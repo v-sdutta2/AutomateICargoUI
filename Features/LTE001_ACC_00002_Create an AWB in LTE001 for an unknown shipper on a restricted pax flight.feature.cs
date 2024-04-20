@@ -20,22 +20,25 @@ namespace iCargoUIAutomation.Features
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.9.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [NUnit.Framework.TestFixtureAttribute()]
-    [NUnit.Framework.DescriptionAttribute("LTE001_ACC_00003_Create a DG AWB in LTE001")]
-    public partial class LTE001_ACC_00003_CreateADGAWBInLTE001Feature
+    [NUnit.Framework.DescriptionAttribute("LTE001_ACC_00002_Create an AWB in LTE001 for an unknown shipper on a restricted p" +
+        "ax flight")]
+    public partial class LTE001_ACC_00002_CreateAnAWBInLTE001ForAnUnknownShipperOnARestrictedPaxFlightFeature
     {
         
         private TechTalk.SpecFlow.ITestRunner testRunner;
         
         private string[] _featureTags = ((string[])(null));
         
-#line 1 "LTE001_ACC_00003_Create a DG AWB in LTE001.feature"
+#line 1 "LTE001_ACC_00002_Create an AWB in LTE001 for an unknown shipper on a restricted pax flight.feature"
 #line hidden
         
         [NUnit.Framework.OneTimeSetUpAttribute()]
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "LTE001_ACC_00003_Create a DG AWB in LTE001", "Create a New DG Shipment, Acceptance & screening of that as a CGODG user", ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "LTE001_ACC_00002_Create an AWB in LTE001 for an unknown shipper on a restricted p" +
+                    "ax flight", "Create a New Shipment, Acceptance of that new shipment & screening as a CGO or CG" +
+                    "ODG user", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -74,10 +77,10 @@ namespace iCargoUIAutomation.Features
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Create a DG AWB in LTE001")]
+        [NUnit.Framework.DescriptionAttribute("Create an AWB in LTE001 for an unknown shipper on a restricted pax flight")]
         [NUnit.Framework.CategoryAttribute("tag1")]
-        [NUnit.Framework.TestCaseAttribute("10763", "10763", "10763", "SEA", "ANC", "PRIORITY", "DGR", "NONSCR", "UN8000", "None", "1", "30", "PP", "CREDIT", "CART", "8000", "Consumer commodity", "Y963", "0.5", "No", null)]
-        public virtual void CreateADGAWBInLTE001(
+        [NUnit.Framework.TestCaseAttribute("ASQXGUEST", "82165", "10763", "SEA", "ANC", "GENERAL", "None", "0316", "None", "None", "2", "59", "CC", "None", "CART", null)]
+        public virtual void CreateAnAWBInLTE001ForAnUnknownShipperOnARestrictedPaxFlight(
                     string agentCode, 
                     string shipperCode, 
                     string consigneeCode, 
@@ -93,11 +96,6 @@ namespace iCargoUIAutomation.Features
                     string chargeType, 
                     string modeOfPayment, 
                     string cartType, 
-                    string uNID, 
-                    string properShipmentName, 
-                    string packingInstruction, 
-                    string netQtyPerPkg, 
-                    string reportableQnty, 
                     string[] exampleTags)
         {
             string[] @__tags = new string[] {
@@ -123,12 +121,7 @@ namespace iCargoUIAutomation.Features
             argumentsOfScenario.Add("ChargeType", chargeType);
             argumentsOfScenario.Add("ModeOfPayment", modeOfPayment);
             argumentsOfScenario.Add("cartType", cartType);
-            argumentsOfScenario.Add("UNID", uNID);
-            argumentsOfScenario.Add("ProperShipmentName", properShipmentName);
-            argumentsOfScenario.Add("PackingInstruction", packingInstruction);
-            argumentsOfScenario.Add("NetQtyPerPkg", netQtyPerPkg);
-            argumentsOfScenario.Add("ReportableQnty", reportableQnty);
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Create a DG AWB in LTE001", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Create an AWB in LTE001 for an unknown shipper on a restricted pax flight", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
 #line 6
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -197,46 +190,47 @@ this.ScenarioInitialize(scenarioInfo);
 #line 21
  testRunner.And("User clicks on the ContinueShipment button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 22
+#line 23
  testRunner.And("User clicks on the Select Flight Button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 23
+#line 24
  testRunner.And("User selects an available flight", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 24
+#line 25
  testRunner.And("User clicks on the ContinueFlightDetails button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 25
+#line 26
  testRunner.And(string.Format("User enters the Charge details with ChargeType \"{0}\" and ModeOfPayment \"{1}\"", chargeType, modeOfPayment), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 26
+#line 27
  testRunner.And("User clicks on the CalculateCharges button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 27
+#line 28
  testRunner.And("User clicks on the ContinueChargeDetails button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 28
+#line 29
  testRunner.And("User enters the Acceptance details", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 29
- testRunner.And("User clicks on the ContinueAcceptanceDetails button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
 #line 30
- testRunner.And("User enters the Screening details for row 1 with screeingMethod as \'ALT Dangerous" +
-                        " Goods\' and ScreeningResult as \'Pass\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("User clicks on the ContinueAcceptanceDetails button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 31
  testRunner.And("User clicks on the ContinueScreeningDetails button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 32
- testRunner.And(string.Format("User Save Shipment Capture Checksheet & DG Details with ChargeType \"{0}\",UNID \"{1" +
-                            "}\", ProperShipmentName \"{2}\", PackingInstruction \"{3}\",NoOfPkg \"{4}\", NetQtyPerP" +
-                            "kg \"{5}\", ReportableQnty \"{6}\"", chargeType, uNID, properShipmentName, packingInstruction, piece, netQtyPerPkg, reportableQnty), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("User checks the AWB_Verified checkbox", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 33
- testRunner.And("User closes the LTE screen", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("User saves the shipment details and capture AWB number", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 34
+ testRunner.And("User validates the popped up error message as \"The Shipper does not have a Valid " +
+                        "Certificate Type\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 35
+ testRunner.And("User closes the LTE screen", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 36
  testRunner.Then("User logs out from the application", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }

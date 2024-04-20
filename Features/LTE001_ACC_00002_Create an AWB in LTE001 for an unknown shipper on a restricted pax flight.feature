@@ -1,8 +1,9 @@
-﻿Feature: LTE001_ACC_00008_Reopen an AWB and change piece count and weight and reexecute
+﻿Feature: LTE001_ACC_00002_Create an AWB in LTE001 for an unknown shipper on a restricted pax flight
+
 Create a New Shipment, Acceptance of that new shipment & screening as a CGO or CGODG user
 
 @tag1
-Scenario Outline: Reopen an AWB and change piece count and weight and reexecute
+Scenario Outline: Create an AWB in LTE001 for an unknown shipper on a restricted pax flight
 	Given User lauches the Url of iCargo Staging UI
 	Then User enters into the  iCargo 'Sign in to icargoas' page successfully
 	When User clicks on the oidc button
@@ -27,31 +28,13 @@ Scenario Outline: Reopen an AWB and change piece count and weight and reexecute
 	And User clicks on the ContinueChargeDetails button
 	And User enters the Acceptance details
 	And User clicks on the ContinueAcceptanceDetails button
-	And User enters the Screening details for row 1 with screeingMethod as 'Transfer Manifest Verified' and ScreeningResult as 'Pass'
 	And User clicks on the ContinueScreeningDetails button
 	And User checks the AWB_Verified checkbox
-	And User saves all the details & handles all the popups
-	When User enters the Executed AWB number
-	And User Reopens the AWB
-	And User verifies and Update the Shipment Details
-	And User clicks on the ContinueShipment button
-	And User verifies and Update the Flight Details
-	And User clicks on the ContinueFlightDetails button
-	And user opens the Charge Details
-	And User clicks on the CalculateCharges button
-	And User clicks on the ContinueChargeDetails button
-	And User verifies and Update the Acceptance Details
-	And User clicks on the ContinueAcceptanceDetails button
-	And User verifies and Update the Screening Details
-	And User clicks on the ContinueScreeningDetails button
-	And User checks the AWB_Verified checkbox
-	And User saves all the details & handles all the popups
+	And User saves the shipment details and capture AWB number
+	And User validates the popped up error message as "The Shipper does not have a Valid Certificate Type"
 	And User closes the LTE screen
 	Then User logs out from the application
 
-
 Examples:
 	| AgentCode | ShipperCode | ConsigneeCode | Origin | Destination | ProductCode | SCC  | Commodity | ShipmentDescription | ServiceCargoClass | Piece | Weight | ChargeType | ModeOfPayment | cartType |
-	| 10763     | 10763       | 10763         | SEA    | ANC         | GENERAL     | None | 0316      | None                | None              | 2     | 59     | CC         | None          | CART     |
-
-	
+	| ASQXGUEST | 82165       | 10763         | SEA    | ANC         | GENERAL     | None | 0316      | None                | None              | 2     | 59     | CC         | None          | CART     |

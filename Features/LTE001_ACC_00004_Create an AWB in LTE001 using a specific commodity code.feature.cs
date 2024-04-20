@@ -77,8 +77,24 @@ namespace iCargoUIAutomation.Features
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Create an AWB in LTE001 using a specific commodity code")]
         [NUnit.Framework.CategoryAttribute("tag1")]
-        [NUnit.Framework.TestCaseAttribute("SEA", "ANC", "GENERAL", "None", "0316", "None", "None", "2", "59", "PP", "CREDIT", "CART", null)]
-        public virtual void CreateAnAWBInLTE001UsingASpecificCommodityCode(string origin, string destination, string productCode, string sCC, string commodity, string shipmentDescription, string serviceCargoClass, string piece, string weight, string chargeType, string modeOfPayment, string cartType, string[] exampleTags)
+        [NUnit.Framework.TestCaseAttribute("10763", "10763", "10763", "SEA", "ANC", "GENERAL", "None", "0316", "None", "None", "2", "59", "PP", "CREDIT", "CART", null)]
+        public virtual void CreateAnAWBInLTE001UsingASpecificCommodityCode(
+                    string agentCode, 
+                    string shipperCode, 
+                    string consigneeCode, 
+                    string origin, 
+                    string destination, 
+                    string productCode, 
+                    string sCC, 
+                    string commodity, 
+                    string shipmentDescription, 
+                    string serviceCargoClass, 
+                    string piece, 
+                    string weight, 
+                    string chargeType, 
+                    string modeOfPayment, 
+                    string cartType, 
+                    string[] exampleTags)
         {
             string[] @__tags = new string[] {
                     "tag1"};
@@ -88,6 +104,9 @@ namespace iCargoUIAutomation.Features
             }
             string[] tagsOfScenario = @__tags;
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            argumentsOfScenario.Add("AgentCode", agentCode);
+            argumentsOfScenario.Add("ShipperCode", shipperCode);
+            argumentsOfScenario.Add("ConsigneeCode", consigneeCode);
             argumentsOfScenario.Add("Origin", origin);
             argumentsOfScenario.Add("Destination", destination);
             argumentsOfScenario.Add("ProductCode", productCode);
@@ -149,7 +168,8 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.When("user clicks on the List button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 16
- testRunner.And("User enters the Participant details", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And(string.Format("User enters the Participant details with AgentCode \"{0}\", ShipperCode \"{1}\", Cons" +
+                            "igneeCode \"{2}\"", agentCode, shipperCode, consigneeCode), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 17
  testRunner.And("User clicks on the ContinueParticipant button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");

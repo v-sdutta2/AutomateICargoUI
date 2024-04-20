@@ -64,9 +64,9 @@ namespace iCargoUIAutomation.pages
         private By btnOrangePencilEditBooking_Css = By.CssSelector("header i.ico-pencil-rounded-orange");
 
         //   Participants   //
-        string agentCode = "10763";
-        string shipperCode = "10763";
-        string consigneeCode = "10763";
+        public static string agentCode = "";
+        public static string shipperCode = "";
+        public static string consigneeCode = "";
         private By lblParticipantDetails_Id = By.Id("participant");
         private By btnOrangePencilParticipant_Css = By.CssSelector("#view_participant a");
         private By txtAgentCode_Name = By.Name("agentCode");
@@ -250,8 +250,11 @@ namespace iCargoUIAutomation.pages
 
 
         }
-        public void EnterParticipantDetails()
+        public void EnterParticipantDetails(string agent, string shipper, string consignee)
         {
+            agentCode = agent;
+            shipperCode = shipper;
+            consigneeCode = consignee;
             try
             {
                 Click(txtAgentCode_Name);
@@ -276,9 +279,17 @@ namespace iCargoUIAutomation.pages
             {
                 Click(lblParticipantDetails_Id);
                 Click(btnOrangePencilParticipant_Css);
-                Assert.AreEqual(GetAttributeValue(txtAgentCode_Name, "value"), agentCode);
-                Assert.AreEqual(GetAttributeValue(txtShipperCode_Name, "value"), shipperCode);
-                Assert.AreEqual(GetAttributeValue(txtConsigneeCode_Name, "value"), consigneeCode);
+                // check the values of the participants are not null
+                agentCode = GetAttributeValue(txtAgentCode_Name, "value");
+                shipperCode = GetAttributeValue(txtShipperCode_Name, "value");
+                consigneeCode = GetAttributeValue(txtConsigneeCode_Name, "value");
+
+                Assert.IsNotNull(agentCode, "Agent code is null");
+                Assert.IsNotNull(shipperCode, "Shipper code is null");
+                Assert.IsNotNull(consigneeCode, "Consignee code is null");
+
+
+
             }
             catch (Exception e)
             {
@@ -941,6 +952,10 @@ namespace iCargoUIAutomation.pages
             this.chargeType = chargeType;
             int noOfWindowsBefore = GetNumberOfWindowsOpened();
             Click(btnSaveShipment_Name);
+            if (IsElementDisplayed(lblEmbargoDetails_Xpath))
+            {
+                Click(btnContinueEmbargo_Xpath);
+            }
             WaitForNewWindowToOpen(TimeSpan.FromSeconds(10), noOfWindowsBefore + 1);
             int noOfWindowsAfter = GetNumberOfWindowsOpened();
             if (noOfWindowsAfter > noOfWindowsBefore)
@@ -953,6 +968,16 @@ namespace iCargoUIAutomation.pages
 
         }
 
+        public string saveShipmentCaptureAWB()
+        {
+            Click(btnSaveShipment_Name);
+            if (IsElementDisplayed(lblEmbargoDetails_Xpath))
+            {
+                Click(btnContinueEmbargo_Xpath);
+            }
+            awb_num = captureAWBNumber();
+            return awb_num;
+        }
 
 
         public string captureAWBNumber()

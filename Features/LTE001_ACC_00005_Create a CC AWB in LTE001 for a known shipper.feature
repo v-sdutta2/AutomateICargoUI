@@ -13,7 +13,7 @@ Scenario Outline: Create a CC AWB in LTE001 for a known shipper
 	And User enters the screen name as 'LTE001'
 	Then User enters into the  iCargo 'Create Shipment' page successfully
 	When user clicks on the List button
-	And User enters the Participant details
+	And User enters the Participant details with AgentCode "<AgentCode>", ShipperCode "<ShipperCode>", ConsigneeCode "<ConsigneeCode>"
 	And User clicks on the ContinueParticipant button
 	And User enters the Certificate details
 	And User clicks on the ContinueCertificate button
@@ -35,5 +35,5 @@ Scenario Outline: Create a CC AWB in LTE001 for a known shipper
 	Then User logs out from the application
 
 Examples:
-	| Origin | Destination | ProductCode | SCC  | Commodity | ShipmentDescription | ServiceCargoClass | Piece | Weight | ChargeType | ModeOfPayment | cartType |
-	| SEA    | ANC         | GENERAL     | None | 0316      | None                | None              | 2     | 59     | CC         | None          | CART     |
+	| AgentCode | ShipperCode | ConsigneeCode| Origin | Destination | ProductCode | SCC  | Commodity | ShipmentDescription | ServiceCargoClass | Piece | Weight | ChargeType | ModeOfPayment | cartType |
+	| 10763     | 10763       | 10763        | SEA    | ANC         | GENERAL     | None | 0316      | None                | None              | 2     | 59     | CC         | None          | CART     |

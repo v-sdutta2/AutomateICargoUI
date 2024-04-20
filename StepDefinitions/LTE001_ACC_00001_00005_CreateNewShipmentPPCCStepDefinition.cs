@@ -57,12 +57,15 @@ namespace iCargoUIAutomation.StepDefinitions
             csp.clickOnListButton();
         }
 
-        [When(@"User enters the Participant details")]
-        public void UserEntersTheParticipantDetails()
+        [When(@"User enters the Participant details with AgentCode ""([^""]*)"", ShipperCode ""([^""]*)"", ConsigneeCode ""([^""]*)""")]
+        public void WhenUserEntersTheParticipantDetailsWithAgentCodeShipperCodeConsigneeCode(string agent, string shipper, string consignee)
         {
             Log.Info("Step: Entering the Participant details");
-            csp.EnterParticipantDetails();
+            csp.EnterParticipantDetails(agent,shipper,consignee);
         }
+
+
+      
 
 
 
