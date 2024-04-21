@@ -20,22 +20,22 @@ namespace iCargoUIAutomation.Features
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.9.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [NUnit.Framework.TestFixtureAttribute()]
-    [NUnit.Framework.DescriptionAttribute("CAP018_BKG_00001_iCargo Login and Create New Shipment")]
-    public partial class CAP018_BKG_00001_ICargoLoginAndCreateNewShipmentFeature
+    [NUnit.Framework.DescriptionAttribute("CAP018_BKG_00004_Create a booking given an AWB from stock")]
+    public partial class CAP018_BKG_00004_CreateABookingGivenAnAWBFromStockFeature
     {
         
         private TechTalk.SpecFlow.ITestRunner testRunner;
         
         private string[] _featureTags = ((string[])(null));
         
-#line 1 "CAP018_BKG_00001_Create a booking.feature"
+#line 1 "CAP018_BKG_00004_Create a booking given an AWB from stock.feature"
 #line hidden
         
         [NUnit.Framework.OneTimeSetUpAttribute()]
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "CAP018_BKG_00001_iCargo Login and Create New Shipment", null, ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "CAP018_BKG_00004_Create a booking given an AWB from stock", null, ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -74,10 +74,10 @@ namespace iCargoUIAutomation.Features
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("iCargo Login and Create New Shipment")]
+        [NUnit.Framework.DescriptionAttribute("Create a booking given an AWB from stock and system will create a new awb")]
         [NUnit.Framework.CategoryAttribute("tag1")]
-        [NUnit.Framework.TestCaseAttribute("SEA", "ANC", "20-Apr-2024", "GENERAL", "0316", "2", "20", "20-Apr-2024", "AS61", null)]
-        public virtual void ICargoLoginAndCreateNewShipment(string origin, string destination, string shippingDate, string productCode, string commodity, string piece, string weight, string flightDate, string flightNo, string[] exampleTags)
+        [NUnit.Framework.TestCaseAttribute("74428115", "SEA", "ANC", "21-Apr-2024", "GENERAL", "0316", "2", "20", "21-Apr-2024", "AS61", "82165", "82165", "82165", null)]
+        public virtual void CreateABookingGivenAnAWBFromStockAndSystemWillCreateANewAwb(string aWB, string origin, string destination, string shippingDate, string productCode, string commodity, string piece, string weight, string flightDate, string flightNo, string agentCode, string shipper, string consignee, string[] exampleTags)
         {
             string[] @__tags = new string[] {
                     "tag1"};
@@ -87,6 +87,7 @@ namespace iCargoUIAutomation.Features
             }
             string[] tagsOfScenario = @__tags;
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            argumentsOfScenario.Add("AWB", aWB);
             argumentsOfScenario.Add("Origin", origin);
             argumentsOfScenario.Add("Destination", destination);
             argumentsOfScenario.Add("ShippingDate", shippingDate);
@@ -96,9 +97,12 @@ namespace iCargoUIAutomation.Features
             argumentsOfScenario.Add("Weight", weight);
             argumentsOfScenario.Add("FlightDate", flightDate);
             argumentsOfScenario.Add("FlightNo", flightNo);
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("iCargo Login and Create New Shipment", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
+            argumentsOfScenario.Add("AgentCode", agentCode);
+            argumentsOfScenario.Add("Shipper", shipper);
+            argumentsOfScenario.Add("Consignee", consignee);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Create a booking given an AWB from stock and system will create a new awb", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
 #line 4
-    this.ScenarioInitialize(scenarioInfo);
+this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
             bool isFeatureIgnored = default(bool);
@@ -118,48 +122,54 @@ namespace iCargoUIAutomation.Features
             {
                 this.ScenarioStart();
 #line 5
-        testRunner.Given("User lauches the Url of iCargo Staging UI", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Given("User lauches the Url of iCargo Staging UI", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 6
-     testRunner.Then("User enters into the  iCargo \'Sign in to icargoas\' page successfully", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("User enters into the  iCargo \'Sign in to icargoas\' page successfully", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
 #line 7
-     testRunner.When("User clicks on the oidc button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("User clicks on the oidc button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 8
-     testRunner.Then("A new window is opened", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("A new window is opened", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
 #line 9
-        testRunner.And("User enters into the  iCargo \'Home\' page successfully", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("User enters into the  iCargo \'Home\' page successfully", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 10
-        testRunner.When("User enters screen name as \'CAP018\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("User enters screen name as \'CAP018\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 11
-        testRunner.Then("User enters into the  iCargo \'Maintain Booking\' page successfully", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("User enters into the  iCargo \'Maintain Booking\' page successfully", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
 #line 12
-        testRunner.And("User clicks on New/List button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And(string.Format("User enters the AWB number as \"{0}\"", aWB), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 13
-        testRunner.And(string.Format("User enters shipment details with Origin \"{0}\", Destination \"{1}\", Shipping Date " +
-                            "\"{2}\", Product Code \"{3}\"", origin, destination, shippingDate, productCode), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("User clicks on New/List button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 14
-        testRunner.And("User enters Shipper and Consignee details", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("a banner appears for the awb does not exist", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 15
-        testRunner.And(string.Format("User enters commodity details with Commodity \"{0}\", Pieces \"{1}\", Weight \"{2}\"", commodity, piece, weight), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And(string.Format("User enters shipment details with Origin \"{0}\", Destination \"{1}\",Agent Code \"{2}" +
+                            "\", Shipping Date \"{3}\", Product Code \"{4}\"", origin, destination, agentCode, shippingDate, productCode), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 16
-        testRunner.And(string.Format("User enters Carrier details with Origin \"{0}\", Destination \"{1}\", Flight No \"{2}\"" +
-                            ", Flight Date \"{3}\", Pieces \"{4}\", Weight \"{5}\"", origin, destination, flightNo, flightDate, piece, weight), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And(string.Format("User enters Unknown Shipper \"{0}\" and Consignee \"{1}\" details", shipper, consignee), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 17
-        testRunner.And("User clicks on Save button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And(string.Format("User enters commodity details with Commodity \"{0}\", Pieces \"{1}\", Weight \"{2}\"", commodity, piece, weight), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 18
-        testRunner.Then("User logs out from the application", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.And(string.Format("User enters Carrier details with Origin \"{0}\", Destination \"{1}\", Flight No \"{2}\"" +
+                            ", Flight Date \"{3}\", Pieces \"{4}\", Weight \"{5}\"", origin, destination, flightNo, flightDate, piece, weight), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 19
+ testRunner.And("User clicks on Save button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 20
+ testRunner.Then("User logs out from the application", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
