@@ -19,5 +19,5 @@ Scenario Outline: iCargo Login and Rebook an already executed AWB
 
 Examples:
 	| AWB      | Origin | Destination |  Piece | Weight | FlightDate  | FlightNo |
-	| 74323826 | SEA    | ANC         |  2     | 20     | 18-Apr-2024 | AS61     |
+	| 74323826 | SEA    | ANC         |  2     | 20     | 20-Apr-2024 | AS7006     |
 	

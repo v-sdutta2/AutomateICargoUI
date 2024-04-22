@@ -75,7 +75,7 @@ namespace iCargoUIAutomation.Features
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("iCargo Login and Rebook an already executed AWB")]
-        [NUnit.Framework.TestCaseAttribute("74323826", "SEA", "ANC", "2", "20", "18-Apr-2024", "AS61", null)]
+        [NUnit.Framework.TestCaseAttribute("74323826", "SEA", "ANC", "2", "20", "20-Apr-2024", "AS7006", null)]
         public virtual void ICargoLoginAndRebookAnAlreadyExecutedAWB(string aWB, string origin, string destination, string piece, string weight, string flightDate, string flightNo, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;

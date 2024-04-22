@@ -360,6 +360,44 @@ namespace iCargoUIAutomation.pages
             Assert.AreEqual(mincontimewarning, resErrorMessage);
             Console.WriteLine(resErrorMessage);
         }
+
+        public void AWBBookingfromStock()
+        {
+            try
+            {
+                SwitchToPopupWindow();
+                WaitForElementToBeVisible(alreadyExecutedPopup_XPATH, TimeSpan.FromSeconds(10));
+                string alreadyExecutedPopUp = GetText(alreadyExecutedPopup_XPATH);
+                Console.WriteLine(alreadyExecutedPopUp);
+                SwitchToCAP018Frame();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
+
+        public void UnknownAgentShipmentDetails(string org, string dest, string agtcode, string shippdt, string prodcode)
+        {
+            EnterText(origin_ID, org);
+            EnterText(destination_XPATH, dest);
+            ClickOnElementIfPresent(agentCode_ID);           
+            EnterTextWithCheck(agentCode_ID, agtcode.ToString());
+            EnterText(shippingDate_ID, shippdt);
+            EnterText(product_XPATH, prodcode);
+            Click(shipperConsigneeBtn_ID);
+        }
+
+        public void UnknownShipperConsigneeDetails(string shipper, string consg)
+        {
+            SwitchToSecondPopupWindow();           
+            EnterText(shipperCode_XPATH, shipper);
+            EnterText(consigneeCode_XPATH, consg);
+            Thread.Sleep(5000);
+            Click(shipperConsigneeOkBtn_ID);
+            //ClickOnElementIfPresent(shipperConsigneeOkBtn_ID);
+            SwitchToPopupWindow();
+        }
     }
 
 }

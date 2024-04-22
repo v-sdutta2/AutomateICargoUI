@@ -18,4 +18,4 @@ Scenario: Create a multi leg booking with flights that do not meet minimum conne
 	Then User logs out from the application
 Examples:
 	| Origin | Destination | ShippingDate | ProductCode | Commodity | Piece | Weight | FlightDate  | FlightNo |
-	| ANC    | LAX         | 19-Apr-2024  | PRIORITY     | 0091      | 2     | 50    | 19-Apr-2024 | 108 1246 |
+	| ANC    | LAX         | 20-Apr-2024  | PRIORITY     | 0091      | 2     | 50    | 20-Apr-2024 | 108 1246 |
