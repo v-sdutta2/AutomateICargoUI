@@ -1,6 +1,6 @@
 ﻿Feature: CAP018_BKG_00007_Create a booking for an AVI
 
-
+@tag1
  Scenario Outline: iCargo Login and Create New AVI Shipment
         Given User lauches the Url of iCargo Staging UI
 	    Then User enters into the  iCargo 'Sign in to icargoas' page successfully
@@ -17,6 +17,6 @@
         And User clicks on Save button and fills the checksheet details to generate awb
         Then User logs out from the application
         Examples:
-            | Origin | Destination | ShippingDate | ProductCode | Commodity | Piece | Weight | FlightDate  | FlightNo | ChargeType |
-            | SEA    | ANC         | 18-Apr-2024  | PET CONNECT | 9730      | 2     | 50     | 18-Apr-2024 | AS61    | PP         |
+            | Origin | Destination | ShippingDate | ProductCode | Commodity | Piece | Weight | FlightDate  | FlightNo |
+            | SEA    | ANC         | 20-Apr-2024  | PET CONNECT | 9730      | 2     | 50     | 20-Apr-2024 | AS61    |
 	

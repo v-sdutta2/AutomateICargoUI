@@ -19,6 +19,6 @@ Scenario Outline: Attach and Detach AWB from a saved booking to generate new AWB
 
 Examples:
 	| AWB      | AgentCode  | 
-	| 31375024 | ASQXGUEST  | 
+	| 30073470 | ASQXGUEST  | 
 
 	#30073470  31375024

@@ -22,11 +22,11 @@
   <ItemGroup>
     <SpecFlowObsoleteCodeBehindFiles Remove="Features\LTE001_ACC_00006_Accept a prebooked AWB in LTE001 - Copy.feature.cs" />
     <SpecFlowObsoleteCodeBehindFiles Remove="Features\LTE001_ACC_00007_Create an AWB in LTE001 that has pieces that fail screening - Copy.feature.cs" />
-    <SpecFlowObsoleteCodeBehindFiles Remove="Features\LTE001_ACC_00009_Create and accept an AWB for a known shipper booked on pax flights without screening details - Copy.feature.cs" />
     <SpecFlowObsoleteCodeBehindFiles Remove="Features\LTE001_CreateAcceptScreening - Copy.feature.cs" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="ExtentReports" Version="4.1.0" />
     <PackageReference Include="ini-parser" Version="2.5.2" />
     <PackageReference Include="log4net" Version="2.0.17" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
@@ -40,10 +40,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <SpecFlowFeatureFiles Update="Features\LTE001_ACC_00002_Create an AWB in LTE001 for an unknown shipper on a restricted pax flight.feature">
-      <Visible>$(UsingMicrosoftNETSdk)</Visible>
-      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
-    </SpecFlowFeatureFiles>
     <SpecFlowFeatureFiles Update="Features\LTE001_ACC_00009_Create and accept an AWB for a known shipper booked on pax flights without screening details.feature">
       <Visible>$(UsingMicrosoftNETSdk)</Visible>
       <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
@@ -55,13 +51,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Logs\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Features\LTE001_ACC_00002_Create an AWB in LTE001 for an unknown shipper on a restricted pax flight.feature.cs">
-      <DependentUpon>LTE001_ACC_00002_Create an AWB in LTE001 for an unknown shipper on a restricted pax flight.feature</DependentUpon>
-    </Compile>
+    <Folder Include="Screenshots\" />
   </ItemGroup>
 
 </Project>
