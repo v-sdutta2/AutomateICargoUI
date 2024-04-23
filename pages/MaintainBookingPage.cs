@@ -105,6 +105,24 @@ namespace iCargoUIAutomation.pages
         private By flightSearchtextbox_XPATH = By.XPath("//input[@placeholder='Enter the keywords to search']");
         private By resColor_Xpath = By.XPath("//label[@class='badge-red']");
         private By resErrorMessage_Xpath = By.XPath("//div[@class='fs12 mar-t-xs text-gray multy-list-flight']/p");
+
+        //Unknown Shipper Consignee Details
+        private By unkShipperName_ID = By.Id("CMP_Capacity_Booking_MaintainReservation_ShipperConsignee_ShipperName_NEW");
+        private By unkShipperFirstAddress_ID = By.Id("CMP_Capacity_Booking_MaintainReservation_ShipperConsignee_ShipperFirstAddress_NEW");
+        private By unkShipperSecondAddress = By.Id("CMP_Capacity_Booking_MaintainReservation_ShipperConsignee_ShipperSecondAddress_NEW");
+        private By unkShipperCity_ID = By.Id("CMP_Capacity_Booking_MaintainReservation_ShipperConsignee_ShipperCity_NEW");
+        private By unkShipperState_ID = By.Id("CMP_Capacity_Booking_MaintainReservation_ShipperConsignee_ShipperState");
+        private By unkShipperCountry_ID = By.Id("CMP_Capacity_Booking_MaintainReservation_ShipperConsignee_ShipperCountry");
+        private By unkShipperZip_ID = By.Id("CMP_Capacity_Booking_MaintainReservation_ShipperConsignee_ShipperPostalCode");
+        private By unkShipperEmail_ID = By.Id("CMP_Capacity_Booking_MaintainReservation_ShipperConsignee_ShipperEmail");
+        private By unkConsigneeName_ID = By.Id("CMP_Capacity_Booking_MaintainReservation_ShipperConsignee_ConsigneeName_NEW");
+        private By unkConsigneeFirstAddress_ID = By.Id("CMP_Capacity_Booking_MaintainReservation_ShipperConsignee_ConsigneeFirstAddress_NEW");
+        private By unkConsigneeSecondAddress = By.Id("CMP_Capacity_Booking_MaintainReservation_ShipperConsignee_ConsigneeSecondAddress_NEW");
+        private By unkConsigneeCity_ID = By.Id("CMP_Capacity_Booking_MaintainReservation_ShipperConsignee_ConsigneeCity_NEW");
+        private By unkConsigneeState_ID = By.Id("CMP_Capacity_Booking_MaintainReservation_ShipperConsignee_ConsigneeState");
+        private By unkConsigneeCountry_ID = By.Id("CMP_Capacity_Booking_Permanent_ShipperConsignee_ConsigneeCountry");
+        private By unkConsigneeZip_ID = By.Id("CMP_Capacity_Booking_MaintainReservation_ShipperConsignee_ConsigneePostalCode");
+        private By unkConsigneeEmail_ID = By.Id("CMP_Capacity_Booking_MaintainReservation_ShipperConsignee_ConsigneeEmail");
         public void SwitchToCAP018Frame()
         {
             WaitForElementToBeVisible(CAP018Frame_XPATH, TimeSpan.FromSeconds(10));
@@ -393,6 +411,49 @@ namespace iCargoUIAutomation.pages
             SwitchToSecondPopupWindow();           
             EnterText(shipperCode_XPATH, shipper);
             EnterText(consigneeCode_XPATH, consg);
+            Thread.Sleep(5000);
+            Click(shipperConsigneeOkBtn_ID);
+            //ClickOnElementIfPresent(shipperConsigneeOkBtn_ID);
+            SwitchToPopupWindow();
+        }
+
+        public void UnknownShipperConsigneeALLDetails(string unkshppr, string unkconsgn)
+        {
+            SwitchToSecondPopupWindow();
+            EnterText(shipperCode_XPATH, unkshppr);
+            string shipperName = "Test Shipper";
+            EnterTextWithCheck(unkShipperName_ID, shipperName);
+            string shipperFirstAddress = "Test Address1";
+            EnterTextWithCheck(unkShipperFirstAddress_ID, shipperFirstAddress);
+            string shipperSecondAddress = "Test Address2";
+            EnterTextWithCheck(unkShipperSecondAddress, shipperSecondAddress);
+            string shipperCity = "Test City";
+            EnterTextWithCheck(unkShipperCity_ID, shipperCity);
+            string shipperState = "Test State";
+            EnterTextWithCheck(unkShipperState_ID, shipperState);
+            string shipperCountry = "US";
+            EnterTextWithCheck(unkShipperCountry_ID, shipperCountry);
+            string shipperZip = "67890";
+            EnterTextWithCheck(unkShipperZip_ID, shipperZip);
+            string shipperEmail = "TEST@GMAIL.COM.INVALID";
+            EnterTextWithCheck(unkShipperEmail_ID, shipperEmail);
+            EnterText(consigneeCode_XPATH, unkconsgn);
+            string consigneeName = "Test Consignee";
+            EnterTextWithCheck(unkConsigneeName_ID, consigneeName);
+            string consigneeFirstAddress = "Test Address1";
+            EnterTextWithCheck(unkConsigneeFirstAddress_ID, consigneeFirstAddress);
+            string consigneeSecondAddress= "Test Address2";
+            EnterTextWithCheck(unkConsigneeSecondAddress, consigneeSecondAddress);
+            string consigneeCity = "Test City";
+            EnterTextWithCheck(unkConsigneeCity_ID, consigneeCity);
+            string consigneeState = "Test State";
+            EnterTextWithCheck(unkConsigneeState_ID, consigneeState);
+            string consigneeCountry = "US";
+            EnterTextWithCheck(unkConsigneeCountry_ID, consigneeCountry);
+            string consigneeZip = "67890";
+            EnterTextWithCheck(unkConsigneeZip_ID, consigneeZip);
+            string consigneeEmail = "TEST@GMAIL.COM.INVALID";
+            EnterTextWithCheck(unkConsigneeEmail_ID, consigneeEmail);
             Thread.Sleep(5000);
             Click(shipperConsigneeOkBtn_ID);
             //ClickOnElementIfPresent(shipperConsigneeOkBtn_ID);
