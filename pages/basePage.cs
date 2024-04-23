@@ -330,7 +330,7 @@ namespace iCargoUIAutomation.pages
         {
             try
             {
-                WaitForElementToBeVisible(byLocator, TimeSpan.FromSeconds(10));
+                WaitForElementToBeVisible(byLocator, TimeSpan.FromSeconds(5));
                 return true;
             }
             catch
