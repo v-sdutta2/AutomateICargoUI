@@ -1181,7 +1181,7 @@ namespace iCargoUIAutomation.pages
             }
         }
 
-        public void validateAWBStatus(string expectedStatus)
+        public string validateAWBStatus(string expectedStatus)
         {
             string actualStatus = captureDataCaptureStatus();
             if (!actualStatus.Contains(expectedStatus))
@@ -1193,7 +1193,10 @@ namespace iCargoUIAutomation.pages
             else
             {
                 Log.Info("AWB status is as expected: " + actualStatus);
+                awb_num = captureAWBNumber();
+                Log.Info("AWB number is: " + awb_num);
             }
+            return awb_num;
         }
 
         public void validateCommodityChargeAmount()

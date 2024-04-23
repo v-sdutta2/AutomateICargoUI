@@ -46,8 +46,6 @@ namespace iCargoUIAutomation.StepDefinitions
         }
 
 
-
-
         [When(@"user clicks on the List button")]
         public void UserClickOnListButton()
         {
@@ -61,11 +59,8 @@ namespace iCargoUIAutomation.StepDefinitions
         public void WhenUserEntersTheParticipantDetailsWithAgentCodeShipperCodeConsigneeCode(string agent, string shipper, string consignee)
         {
             Log.Info("Step: Entering the Participant details");
-            csp.EnterParticipantDetails(agent,shipper,consignee);
-        }
-
-
-      
+            csp.EnterParticipantDetails(agent,shipper,consignee); 
+        }     
 
 
 
@@ -99,8 +94,6 @@ namespace iCargoUIAutomation.StepDefinitions
             Log.Info("Step: Entering the Shipment details");
             csp.EnterShipmentDetails(origin, destination, productCode, scc, commodity, shipmentdesc, serviceCargoClass, piece, weight);
         }
-
-
 
 
         [When(@"User clicks on the ContinueShipment button")]
@@ -146,8 +139,6 @@ namespace iCargoUIAutomation.StepDefinitions
         }
 
 
-
-
         [When(@"User clicks on the CalculateCharges button")]
         public void WhenUserClicksOnCalculateChargesButton()
         {
@@ -184,9 +175,7 @@ namespace iCargoUIAutomation.StepDefinitions
         {
             Log.Info("Step: Entering the Screening details");
             csp.enterScreeningDetails(rownum, screeningMethod, screeningResult);
-        }
-
-        
+        }        
 
 
         [When(@"User clicks on the ContinueScreeningDetails button")]
@@ -224,7 +213,11 @@ namespace iCargoUIAutomation.StepDefinitions
             csp.saveShipmentDetailsAndHandlePopups();
         }
 
-
+        [When(@"User handles the error popups")]
+        public void WhenUserHandlesTheErrorPopups()
+        {
+            csp.clickingYesOnPopupWarnings();
+        }
 
         [When(@"User closes the LTE screen")]
         public void UserClosesLTEScreen()
