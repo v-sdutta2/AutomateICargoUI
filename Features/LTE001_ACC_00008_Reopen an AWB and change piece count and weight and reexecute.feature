@@ -30,12 +30,13 @@ Scenario Outline: Reopen an AWB and change piece count and weight and reexecute
 	And User enters the Screening details for row 1 with screeingMethod as 'Transfer Manifest Verified' and ScreeningResult as 'Pass'
 	And User clicks on the ContinueScreeningDetails button
 	And User checks the AWB_Verified checkbox
+	And User clicks on the save button & handle Payment Portal
 	And User saves all the details & handles all the popups
 	When User enters the Executed AWB number
 	And User Reopens the AWB
-	And User verifies and Update the Shipment Details
+	And User verifies and Update the field 'piece&weight' with updated value as '1' in the Shipment Details
 	And User clicks on the ContinueShipment button
-	And User verifies and Update the Flight Details
+	And User verifies and Update the Flight Details with 'piece&weight'
 	And User clicks on the ContinueFlightDetails button
 	And user opens the Charge Details
 	And User clicks on the CalculateCharges button
@@ -45,7 +46,9 @@ Scenario Outline: Reopen an AWB and change piece count and weight and reexecute
 	And User verifies and Update the Screening Details
 	And User clicks on the ContinueScreeningDetails button
 	And User checks the AWB_Verified checkbox
+	And User clicks on the save button
 	And User saves all the details & handles all the popups
+	And User validates the AWB is "EXECUTED"
 	And User closes the LTE screen
 	Then User logs out from the application
 
