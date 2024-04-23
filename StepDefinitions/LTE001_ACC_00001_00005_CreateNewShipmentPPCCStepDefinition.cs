@@ -203,6 +203,20 @@ namespace iCargoUIAutomation.StepDefinitions
             csp.clickOnAWBVerifiedCheckbox();
         }
 
+        [When(@"User clicks on the save button")]
+        public void WhenUserClicksOnTheSaveButton()
+        {
+            csp.clickSave();
+        }
+
+
+        [When(@"User clicks on the save button & handle Payment Portal")]
+        public void WhenUserClicksOnTheSaveButtonAndHandlePaymentPortal()
+        {
+           csp.clickOnSaveButtonHandlePaymentPortal();
+        }
+
+
         [When(@"User saves all the details & handles all the popups")]
         public void UserSavesAllDetailsHandlesAllThePopups()
         {
