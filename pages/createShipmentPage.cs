@@ -177,6 +177,9 @@ namespace iCargoUIAutomation.pages
         private By lblCpatureChecksheetWarning = By.XPath("//*[@id='_ajax_shipmentChecksheet']/i");
         private By popupContainerFrameChksheet = By.XPath("//*[text()='Capture Check Sheet']//parent::div//following-sibling::div/iframe");
         private By lblTotalChkSheetSections_Xpath = By.XPath("//*[@id='tabs-1']//div[@id='configId']/h2");
+        /* For Employee Shipment checksheet */
+        private By txtDateOfHire_Xpath = By.XPath("//*[text()='EMPLOYEE SHIPMENT VERIFICATION']//following::input[@id='calendar2']");
+        private By txtPeoplesoftNumber_Xpath = By.XPath("//*[text()='EMPLOYEE SHIPMENT VERIFICATION']//following::textarea[@id='CMP_Checksheet_Defaults_CaptureCheckSheet_Remarks']");
 
         private By btnOKCaptureChkSheet_Xpath = By.XPath("//*[@class='btmbtnpane btm-fixed']/button[@id='btnSave']");
         private By btnOKSuccessCheckSheet_Xpath = By.XPath("//*[@class='alert-messages-list']//parent::div//following-sibling::div//button");
@@ -385,7 +388,20 @@ namespace iCargoUIAutomation.pages
                 EnterText(txtOrigin_Name, origin);
                 EnterText(txtDestination_Name, destination);
                 EnterText(txtShipmentDate_Name, shippingDate);
-                EnterText(txtProductCode_Name, productCode);
+                
+                if (productCode == "Employee Shipment")
+                {
+                    EnterText(txtProductCode_Name, productCode);
+                    Thread.Sleep(1000);
+                                       
+                    EnterKeys(txtProductCode_Name, Keys.ArrowDown);
+                    EnterKeys(txtProductCode_Name, Keys.Tab);
+                }
+                else
+                {
+                    EnterText(txtProductCode_Name, productCode);
+                }
+               
                 if (scc != "None")
                 {
                     EnterText(txtSCCCode_Name, scc);
@@ -1153,6 +1169,27 @@ namespace iCargoUIAutomation.pages
                         }
 
                     }
+
+                }
+                else if(section.Text == "EMPLOYEE SHIPMENT VERIFICATION")
+                {
+                    string drpDwnQn = "//*[@id='tabs-1']//div[@id='configId']/h2[text()='dgSectionName']/parent::div/following-sibling::div//select";
+
+                    drpDwnQn = drpDwnQn.Replace("dgSectionName", "EMPLOYEE SHIPMENT VERIFICATION");
+                    totalQuestions = GetElementCount(By.XPath(drpDwnQn));
+                    drpDwnQn = drpDwnQn + "[@name= 'questionwithAnswer[0].templateAnswer']";
+                    if (!IsDropdownSelectedByVisibleText((By.XPath(drpDwnQn)), "Yes"))
+                    {
+                        for (int j = 0; j < totalQuestions; j++)
+                        {
+                            SelectDropdownByVisibleText(By.XPath(drpDwnQn.Replace("0", j.ToString())), "Yes");
+                            EnterKeys(By.XPath(drpDwnQn), Keys.Tab);
+                        }
+
+                    }
+                    EnterText(txtDateOfHire_Xpath, "01-Apr-2020");
+                    EnterText(txtPeoplesoftNumber_Xpath, "5034988");
+                    EnterKeys(txtPeoplesoftNumber_Xpath, Keys.Tab);
 
                 }
             }
