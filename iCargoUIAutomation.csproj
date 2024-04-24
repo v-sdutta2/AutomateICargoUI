@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <SpecFlowObsoleteCodeBehindFiles Remove="Features\LTE001_ACC_00003_Create a DG AWB in LTE001 - Copy.feature.cs" />
     <SpecFlowObsoleteCodeBehindFiles Remove="Features\LTE001_ACC_00006_Accept a prebooked AWB in LTE001 - Copy.feature.cs" />
     <SpecFlowObsoleteCodeBehindFiles Remove="Features\LTE001_ACC_00007_Create an AWB in LTE001 that has pieces that fail screening - Copy.feature.cs" />
     <SpecFlowObsoleteCodeBehindFiles Remove="Features\LTE001_ACC_00008_Reopen an AWB and change piece count and weight and reexecute - Copy.feature.cs" />
@@ -42,6 +43,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <SpecFlowFeatureFiles Update="Features\LTE001_ACC_00015_Create an AWB for a CAO DG shipment and book on a pax flight.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+    </SpecFlowFeatureFiles>
     <SpecFlowFeatureFiles Update="Features\LTE001_ACC_00016_Create an AWB for an Employee Shipment.feature">
       <Visible>$(UsingMicrosoftNETSdk)</Visible>
       <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
