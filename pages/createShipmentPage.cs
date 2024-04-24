@@ -634,7 +634,7 @@ namespace iCargoUIAutomation.pages
                     {
                         if (!GetAttributeValue(By.XPath("//*[@id='flight_details']//tbody//tr[" + (i + 1) + "]"), "class").Contains("row-border-merge"))
                         {
-                            if (!getCAPAvailabilityStatus(i).Contains("error") && !getEMBAvailabilityStatus(i).Contains("error") && !getLOADAvailabilityStatus(i).Contains("error") && !getRESAvailabilityStatus(i).Contains("error") && !getCAPAvailabilityStatus(i + 1).Contains("error") && !getEMBAvailabilityStatus(i + 1).Contains("error") && !getLOADAvailabilityStatus(i + 1).Contains("error") && !getRESAvailabilityStatus(i + 1).Contains("error") && getFlightType(i).Contains(typeOfFlight))
+                            if (!getCAPAvailabilityStatus(i).Contains("error") && !getEMBAvailabilityStatus(i).Contains("error") && !getLOADAvailabilityStatus(i).Contains("error") && !getRESAvailabilityStatus(i).Contains("error") && getFlightType(i).Contains(typeOfFlight))
                             {
                                 flightNum = GetText(By.XPath("//*[@id='flight_details']//tbody//tr[" + i + "]//td[1]")).Trim().Split("AS")[1].Trim();
 
@@ -646,6 +646,51 @@ namespace iCargoUIAutomation.pages
                             }
 
                         }               
+
+                    }
+
+                }
+                else
+                {
+                    Log.Info("No flight is available for booking from " + origin + " to " + destination + " on " + shippingDate);
+                }
+
+
+            }
+            catch (Exception e)
+            {
+                Log.Error("Error in booking flight: " + e.ToString());
+            }
+
+        }
+
+
+        public void selectFlightWithRestriction()
+        {
+            try
+            {
+                int noOfFlights = GetElementCount(listAllFlights_Xpath);
+                if (noOfFlights > 0)
+                {
+                    for (int i = 1; i <= noOfFlights; i++)
+                    {
+                        if (GetAttributeValue(By.XPath("//*[@id='flight_details']//tbody//tr[" + (i + 1) + "]"), "class").Contains("row-border-merge"))
+                        {
+                            if (!getCAPAvailabilityStatus(i).Contains("error") && !getEMBAvailabilityStatus(i).Contains("error") && !getLOADAvailabilityStatus(i).Contains("error") || getRESAvailabilityStatus(i).Contains("error") && !getCAPAvailabilityStatus(i + 1).Contains("error") && !getEMBAvailabilityStatus(i + 1).Contains("error") && !getLOADAvailabilityStatus(i + 1).Contains("error") || getRESAvailabilityStatus(i + 1).Contains("error"))
+                            {
+                                flightNum = GetText(By.XPath("//*[@id='flight_details']//tbody//tr[" + i + "]//td[1]")).Trim().Split("AS")[1].Trim();
+                                ConnectingflightNum = GetText(By.XPath("//*[@id='flight_details']//tbody//tr[" + (i + 1) + "]//td[1]")).Trim().Split("AS")[1].Trim();
+                                btnBookFlight = btnBookFlight.Replace("1", i.ToString());
+                                ScrollDown();
+                                Click(By.XPath(btnBookFlight));
+
+                                Log.Info("Flight " + flightNum + " & connecting flightNum " + ConnectingflightNum + "having minimum connection time restriction, is booked successfully");
+
+                                break;
+                            }
+                            i+=1;
+
+                        }
 
                     }
 
@@ -1158,6 +1203,7 @@ namespace iCargoUIAutomation.pages
             return awb_num;
         }
 
+        
         public string captureAWBNumber()
         {
             return GetText(lblAWBNo_Css);

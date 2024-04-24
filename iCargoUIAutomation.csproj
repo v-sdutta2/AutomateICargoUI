@@ -43,6 +43,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <SpecFlowFeatureFiles Update="Features\LTE001_ACC_00013_Create an AWB with less than a 2 hr connection time between flights.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+    </SpecFlowFeatureFiles>
     <SpecFlowFeatureFiles Update="Features\LTE001_ACC_00015_Create an AWB for a CAO DG shipment and book on a pax flight.feature">
       <Visible>$(UsingMicrosoftNETSdk)</Visible>
       <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
@@ -74,6 +78,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Features\LTE001_ACC_00013_Create an AWB with less than a 2 hr connection time between flights.feature.cs">
+      <Visible>true</Visible>
+      <DependentUpon>LTE001_ACC_00013_Create an AWB with less than a 2 hr connection time between flights.feature</DependentUpon>
+      <DesignTime>true</DesignTime>
+      <AutoGen>true</AutoGen>
+    </Compile>
     <Compile Update="Features\LTE001_ACC_00010_Reopen an AWB and change the final destination and reexecute.feature.cs">
       <DependentUpon>LTE001_ACC_00010_Reopen an AWB and change the final destination and reexecute.feature</DependentUpon>
     </Compile>

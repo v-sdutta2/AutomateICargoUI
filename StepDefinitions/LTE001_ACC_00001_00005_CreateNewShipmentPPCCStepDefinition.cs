@@ -219,6 +219,13 @@ namespace iCargoUIAutomation.StepDefinitions
             csp.clickingYesOnPopupWarnings();
         }
 
+        [When(@"User handles the error popups with errorType as '([^']*)'")]
+        public void WhenUserHandlesTheErrorPopupsWithErrorTypeAs(string errorType)
+        {
+            csp.clickingYesOnPopupWarnings(errorType);
+        }
+
+
         [When(@"User closes the LTE screen")]
         public void UserClosesLTEScreen()
         {
