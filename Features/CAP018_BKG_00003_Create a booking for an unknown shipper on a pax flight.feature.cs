@@ -76,7 +76,7 @@ namespace iCargoUIAutomation.Features
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Create a booking for an unknown shipper on a pax flight")]
         [NUnit.Framework.CategoryAttribute("tag1")]
-        [NUnit.Framework.TestCaseAttribute("SEA", "ANC", "22-Apr-2024", "GENERAL", "0316", "2", "20", "22-Apr-2024", "AS61", "ASQXGUEST", "C1001", "C1001", null)]
+        [NUnit.Framework.TestCaseAttribute("SEA", "ANC", "24-Apr-2024", "GENERAL", "0316", "2", "20", "24-Apr-2024", "AS61", "ASQXGUEST", "C1001", "C1001", null)]
         public virtual void CreateABookingForAnUnknownShipperOnAPaxFlight(string origin, string destination, string shippingDate, string productCode, string commodity, string piece, string weight, string flightDate, string flightNo, string agentCode, string shipper, string consignee, string[] exampleTags)
         {
             string[] @__tags = new string[] {

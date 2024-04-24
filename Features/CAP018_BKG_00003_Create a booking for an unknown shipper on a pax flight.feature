@@ -20,4 +20,4 @@ Given User lauches the Url of iCargo Staging UI
         Then User logs out from the application
         Examples:
             | Origin | Destination | ShippingDate | ProductCode | Commodity | Piece | Weight | FlightDate  | FlightNo | AgentCode | Shipper | Consignee |
-            | SEA    | ANC         | 22-Apr-2024  | GENERAL     | 0316      | 2     | 20     | 22-Apr-2024 | AS61     | ASQXGUEST |C1001   | C1001    |
+            | SEA    | ANC         | 24-Apr-2024  | GENERAL     | 0316      | 2     | 20     | 24-Apr-2024 | AS61     | ASQXGUEST |C1001   | C1001    |
