@@ -29,6 +29,7 @@ namespace iCargoUIAutomation.pages
         private By txtPI_Name = By.Name("packingInstruction");
         private By txtNoOfPkgs_Name = By.Name("numberOfPackages");
         private By txtNetQtyPerPkg_Name = By.Name("netQuantityPerPackage");
+        private By drpdwn_NetQtyPerPkgUnit_Name = By.Name("netQuantityPerPackageUnit");
         private By txtGrossIndicator_Name = By.Name("netGrossIndicator");
         private By drpdwnReportableQnty_Name = By.Name("reportableQuantity");
         private By btnAddDgDetails_Xpath = By.XPath("//button[text()='Add']");
@@ -63,6 +64,37 @@ namespace iCargoUIAutomation.pages
             SwitchToDefaultContent();
             //switchToLTEContentFrame();
         }
+
+
+        public void enterDetailsForCAODGShipment(string unid, string propershipmntname, string pi, string noofpkg, string netqtyperpkg, string reportable)
+        {
+            Click(lnkDangerousGoods_Xpath);
+            SwitchToFrame(popupContainerFrame_Xpath);
+            Click(btnDGPencil_Xpath);
+            EnterText(txtEmergencyContactName_Name, "Chem Trec");
+            EnterText(txtEmergencyContactNumber_Name, "8008008000");
+            Click(btnOKsaveContact_Name);
+            WaitForElementToBeVisible(txtUNID_Xpath, TimeSpan.FromSeconds(5));
+            ScrollDown();
+            EnterText(txtUNID_Xpath, unid);
+            EnterKeys(txtUNID_Xpath, Keys.Tab);
+            Thread.Sleep(2000);
+            SelectDropdownByVisibleText(drpdwnProperShippingName_Xpath, propershipmntname);
+            Click(chkbxCAO_Xpath);
+            EnterText(txtPI_Name, pi);
+            EnterText(txtNoOfPkgs_Name, noofpkg);
+            EnterText(txtNetQtyPerPkg_Name, netqtyperpkg);
+            SelectDropdownByVisibleText(drpdwn_NetQtyPerPkgUnit_Name, "KG");            
+            SelectDropdownByVisibleText(drpdwnReportableQnty_Name, reportable);
+            Click(btnAddDgDetails_Xpath);
+            WaitForElementToBeVisible(chkboxDGVerified_Xpath, TimeSpan.FromSeconds(5));
+            Click(chkboxDGVerified_Xpath);
+            Click(btnOKDGVerified_Xpath);
+
+            SwitchToDefaultContent();
+            //switchToLTEContentFrame();
+        }
+
 
 
     }

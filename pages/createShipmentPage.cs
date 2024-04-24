@@ -113,6 +113,7 @@ namespace iCargoUIAutomation.pages
         private By btnSelectFlight_Name = By.Name("btnSearchFlight");
         private By lblFlightListHeader_Xpath = By.XPath("//*[@id='flight_details']//thead//th[text()='Flight List']");
         private By listAllFlights_Xpath = By.XPath("//*[@id='flight_details']//tbody//tr");
+        private string lblFlightType = "";
         private string btnBookFlight = "//*[@id='flight_details']//tbody//tr[1]//input[@type='button']";
         private By btnContinueFlightDetails_Name = By.Name("btnFlightDtlsCont");
         private string lblAvailabilityCap = "";
@@ -621,6 +622,55 @@ namespace iCargoUIAutomation.pages
 
         }
 
+
+        public void bookWithSpecificFlightType(string typeOfFlight)
+        {
+            try
+            {
+                int noOfFlights = GetElementCount(listAllFlights_Xpath);
+                if (noOfFlights > 0)
+                {
+                    for (int i = 1; i <= noOfFlights; i++)
+                    {
+                        if (!GetAttributeValue(By.XPath("//*[@id='flight_details']//tbody//tr[" + (i + 1) + "]"), "class").Contains("row-border-merge"))
+                        {
+                            if (!getCAPAvailabilityStatus(i).Contains("error") && !getEMBAvailabilityStatus(i).Contains("error") && !getLOADAvailabilityStatus(i).Contains("error") && !getRESAvailabilityStatus(i).Contains("error") && !getCAPAvailabilityStatus(i + 1).Contains("error") && !getEMBAvailabilityStatus(i + 1).Contains("error") && !getLOADAvailabilityStatus(i + 1).Contains("error") && !getRESAvailabilityStatus(i + 1).Contains("error") && getFlightType(i).Contains(typeOfFlight))
+                            {
+                                flightNum = GetText(By.XPath("//*[@id='flight_details']//tbody//tr[" + i + "]//td[1]")).Trim().Split("AS")[1].Trim();
+
+                                btnBookFlight = btnBookFlight.Replace("1", i.ToString());
+                                ScrollDown();
+                                Click(By.XPath(btnBookFlight));
+                                Log.Info(typeOfFlight+" Flight: " + flightNum + " is booked successfully");
+                                break;
+                            }
+
+                        }               
+
+                    }
+
+                }
+                else
+                {
+                    Log.Info("No flight is available for booking from " + origin + " to " + destination + " on " + shippingDate);
+                }
+
+
+            }
+            catch (Exception e)
+            {
+                Log.Error("Error in booking flight: " + e.ToString());
+            }
+
+        }
+
+        public string getFlightType(int flightRowNum)
+        {
+            lblFlightType = "//*[@id='flight_details']//tbody//tr[" + flightRowNum + "]//td[3]";
+            string flightType = GetText(By.XPath(lblFlightType)).Trim();
+            return flightType;
+        }
+
         public string getCAPAvailabilityStatus(int flightRowNum)
         {
             lblAvailabilityCap = "//*[@id='flight_details']//tbody//tr[" + flightRowNum + "]//span[text()='CAP']";
@@ -944,6 +994,16 @@ namespace iCargoUIAutomation.pages
             Click(btnSaveShipment_Name);
         }
 
+        public void saveCAODGshipment(string flightType)
+        {
+            if (flightType.Equals("Combination"))
+            {
+                clickSave();
+                clickingYesOnPopupWarnings();               
+            }
+            
+        }
+
         public (string, string) saveShipmentDetailsAndHandlePopups()
         {
 
@@ -1010,6 +1070,19 @@ namespace iCargoUIAutomation.pages
             }
             return (awb_num, totalPaybleAmount);
 
+        }
+
+
+        public void enterCAODGDetails(string chargetyp,string unid, string propershipmntname, string pi, string noofpkg, string netqtyperpkg, string reportable)
+        {
+            this.chargeType = chargetyp;
+            Click(btnSaveShipment_Name);
+            clickingYesOnPopupWarnings();
+            dgp.enterDetailsForCAODGShipment(unid, propershipmntname, pi, noofpkg, netqtyperpkg, reportable);
+            switchToLTEContentFrame();
+            Click(btnSaveShipment_Name);
+            clickingYesOnPopupWarnings();
+            captureCheckSheetForDG();            
         }
 
         public string clickOnSaveButtonHandlePaymentPortal()
@@ -1158,6 +1231,24 @@ namespace iCargoUIAutomation.pages
                     string drpDwnQn = "//*[@id='tabs-1']//div[@id='configId']/h2[text()='dgSectionName']/parent::div/following-sibling::div//select";
 
                     drpDwnQn = drpDwnQn.Replace("dgSectionName", "DGR HANDLING INFORMATION");
+                    totalQuestions = GetElementCount(By.XPath(drpDwnQn));
+                    drpDwnQn = drpDwnQn + "[@name= 'questionwithAnswer[0].templateAnswer']";
+                    if (!IsDropdownSelectedByVisibleText((By.XPath(drpDwnQn)), "Yes"))
+                    {
+                        for (int j = 0; j < totalQuestions; j++)
+                        {
+                            SelectDropdownByVisibleText(By.XPath(drpDwnQn.Replace("0", j.ToString())), "Yes");
+                            EnterKeys(By.XPath(drpDwnQn), Keys.Tab);
+                        }
+
+                    }
+
+                }
+                else if (section.Text == "CAO HANDLING INFORMATION")
+                {
+                    string drpDwnQn = "//*[@id='tabs-1']//div[@id='configId']/h2[text()='dgSectionName']/parent::div/following-sibling::div//select";
+
+                    drpDwnQn = drpDwnQn.Replace("dgSectionName", "CAO HANDLING INFORMATION");
                     totalQuestions = GetElementCount(By.XPath(drpDwnQn));
                     drpDwnQn = drpDwnQn + "[@name= 'questionwithAnswer[0].templateAnswer']";
                     if (!IsDropdownSelectedByVisibleText((By.XPath(drpDwnQn)), "Yes"))
