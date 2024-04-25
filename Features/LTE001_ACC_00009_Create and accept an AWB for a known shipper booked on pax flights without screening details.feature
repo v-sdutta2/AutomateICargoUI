@@ -21,7 +21,7 @@ Scenario Outline: Create and accept an AWB for a known shipper booked on pax fli
 	And User clicks on the ContinueShipment button
 	#And User enters the Flight details with CarrierCode "<CarrierCode>", FlightNo "<FlightNo>"
 	And User clicks on the Select Flight Button
-	And User selects an available flight
+	And User selects an "Combination" flight
 	And User clicks on the ContinueFlightDetails button
 	And User enters the Charge details with ChargeType "<ChargeType>" and ModeOfPayment "<ModeOfPayment>"
 	And User clicks on the CalculateCharges button

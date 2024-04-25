@@ -200,7 +200,7 @@ namespace iCargoUIAutomation.pages
         {
             int noOfWindowsBefore = GetNumberOfWindowsOpened();
             Click(saveBtn_ID);
-            clickingYesOnPopupWarnings();
+           clickingYesOnPopupWarnings();
             WaitForNewWindowToOpen(TimeSpan.FromSeconds(10), noOfWindowsBefore + 1);
             int noOfWindowsAfter = GetNumberOfWindowsOpened();
             if (noOfWindowsAfter > noOfWindowsBefore)
@@ -292,7 +292,7 @@ namespace iCargoUIAutomation.pages
         {
             int noOfWindowsBefore = GetNumberOfWindowsOpened();
             clickOnSaveButtonToSaveNewFlightDetails();
-            clickingYesOnPopupWarnings();
+           clickingYesOnPopupWarnings();
             SwitchToCAP018Frame();       
             SwitchToFrame(aviChecksheetframe_XPath);
             Console.WriteLine("Switched to Irregularity Frame");            

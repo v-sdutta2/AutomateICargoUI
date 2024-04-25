@@ -79,10 +79,10 @@ namespace iCargoUIAutomation.Features
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Create an AWB in LTE001 for an unknown shipper on a restricted pax flight")]
         [NUnit.Framework.CategoryAttribute("tag1")]
-        [NUnit.Framework.TestCaseAttribute("ASQXGUEST", "82165", "10763", "SEA", "ANC", "GENERAL", "None", "0316", "None", "None", "2", "59", "CC", "None", "CART", null)]
+        [NUnit.Framework.TestCaseAttribute("ASQXGUEST", "C1001", "10763", "SEA", "ANC", "GENERAL", "None", "0316", "None", "None", "2", "59", "CC", "None", "CART", null)]
         public virtual void CreateAnAWBInLTE001ForAnUnknownShipperOnARestrictedPaxFlight(
                     string agentCode, 
-                    string shipperCode, 
+                    string unknownShipperCode, 
                     string consigneeCode, 
                     string origin, 
                     string destination, 
@@ -107,7 +107,7 @@ namespace iCargoUIAutomation.Features
             string[] tagsOfScenario = @__tags;
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             argumentsOfScenario.Add("AgentCode", agentCode);
-            argumentsOfScenario.Add("ShipperCode", shipperCode);
+            argumentsOfScenario.Add("UnknownShipperCode", unknownShipperCode);
             argumentsOfScenario.Add("ConsigneeCode", consigneeCode);
             argumentsOfScenario.Add("Origin", origin);
             argumentsOfScenario.Add("Destination", destination);
@@ -170,8 +170,8 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.When("user clicks on the List button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 16
- testRunner.And(string.Format("User enters the Participant details with AgentCode \"{0}\", ShipperCode \"{1}\", Cons" +
-                            "igneeCode \"{2}\"", agentCode, shipperCode, consigneeCode), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And(string.Format("User enters the Participant details with AgentCode \"{0}\",Unknown ShipperCode \"{1}" +
+                            "\", ConsigneeCode \"{2}\"", agentCode, unknownShipperCode, consigneeCode), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 17
  testRunner.And("User clicks on the ContinueParticipant button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
@@ -194,7 +194,7 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.And("User clicks on the Select Flight Button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 24
- testRunner.And("User selects an available flight", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("User selects an \"Combination\" flight", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 25
  testRunner.And("User clicks on the ContinueFlightDetails button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
