@@ -49,7 +49,6 @@ namespace iCargoUIAutomation.pages
             cip = new CaptureIrregularityPage(driver);
         }
 
-
         // LTE001 Header Section   //
         private By contentFrame_Xpath = By.XPath("//div[@id='LTE001']/iframe");
         private By txtAwbNo_Id = By.Id("awb_b");
@@ -73,9 +72,22 @@ namespace iCargoUIAutomation.pages
         private By btnOrangePencilParticipant_Css = By.CssSelector("#view_participant a");
         private By txtAgentCode_Name = By.Name("agentCode");
         private By txtShipperCode_Name = By.Name("shipperCode");
+        private By txtShipperName_Name = By.Name("shipperName");
+        private By txtShipperContact_Name = By.Name("shipperCntctNumber");
+        private By btnMoreShipper_Name= By.Name("btnMoreShipper");
+        private By txtShipperAddress_Name= By.Name("shipperAddress");
+        private By txtShipperCity_Name = By.Name("shipperCity");
+        private By txtShipperState_Name = By.Name("shipperState");
+        private By txtShipperZip_Name = By.Name("shipperZipCode");
+        private By txtShipperCountry_Name = By.Name("shipperCountry");       
+        private By txtShipperEmail_Name = By.Name("shipperEmail");
+        private By btnShipperOk_Name = By.Name("btnShipperOK");
+
+
         private By txtConsigneeCode_Name = By.Name("consigneeCode");
         private By btnContinueParticipants_Name = By.Name("btnParticipantCont");
         private By btnContinueCommodity_Name = By.Name("btnCommodityCont");
+
 
         //   Certificates   //
 
@@ -287,6 +299,43 @@ namespace iCargoUIAutomation.pages
 
         }
 
+        public void EnterParticipantDetailsWithUnknownShipper(string agent, string shipper, string consignee)
+        {
+            agentCode = agent;
+            shipperCode = shipper;
+            consigneeCode = consignee;
+            try
+            {
+                Click(txtAgentCode_Name);
+                EnterTextWithCheck(txtAgentCode_Name, agentCode);
+                Click(txtShipperCode_Name);
+                EnterTextWithCheck(txtShipperCode_Name, shipperCode);//C1001
+                EnterTextWithCheck(txtShipperName_Name, "Test Unknown Shipper");
+                EnterTextWithCheck(txtShipperContact_Name, "1234567890");
+                Click(btnMoreShipper_Name);
+                WaitForElementToBeVisible(txtShipperAddress_Name, TimeSpan.FromSeconds(5));
+                EnterTextWithCheck(txtShipperAddress_Name, "Test Address");
+                EnterTextWithCheck(txtShipperCity_Name, "ANCHORAGE");
+                EnterTextWithCheck(txtShipperState_Name, "Alaska");
+                EnterTextWithCheck(txtShipperCountry_Name, "US");
+                EnterTextWithCheck(txtShipperZip_Name, "99505");                
+                EnterTextWithCheck(txtShipperEmail_Name, "test@mail.com");
+                ScrollDown();
+                Click(btnShipperOk_Name);
+
+                Click(txtConsigneeCode_Name);
+                EnterTextWithCheck(txtConsigneeCode_Name, consigneeCode);
+                EnterKeys(txtConsigneeCode_Name, Keys.Tab);
+            }
+            catch (Exception e)
+            {
+                Log.Error("Error in entering participant details: " + e.ToString());
+            }
+
+
+
+        }
+
         public void openAndVerifyParticipants()
         {
             try
@@ -318,7 +367,7 @@ namespace iCargoUIAutomation.pages
             {
                 Click(lblShipmentDetails_Id);
                 Click(btnOrangePencilShipment_Css);
-                clickingYesOnPopupWarnings();
+               clickingYesOnPopupWarnings("");
             }
             catch (Exception e)
             {
@@ -820,20 +869,11 @@ namespace iCargoUIAutomation.pages
 
         public string clickingYesOnPopupWarnings(string errortype=null)
         {
-            string errorText = "";          
-            if (errortype == null)
-            {
-                SwitchToDefaultContent();
-                if (IsElementDisplayed(popupWarning_Css))
-                {
-                    errorText = GetText(popupAlertMessage_Xpath);
-                    Click(btnYesActiveCashDraw_Xpath);
-                }
-                switchToLTEContentFrame();
-            }
+            string errorText = "";   
+            
 
 
-            else if (errortype.Equals("Embargo"))
+            if (errortype.Equals("Embargo"))
             {
                 if (IsElementDisplayed(lblEmbargoDetails_Xpath))
                 {
@@ -847,6 +887,16 @@ namespace iCargoUIAutomation.pages
                     cip.captureIrregularity(pieces, weight);
                     switchToLTEContentFrame();
                 }
+            }
+            else 
+            {
+                SwitchToDefaultContent();
+                if (IsElementDisplayed(popupWarning_Css))
+                {
+                    errorText = GetText(popupAlertMessage_Xpath);
+                    Click(btnYesActiveCashDraw_Xpath);
+                }
+                switchToLTEContentFrame();
             }
 
 
@@ -883,7 +933,7 @@ namespace iCargoUIAutomation.pages
             }
             catch (Exception)
             {
-                clickingYesOnPopupWarnings();
+               clickingYesOnPopupWarnings("");
                 if (chargeType.Equals("PP") && !serviceCargoClass.Equals("Free of Charge") && !serviceCargoClass.Equals("COMAT"))
                 {
                     selectModeOfPayment(modeOfPayment);
@@ -1044,7 +1094,7 @@ namespace iCargoUIAutomation.pages
             if (flightType.Equals("Combination"))
             {
                 clickSave();
-                clickingYesOnPopupWarnings();               
+               clickingYesOnPopupWarnings("");               
             }
             
         }
@@ -1068,7 +1118,7 @@ namespace iCargoUIAutomation.pages
                 }
                 catch (Exception)
                 {
-                    clickingYesOnPopupWarnings();
+                    clickingYesOnPopupWarnings("");
                 }
 
                 //if ((captureBookingStatus() == "Confirmed") && (captureDataCaptureStatus() == "EXECUTED") && (captureAcceptanceStatus() == "Finalised") && (captureColorReadyForCarriageStatus().Contains("green")) && (captureColorCaptureCheckSheetStatus().Contains("green")) && (captureColorBlockStatus().Contains("green")))
@@ -1085,11 +1135,11 @@ namespace iCargoUIAutomation.pages
         {
             this.chargeType = chargetype;
             Click(btnSaveShipment_Name);
-            clickingYesOnPopupWarnings();
+           clickingYesOnPopupWarnings("");
             dgp.handleDGShipment(unid, propershipmntname, pi, noofpkg, netqtyperpkg, reportable);
             switchToLTEContentFrame();
             Click(btnSaveShipment_Name);
-            clickingYesOnPopupWarnings();
+           clickingYesOnPopupWarnings("");
             captureCheckSheetForDG();
             clickOnAWBVerifiedCheckbox();
 
@@ -1104,7 +1154,7 @@ namespace iCargoUIAutomation.pages
                 }
                 catch (Exception)
                 {
-                    clickingYesOnPopupWarnings();
+                   clickingYesOnPopupWarnings("");
                 }
 
                 if ((captureBookingStatus() == "Confirmed") && (captureDataCaptureStatus() == "EXECUTED") && (captureAcceptanceStatus() == "Finalised") && (captureColorReadyForCarriageStatus().Contains("green")) && (captureColorCaptureCheckSheetStatus().Contains("green")) && (captureColorBlockStatus().Contains("green")))
@@ -1122,11 +1172,11 @@ namespace iCargoUIAutomation.pages
         {
             this.chargeType = chargetyp;
             Click(btnSaveShipment_Name);
-            clickingYesOnPopupWarnings();
+           clickingYesOnPopupWarnings("");
             dgp.enterDetailsForCAODGShipment(unid, propershipmntname, pi, noofpkg, netqtyperpkg, reportable);
             switchToLTEContentFrame();
             Click(btnSaveShipment_Name);
-            clickingYesOnPopupWarnings();
+           clickingYesOnPopupWarnings("");
             captureCheckSheetForDG();            
         }
 
@@ -1177,7 +1227,7 @@ namespace iCargoUIAutomation.pages
             this.chargeType = chargetyp;
             int noOfWindowsBefore = GetNumberOfWindowsOpened();
             clickSave();
-            clickingYesOnPopupWarnings();
+           clickingYesOnPopupWarnings("");
             clickingYesOnPopupWarnings("Embargo");
             clickingYesOnPopupWarnings("Capture Irregularity");
             WaitForNewWindowToOpen(TimeSpan.FromSeconds(10), noOfWindowsBefore + 1);
@@ -1189,7 +1239,7 @@ namespace iCargoUIAutomation.pages
                 switchToLTEContentFrame();
             }
             
-            clickingYesOnPopupWarnings();
+           clickingYesOnPopupWarnings("");
         }
 
         public string saveShipmentCaptureAWB()

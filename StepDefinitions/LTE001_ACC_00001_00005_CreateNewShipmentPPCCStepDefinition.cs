@@ -213,11 +213,7 @@ namespace iCargoUIAutomation.StepDefinitions
             csp.saveShipmentDetailsAndHandlePopups();
         }
 
-        [When(@"User handles the error popups")]
-        public void WhenUserHandlesTheErrorPopups()
-        {
-            csp.clickingYesOnPopupWarnings();
-        }
+       
 
         [When(@"User handles the error popups with errorType as '([^']*)'")]
         public void WhenUserHandlesTheErrorPopupsWithErrorTypeAs(string errorType)
