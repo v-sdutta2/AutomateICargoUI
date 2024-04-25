@@ -76,8 +76,8 @@ namespace iCargoUIAutomation.Features
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("iCargo Login and Create New AVI Shipment")]
         [NUnit.Framework.CategoryAttribute("tag1")]
-        [NUnit.Framework.TestCaseAttribute("SEA", "ANC", "20-Apr-2024", "PET CONNECT", "9730", "2", "50", "20-Apr-2024", "AS61", null)]
-        public virtual void ICargoLoginAndCreateNewAVIShipment(string origin, string destination, string shippingDate, string productCode, string commodity, string piece, string weight, string flightDate, string flightNo, string[] exampleTags)
+        [NUnit.Framework.TestCaseAttribute("SEA", "ANC", "24-Apr-2024", "PET CONNECT", "9730", "2", "50", null)]
+        public virtual void ICargoLoginAndCreateNewAVIShipment(string origin, string destination, string shippingDate, string productCode, string commodity, string piece, string weight, string[] exampleTags)
         {
             string[] @__tags = new string[] {
                     "tag1"};
@@ -94,8 +94,6 @@ namespace iCargoUIAutomation.Features
             argumentsOfScenario.Add("Commodity", commodity);
             argumentsOfScenario.Add("Piece", piece);
             argumentsOfScenario.Add("Weight", weight);
-            argumentsOfScenario.Add("FlightDate", flightDate);
-            argumentsOfScenario.Add("FlightNo", flightNo);
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("iCargo Login and Create New AVI Shipment", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
 #line 4
  this.ScenarioInitialize(scenarioInfo);
@@ -152,13 +150,12 @@ namespace iCargoUIAutomation.Features
         testRunner.And(string.Format("User enters commodity details with Commodity \"{0}\", Pieces \"{1}\", Weight \"{2}\"", commodity, piece, weight), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 16
-        testRunner.And(string.Format("User enters Carrier details with Origin \"{0}\", Destination \"{1}\", Flight No \"{2}\"" +
-                            ", Flight Date \"{3}\", Pieces \"{4}\", Weight \"{5}\"", origin, destination, flightNo, flightDate, piece, weight), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-#line 17
-        testRunner.And("User clicks on Save button and fills the checksheet details to generate awb", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+        testRunner.And("User selects flight", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 18
+        testRunner.And("User clicks on Save button and fills the checksheet details to generate awb", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 19
         testRunner.Then("User logs out from the application", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }

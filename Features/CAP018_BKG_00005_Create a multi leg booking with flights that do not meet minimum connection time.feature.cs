@@ -78,7 +78,7 @@ namespace iCargoUIAutomation.Features
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Create a multi leg booking with flights that do not meet minimum connection time " +
             "and system should display a warning message")]
-        [NUnit.Framework.TestCaseAttribute("ANC", "LAX", "20-Apr-2024", "PRIORITY", "0091", "2", "50", "20-Apr-2024", "108 1246", null)]
+        [NUnit.Framework.TestCaseAttribute("ANC", "LAX", "24-Apr-2024", "PRIORITY", "0091", "2", "50", "24-Apr-2024", "108 1246", null)]
         public virtual void CreateAMultiLegBookingWithFlightsThatDoNotMeetMinimumConnectionTimeAndSystemShouldDisplayAWarningMessage(string origin, string destination, string shippingDate, string productCode, string commodity, string piece, string weight, string flightDate, string flightNo, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
@@ -149,13 +149,10 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.And(string.Format("User enters commodity details with Commodity \"{0}\", Pieces \"{1}\", Weight \"{2}\"", commodity, piece, weight), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 16
- testRunner.And(string.Format("User clicks on select flight to search for the given Flight No \"{0}\"", flightNo), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("User searches for the multileg flight to verify RES bubble \'red\' a warning messag" +
+                        "e as \'Minimum Handling / Connection Time Fails\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 17
- testRunner.And("User gets RES bubble \'red\' a warning message as \'Minimum Handling / Connection Ti" +
-                        "me Fails\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-#line 18
+#line 19
  testRunner.Then("User logs out from the application", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
