@@ -14,7 +14,7 @@ namespace iCargoUIAutomation.StepDefinitions
         private MaintainBookingPage mbp;
         string origin = "";
         string destination = "";
-        string shippingDate = "";
+        //string shippingDate = "";
         string productCode = "";
         string commodity = "";
         string piece = "";
@@ -44,14 +44,13 @@ namespace iCargoUIAutomation.StepDefinitions
             mbp.ClickNewListButton();
         }
 
-        [Then(@"User enters shipment details with Origin ""([^""]*)"", Destination ""([^""]*)"", Shipping Date ""([^""]*)"", Product Code ""([^""]*)""")]
-        public void ThenUserEntersShipmentDetailsWithOriginDestinationShippingDateProductCode(string origin, string destination, string shippingDate, string productCode)
+        [Then(@"User enters shipment details with Origin ""([^""]*)"", Destination ""([^""]*)"", Product Code ""([^""]*)""")]
+        public void ThenUserEntersShipmentDetailsWithOriginDestinationShippingDateProductCode(string origin, string destination, string productCode)
         {
             this.origin = origin;
-            this.destination = destination;
-            this.shippingDate = shippingDate;
+            this.destination = destination;            
             this.productCode = productCode;
-            mbp.EnterShipmentDetails(origin, destination, shippingDate, productCode);
+            mbp.EnterShipmentDetails(origin, destination,productCode);
         }
 
         [Then(@"User enters Shipper and Consignee details")]
