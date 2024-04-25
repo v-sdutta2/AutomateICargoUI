@@ -75,7 +75,7 @@ namespace iCargoUIAutomation.Features
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("iCargo Login and Rebook an already executed AWB")]
-        [NUnit.Framework.TestCaseAttribute("74323826", "SEA", "ANC", "2", "20", "20-Apr-2024", "AS7006", null)]
+        [NUnit.Framework.TestCaseAttribute("30074520", "SEA", "ANC", "2", "20", "20-Apr-2024", "AS7006", null)]
         public virtual void ICargoLoginAndRebookAnAlreadyExecutedAWB(string aWB, string origin, string destination, string piece, string weight, string flightDate, string flightNo, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
@@ -138,17 +138,16 @@ this.ScenarioInitialize(scenarioInfo);
 #line 14
  testRunner.And("User deletes the flight details and adds new flight details", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 15
- testRunner.And(string.Format("User enters new Carrier details with Origin \"{0}\", Destination \"{1}\", Flight No \"" +
-                            "{2}\", Flight Date \"{3}\", Pieces \"{4}\", Weight \"{5}\"", origin, destination, flightNo, flightDate, piece, weight), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
 #line 16
- testRunner.And("User clicks on Save button to save new flight details", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("User selects flight", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 17
- testRunner.And("User captures the irregularity details", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("User clicks on Save button to save new flight details", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 18
+ testRunner.And("User captures the irregularity details", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 19
  testRunner.Then("User logs out from the application", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }

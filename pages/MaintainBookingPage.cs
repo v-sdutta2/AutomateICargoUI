@@ -1,7 +1,10 @@
-﻿using NUnit.Framework;
+﻿using FluentAssertions.Execution;
+using NUnit.Framework;
 using OpenQA.Selenium;
+using OpenQA.Selenium.DevTools.V121.Debugger;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Security.Policy;
 using System.Text;
@@ -11,6 +14,9 @@ namespace iCargoUIAutomation.pages
 {
     public class MaintainBookingPage : BasePage
     {
+        string shippingDate = DateTime.Now.ToString("dd-MMM-yyyy");
+        string presentdate = DateTime.Now.ToString("dd-MMM");        
+        
         public MaintainBookingPage(IWebDriver driver) : base(driver)
         {
         }
@@ -120,6 +126,8 @@ namespace iCargoUIAutomation.pages
         private By flightDetailsOkbtn_Xpath = By.XPath("//button[@accesskey='K']");
         private By flightdetailssection_XPATH = By.CssSelector(".table_grid .ReactVirtualized__Table__row");
         private By flightProductCode_Xpath = By.XPath("//div[@class='d-flex justify-content-between']/strong[1]");
+        private By flightdate_Xpath = By.XPath("//div[@data-id='departureArrivalDate']");
+        private By flightDepartureTime_Xpath = By.XPath("//div[@data-id='departureTime']");
 
         //Unknown Shipper Consignee Details
         private By unkShipperName_ID = By.Id("CMP_Capacity_Booking_MaintainReservation_ShipperConsignee_ShipperName_NEW");
@@ -150,7 +158,7 @@ namespace iCargoUIAutomation.pages
             //Click(New_List_XPATH);
         }
 
-        public void EnterShipmentDetails(string origin, string destination, string shippingDate, string ProductCode)
+        public void EnterShipmentDetails(string origin, string destination, string ProductCode)
         {
             EnterText(origin_ID, origin);
             EnterText(destination_XPATH, destination);
@@ -203,8 +211,8 @@ namespace iCargoUIAutomation.pages
             if (IsElementDisplayed(popupAlertWarningBooking_CSS))
             {
                 errorText = GetText(popupAlertMessageBooking_XPATH);
-                Click(btnYesAlertMessageBooking_XPATH);
-            }
+                Click(btnYesAlertMessageBooking_XPATH);                
+            }            
             //SwitchToCAP018Frame();
             return errorText;
         }
@@ -213,8 +221,7 @@ namespace iCargoUIAutomation.pages
         {
             int noOfWindowsBefore = GetNumberOfWindowsOpened();
             Click(saveBtn_ID);
-            clickingYesOnPopupWarnings();
-            clickingYesOnPopupWarnings();
+            clickingYesOnPopupWarnings();            
             WaitForNewWindowToOpen(TimeSpan.FromSeconds(10), noOfWindowsBefore + 1);
             int noOfWindowsAfter = GetNumberOfWindowsOpened();
             if (noOfWindowsAfter > noOfWindowsBefore)
@@ -230,6 +237,7 @@ namespace iCargoUIAutomation.pages
             }
             ClickOnElementIfPresent(btnCloseMb_XPATH);
         }
+     
 
         public void EnterAWBNumber(string awbNumber)
         {
@@ -305,6 +313,7 @@ namespace iCargoUIAutomation.pages
         {
             int noOfWindowsBefore = GetNumberOfWindowsOpened();
             clickOnSaveButtonToSaveNewFlightDetails();
+            clickingYesOnPopupWarnings();
             clickingYesOnPopupWarnings();
             SwitchToCAP018Frame();       
             SwitchToFrame(aviChecksheetframe_XPath);
@@ -482,49 +491,52 @@ namespace iCargoUIAutomation.pages
             string ratecolor = GetAttributeValue(rate_Xpath, "class");
             foreach (var item in noofflights)
             {
-                if (productcode == "GENERAL")
+                if (presentdate == GetText(flightdate_Xpath))
                 {
-                    if (capColor != "badge-red" && rescolor != "badge-red" && embcolor != "badge-red" && ratecolor != "badge-red")
+                    if (productcode == "GENERAL")
                     {
-                        Click(By.XPath("//strong[text()='GENERAL']/parent::div/parent::div/parent::div"));
-                        Click(flightDetailsOkbtn_Xpath);
-                        break;
+                        if (capColor != "badge-red" && rescolor != "badge-red" && embcolor != "badge-red" && ratecolor != "badge-red")
+                        {
+                            Click(By.XPath("//strong[text()='GENERAL']/parent::div/parent::div/parent::div"));
+                            Click(flightDetailsOkbtn_Xpath);
+                            break;
+                        }
                     }
-                }
-                else if (productcode == "PRIORITY")
-                {
-                    if (capColor != "badge-red" && rescolor != "badge-red" && embcolor != "badge-red" && ratecolor != "badge-red")
+                    else if (productcode == "PRIORITY")
                     {
-                        Click(By.XPath("//strong[text()='PRIORITY']/parent::div/parent::div/parent::div"));
-                        Click(flightDetailsOkbtn_Xpath);
-                        break;
+                        if (capColor != "badge-red" && rescolor != "badge-red" && embcolor != "badge-red" && ratecolor != "badge-red")
+                        {
+                            Click(By.XPath("//strong[text()='PRIORITY']/parent::div/parent::div/parent::div"));
+                            Click(flightDetailsOkbtn_Xpath);
+                            break;
+                        }
                     }
-                }
-                else if (productcode == "EMPLOYEE SHIPMENT")
-                {
-                    if (capColor != "badge-red" && rescolor != "badge-red" && embcolor != "badge-red" && ratecolor != "badge-red")
+                    else if (productcode == "EMPLOYEE SHIPMENT")
                     {
-                        Click(By.XPath("//strong[text()='EMPLOYEE SHIPMENT']/parent::div/parent::div/parent::div"));
-                        Click(flightDetailsOkbtn_Xpath);
-                        break;
+                        if (capColor != "badge-red" && rescolor != "badge-red" && embcolor != "badge-red" && ratecolor != "badge-red")
+                        {
+                            Click(By.XPath("//strong[text()='EMPLOYEE SHIPMENT']/parent::div/parent::div/parent::div"));
+                            Click(flightDetailsOkbtn_Xpath);
+                            break;
+                        }
                     }
-                }
-                else if (productcode == "GOLDSTREAK")
-                {
-                    if (capColor != "badge-red" && rescolor != "badge-red" && embcolor != "badge-red" && ratecolor != "badge-red")
+                    else if (productcode == "GOLDSTREAK")
                     {
-                        Click(By.XPath("//strong[text()='GOLDSTREAK']/parent::div/parent::div/parent::div"));
-                        Click(flightDetailsOkbtn_Xpath);
-                        break;
+                        if (capColor != "badge-red" && rescolor != "badge-red" && embcolor != "badge-red" && ratecolor != "badge-red")
+                        {
+                            Click(By.XPath("//strong[text()='GOLDSTREAK']/parent::div/parent::div/parent::div"));
+                            Click(flightDetailsOkbtn_Xpath);
+                            break;
+                        }
                     }
-                }
-                else if (productcode == "PET CONNECT")
-                {
-                    if (capColor != "badge-red" && rescolor != "badge-red" && embcolor != "badge-red" && ratecolor != "badge-red")
+                    else if (productcode == "PET CONNECT")
                     {
-                        Click(By.XPath("//strong[text()='PET CONNECT']/parent::div/parent::div/parent::div"));
-                        Click(flightDetailsOkbtn_Xpath);
-                        break;
+                        if (capColor != "badge-red" && rescolor != "badge-red" && embcolor != "badge-red" && ratecolor != "badge-red")
+                        {
+                            Click(By.XPath("//strong[text()='PET CONNECT']/parent::div/parent::div/parent::div"));
+                            Click(flightDetailsOkbtn_Xpath);
+                            break;
+                        }
                     }
                 }
             }
@@ -535,6 +547,7 @@ namespace iCargoUIAutomation.pages
         {
             Click(selectFlightBtn_ID);
             SwitchToFrame(bookingIrregularityFrame_ID);
+            WaitForElementToBeVisible(flightdetailssection_XPATH, TimeSpan.FromSeconds(20));
             Click(multilegFlightsfilter);
             Click(oneStopFilter_Xpath);
             Click(twoStopFilter_Xpath);

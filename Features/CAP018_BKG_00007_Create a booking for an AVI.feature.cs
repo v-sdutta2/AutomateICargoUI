@@ -140,8 +140,8 @@ namespace iCargoUIAutomation.Features
         testRunner.And("User clicks on New/List button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 13
-        testRunner.And(string.Format("User enters shipment details with Origin \"{0}\", Destination \"{1}\", Shipping Date " +
-                            "\"{2}\", Product Code \"{3}\"", origin, destination, shippingDate, productCode), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+        testRunner.And(string.Format("User enters shipment details with Origin \"{0}\", Destination \"{1}\", Product Code \"" +
+                            "{2}\"", origin, destination, productCode), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 14
         testRunner.And("User enters Shipper and Consignee details", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");

@@ -76,7 +76,7 @@ namespace iCargoUIAutomation.Features
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Create a booking given an AWB from stock and system will create a new awb")]
         [NUnit.Framework.CategoryAttribute("tag1")]
-        [NUnit.Framework.TestCaseAttribute("74428115", "SEA", "ANC", "21-Apr-2024", "GENERAL", "0316", "2", "20", "21-Apr-2024", "AS61", "82165", "82165", "82165", null)]
+        [NUnit.Framework.TestCaseAttribute("74426004", "SEA", "ANC", "21-Apr-2024", "GENERAL", "0316", "2", "20", "21-Apr-2024", "AS61", "82165", "82165", "82165", null)]
         public virtual void CreateABookingGivenAnAWBFromStockAndSystemWillCreateANewAwb(string aWB, string origin, string destination, string shippingDate, string productCode, string commodity, string piece, string weight, string flightDate, string flightNo, string agentCode, string shipper, string consignee, string[] exampleTags)
         {
             string[] @__tags = new string[] {
@@ -161,14 +161,13 @@ this.ScenarioInitialize(scenarioInfo);
 #line 17
  testRunner.And(string.Format("User enters commodity details with Commodity \"{0}\", Pieces \"{1}\", Weight \"{2}\"", commodity, piece, weight), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 18
- testRunner.And(string.Format("User enters Carrier details with Origin \"{0}\", Destination \"{1}\", Flight No \"{2}\"" +
-                            ", Flight Date \"{3}\", Pieces \"{4}\", Weight \"{5}\"", origin, destination, flightNo, flightDate, piece, weight), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
 #line 19
- testRunner.And("User clicks on Save button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("User selects flight", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 20
+ testRunner.And("User clicks on Save button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 21
  testRunner.Then("User logs out from the application", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
