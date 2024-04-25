@@ -192,7 +192,7 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.And("User clicks on the Select Flight Button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 24
- testRunner.And("User selects an available flight", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("User selects an \"Combination\" flight", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 25
  testRunner.And("User clicks on the ContinueFlightDetails button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");

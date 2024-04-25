@@ -221,7 +221,7 @@ namespace iCargoUIAutomation.pages
         {
             int noOfWindowsBefore = GetNumberOfWindowsOpened();
             Click(saveBtn_ID);
-            clickingYesOnPopupWarnings();            
+            clickingYesOnPopupWarnings();     
             WaitForNewWindowToOpen(TimeSpan.FromSeconds(10), noOfWindowsBefore + 1);
             int noOfWindowsAfter = GetNumberOfWindowsOpened();
             if (noOfWindowsAfter > noOfWindowsBefore)
