@@ -75,7 +75,7 @@ namespace iCargoUIAutomation.Features
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Attach and Detach AWB from a saved booking to generate new AWB number")]
-        [NUnit.Framework.TestCaseAttribute("30073470", "ASQXGUEST", null)]
+        [NUnit.Framework.TestCaseAttribute("30074542", "ASQXGUEST", null)]
         public virtual void AttachAndDetachAWBFromASavedBookingToGenerateNewAWBNumber(string aWB, string agentCode, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
