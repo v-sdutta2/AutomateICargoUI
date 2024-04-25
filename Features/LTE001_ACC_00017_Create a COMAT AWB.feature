@@ -32,6 +32,7 @@ Scenario Outline: Create a COMAT AWB
 	And User checks the AWB_Verified checkbox
 	And User clicks on the save button
 	And User handles the error popups with errorType as ''
+	And User validates the AWB is "EXECUTED"
 	And User closes the LTE screen
 	Then User logs out from the application
 

@@ -26,6 +26,12 @@ namespace iCargoUIAutomation.StepDefinitions
             this.csp = pageObjectManager.GetCreateShipmentPage();
         }
 
+        [When(@"User enters the Participant details with AgentCode ""([^""]*)"",Unknown ShipperCode ""([^""]*)"", ConsigneeCode ""([^""]*)""")]
+        public void WhenUserEntersTheParticipantDetailsWithAgentCodeUnknownShipperCodeConsigneeCode(string agent, string unknownshipper, string consignee)
+        {
+            csp.EnterParticipantDetailsWithUnknownShipper(agent, unknownshipper, consignee);
+        }
+
         [When(@"User saves the shipment details and capture AWB number")]
         public void WhenUserSavesTheShipmentDetailsAndCaptureAWBNumber()
         {
