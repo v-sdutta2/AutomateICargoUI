@@ -22,18 +22,25 @@ namespace iCargoUIAutomation.StepDefinitions
             mbp = pageObjectManager.GetMaintainBookingPage();
         }
 
-        [Then(@"User clicks on select flight to search for the given Flight No ""([^""]*)""")]
-        public void ThenUserClicksOnSelectFlightToSearchForTheGivenFlightNo(string flightnbr)
-        {
-            this.flightnbr = flightnbr;
-            mbp.MultilegFlightSearch(flightnbr);
-        }
+        //[Then(@"User clicks on select flight to search for the given Flight No ""([^""]*)""")]
+        //public void ThenUserClicksOnSelectFlightToSearchForTheGivenFlightNo(string flightnbr)
+        //{
+        //    this.flightnbr = flightnbr;
+        //    mbp.MultilegFlightSearch(flightnbr);
+        //}
 
 
-        [Then(@"User gets RES bubble '([^']*)' a warning message as '([^']*)'")]
-        public void ThenUserGetsRESBubbleAWarningMessageAs(string rescolr, string reswarning)
+        //[Then(@"User gets RES bubble '([^']*)' a warning message as '([^']*)'")]
+        //public void ThenUserGetsRESBubbleAWarningMessageAs(string rescolr, string reswarning)
+        //{
+        //    mbp.VerifyMinimumConnectionTimeWarning(rescolr, reswarning);
+        //}
+
+        [Then(@"User searches for the multileg flight to verify RES bubble '([^']*)' a warning message as '([^']*)'")]
+        public void ThenUserSearchesForTheMultilegFlightToVerifyRESBubbleAWarningMessageAs(string rescolr, string reswarning)
         {
-            mbp.VerifyMinimumConnectionTimeWarning(rescolr, reswarning);
+           mbp.selectMultilegflight(rescolr, reswarning);
         }
+
     }
 }
