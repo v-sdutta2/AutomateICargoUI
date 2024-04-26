@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <SpecFlowObsoleteCodeBehindFiles Remove="Features\LTE001_ACC_00001_Create a PP AWB in LTE001 for a known shipper - Copy.feature.cs" />
     <SpecFlowObsoleteCodeBehindFiles Remove="Features\LTE001_ACC_00003_Create a DG AWB in LTE001 - Copy.feature.cs" />
     <SpecFlowObsoleteCodeBehindFiles Remove="Features\LTE001_ACC_00006_Accept a prebooked AWB in LTE001 - Copy.feature.cs" />
     <SpecFlowObsoleteCodeBehindFiles Remove="Features\LTE001_ACC_00007_Create an AWB in LTE001 that has pieces that fail screening - Copy.feature.cs" />
@@ -43,6 +44,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <SpecFlowFeatureFiles Update="Features\LTE001_ACC_00011_Create an AWB for a known shipper that has first flight on freighter and next flight on pax.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+    </SpecFlowFeatureFiles>
     <SpecFlowFeatureFiles Update="Features\LTE001_ACC_00013_Create an AWB with less than a 2 hr connection time between flights.feature">
       <Visible>$(UsingMicrosoftNETSdk)</Visible>
       <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>

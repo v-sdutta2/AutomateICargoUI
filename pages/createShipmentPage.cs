@@ -758,6 +758,58 @@ namespace iCargoUIAutomation.pages
 
         }
 
+        public void bookConnectingFlightWithDifferentFlightTypes(string firstflttyp,string secondflttype)
+        {
+            try
+            {
+                int noOfFlights = GetElementCount(listAllFlights_Xpath);
+                if (noOfFlights > 0)
+                {
+                    for (int i = 1; i <= noOfFlights; i++)
+                    {
+                        if (GetAttributeValue(By.XPath("//*[@id='flight_details']//tbody//tr[" + (i + 1) + "]"), "class").Contains("row-border-merge"))
+                        {
+                            if(getFlightType(i).Contains(firstflttyp) && getFlightType(i+1).Contains(secondflttype))
+                            {
+                                if (!getCAPAvailabilityStatus(i).Contains("error") && !getEMBAvailabilityStatus(i).Contains("error") && !getLOADAvailabilityStatus(i).Contains("error") && !getRESAvailabilityStatus(i).Contains("error") && !getCAPAvailabilityStatus(i + 1).Contains("error") && !getEMBAvailabilityStatus(i + 1).Contains("error") && !getLOADAvailabilityStatus(i + 1).Contains("error") && !getRESAvailabilityStatus(i + 1).Contains("error"))
+                                {
+                                    flightNum = GetText(By.XPath("//*[@id='flight_details']//tbody//tr[" + i + "]//td[1]")).Trim().Split("AS")[1].Trim();
+                                    ConnectingflightNum = GetText(By.XPath("//*[@id='flight_details']//tbody//tr[" + (i + 1) + "]//td[1]")).Trim().Split("AS")[1].Trim();
+                                    btnBookFlight = btnBookFlight.Replace("1", i.ToString());
+                                    ScrollDown();
+                                    Click(By.XPath(btnBookFlight));
+
+                                    Log.Info(firstflttyp+" Flight " + flightNum + " & connecting "+ secondflttype+" Flight " + ConnectingflightNum + " is booked successfully");
+
+                                    break;
+                                }
+
+                            }
+                            
+
+
+                            i += 1;
+
+                        }
+
+                    }
+
+                }
+                else
+                {
+                    Log.Info("No flight is available for booking from " + origin + " to " + destination + " on " + shippingDate);
+                }
+
+
+            }
+            catch (Exception e)
+            {
+                Log.Error("Error in booking flight: " + e.ToString());
+            }
+
+        }
+
+
         public string getFlightType(int flightRowNum)
         {
             lblFlightType = "//*[@id='flight_details']//tbody//tr[" + flightRowNum + "]//td[3]";
