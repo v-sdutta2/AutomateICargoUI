@@ -17,9 +17,9 @@ namespace iCargoUIAutomation.utilities
         public static ExtentTest _feature;
         public static ExtentTest _scenario;
 
-        public static String dir = AppDomain.CurrentDomain.BaseDirectory;
-        public static String testResultPath = dir.Replace("bin\\Debug\\net6.0", "TestResults");
-
+        public static String dir = AppDomain.CurrentDomain.BaseDirectory;  
+        //public static String testResultPath = dir.Replace("bin\\Debug\\net6.0", "Reports");
+        public static String testResultPath = dir.Replace("bin\\Debug\\net6.0", "Reports\\TestResults_" + DateTime.Now.ToString("yyyyMMdd_HHmmss"));
         public static void ExtentReportInit()
         {
             var htmlReporter = new ExtentHtmlReporter(testResultPath);
