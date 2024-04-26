@@ -16,7 +16,7 @@ Scenario Outline: Create a booking given an AWB from stock and system will creat
 	And User enters Unknown Shipper "<Shipper>" and Consignee "<Consignee>" details 
 	And User enters commodity details with Commodity "<Commodity>", Pieces "<Piece>", Weight "<Weight>"
 	#And User enters Carrier details with Origin "<Origin>", Destination "<Destination>", Flight No "<FlightNo>", Flight Date "<FlightDate>", Pieces "<Piece>", Weight "<Weight>"
-	And User selects flight
+	And User selects flight for "<ProductCode>"
 	And User clicks on Save button
 	Then User logs out from the application
 Examples:

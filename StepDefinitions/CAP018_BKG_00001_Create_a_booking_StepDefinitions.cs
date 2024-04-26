@@ -83,10 +83,15 @@ namespace iCargoUIAutomation.StepDefinitions
             //mbp.GetAWBNumber();
         }
 
-        [Then(@"User selects flight")]
-        public void ThenUserSelectsFlight()
+        //[Then(@"User selects flight")]
+        //public void ThenUserSelectsFlight()
+        //{
+        //    mbp.SelectFlight();
+        //}
+        [Then(@"User selects flight for ""([^""]*)""")]
+        public void ThenUserSelectsFlightFor(string productCode)
         {
-            mbp.SelectFlight();
+            mbp.SelectFlight(productCode);
         }
 
     }

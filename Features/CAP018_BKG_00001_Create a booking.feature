@@ -13,7 +13,8 @@
         And User enters shipment details with Origin "<Origin>", Destination "<Destination>", Product Code "<ProductCode>"
         And User enters Shipper and Consignee details
         And User enters commodity details with Commodity "<Commodity>", Pieces "<Piece>", Weight "<Weight>"
-        And User selects flight
+        #And User selects flight
+        And User selects flight for "<ProductCode>"
         #And User enters Carrier details with Origin "<Origin>", Destination "<Destination>", Flight No "<FlightNo>", Flight Date "<FlightDate>", Pieces "<Piece>", Weight "<Weight>"
         And User clicks on Save button
         Then User logs out from the application

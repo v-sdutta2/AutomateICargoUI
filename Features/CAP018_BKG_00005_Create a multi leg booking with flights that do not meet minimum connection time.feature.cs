@@ -149,8 +149,8 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.And(string.Format("User enters commodity details with Commodity \"{0}\", Pieces \"{1}\", Weight \"{2}\"", commodity, piece, weight), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 16
- testRunner.And("User searches for the multileg flight to verify RES bubble \'red\' a warning messag" +
-                        "e as \'Minimum Handling / Connection Time Fails\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And(string.Format("User searches for the multileg flight to verify RES bubble \'red\' a warning messag" +
+                            "e as \'Minimum Handling / Connection Time Fails\' and product code as \"{0}\"", productCode), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 19
  testRunner.Then("User logs out from the application", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
