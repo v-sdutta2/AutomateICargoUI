@@ -32,17 +32,35 @@ namespace iCargoUIAutomation.pages
         {
             try
             {
-                string baseStation = GetText(lblBaseStation_Xpath);
-                if (baseStation != station)
+                string baseStation="";
+                while (true)
                 {
-                    Click(btnMore_Xpath);
-                    Click(lnkSwitchRole_Xpath);
-                    SwitchToFrame(frameSwitchRole_Id);
-                    WaitForElementToBeVisible(drpdwnSelectStation_Id, TimeSpan.FromSeconds(10));
-                    SelectDropdownByVisibleText(drpdwnSelectStation_Id, station);
-                    Click(btnOKSwitchRole_Xpath);
-                    SwitchToDefaultContent();
+                    baseStation = GetText(lblBaseStation_Xpath);
+                    if (baseStation == station)
+                        break;                  
+                    
+                        Click(btnMore_Xpath);
+                        Click(lnkSwitchRole_Xpath);
+                        SwitchToFrame(frameSwitchRole_Id);
+                        WaitForElementToBeVisible(drpdwnSelectStation_Id, TimeSpan.FromSeconds(10));
+                        SelectDropdownByVisibleText(drpdwnSelectStation_Id, station);
+                        Click(btnOKSwitchRole_Xpath);
+                        SwitchToDefaultContent();
+                    
                 }
+
+
+                //string baseStation = GetText(lblBaseStation_Xpath);
+                //if (baseStation != station)
+                //{
+                //    Click(btnMore_Xpath);
+                //    Click(lnkSwitchRole_Xpath);
+                //    SwitchToFrame(frameSwitchRole_Id);
+                //    WaitForElementToBeVisible(drpdwnSelectStation_Id, TimeSpan.FromSeconds(10));
+                //    SelectDropdownByVisibleText(drpdwnSelectStation_Id, station);
+                //    Click(btnOKSwitchRole_Xpath);
+                //    SwitchToDefaultContent();
+                //}
             }
             catch (Exception e)
             {              
