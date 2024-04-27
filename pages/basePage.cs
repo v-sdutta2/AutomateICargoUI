@@ -28,6 +28,22 @@ namespace iCargoUIAutomation.pages
 
 
         // Browser Actions
+
+        // delete all cookiies & caches & verify if all cookies are deleted
+        public void DeleteAllCookies()
+        {
+            driver.Manage().Cookies.DeleteAllCookies();
+            
+            // Verify if all cookies are deleted
+            if (driver.Manage().Cookies.AllCookies.Count == 0)
+            {
+                log.Info("All cookies are deleted");
+            }
+            else
+            {
+                log.Info("All cookies are not deleted");
+            }
+        }
         public void Open(string url)
         {
             try
@@ -409,6 +425,10 @@ namespace iCargoUIAutomation.pages
             SelectElement select = new SelectElement(driver.FindElement(byLocator));
             if (text != "None")
             {
+                // wait untill the value is visible
+                WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+                wait.Until(driver => select.Options.Any(option => option.Text == text));
+
                 select.SelectByText(text);
             }
             else
