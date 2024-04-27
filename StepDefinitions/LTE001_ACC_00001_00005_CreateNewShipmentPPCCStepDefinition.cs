@@ -17,23 +17,7 @@ namespace iCargoUIAutomation.StepDefinitions
         private PageObjectManager pageObjectManager;
         private homePage hp;
         private createShipmentPage csp;
-        // string origin = "";
-        //string destination = "";
-        //string shippingDate = "";//DateTime.Now.ToString("dd-MMM-yyyy");
-
-        //string scc = "";
-        //string serviceCargoClass = "";
-        //string piece = "";
-        //string weight = "";
-        //string chargeType = "";
-        //string modeOfPayment = "";
-        //string iataCharge="";
-        //string marketCharge="";
-        //string totalChagre="";
-        //string flightNum="";
-        //string flightSegment = "";
-        //string generatedAWB = "";
-        //string totalPaybleAmountExtracted = "";
+       
         ILog Log = LogManager.GetLogger(typeof(LTE001_ACC_00001_00005_CreateNewShipmentPPCCStepDefinition));
 
 

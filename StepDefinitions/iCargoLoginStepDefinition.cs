@@ -36,7 +36,8 @@ namespace iCargoUIAutomation.StepDefinitions
         public void GivenUserLauchesTheUrlOfICargoStagingUI()
         {
             Log.Info("Step: Launching the iCargo Staging UI");
-            
+
+            DeleteAllCookies();
             Open(appUrl);
 
         }
