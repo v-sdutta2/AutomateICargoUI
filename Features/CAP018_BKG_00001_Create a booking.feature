@@ -19,5 +19,5 @@
         And User clicks on Save button
         Then User logs out from the application
         Examples:
-            | Origin | Destination | ShippingDate | ProductCode | Commodity | Piece | Weight | FlightDate  | FlightNo | 
-            | SEA    | ANC         | 24-Apr-2024  | PRIORITY     | 0316      | 2     | 20     | 24-Apr-2024 | AS61    |
+            | Origin | Destination | ProductCode | Commodity | Piece | Weight |  
+            | SEA    | ANC         |  PRIORITY     | 0316      | 2     | 20   | 

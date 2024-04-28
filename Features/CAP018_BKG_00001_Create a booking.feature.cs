@@ -76,8 +76,8 @@ namespace iCargoUIAutomation.Features
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("iCargo Login and Create New Shipment")]
         [NUnit.Framework.CategoryAttribute("tag1")]
-        [NUnit.Framework.TestCaseAttribute("SEA", "ANC", "24-Apr-2024", "PRIORITY", "0316", "2", "20", "24-Apr-2024", "AS61", null)]
-        public virtual void ICargoLoginAndCreateNewShipment(string origin, string destination, string shippingDate, string productCode, string commodity, string piece, string weight, string flightDate, string flightNo, string[] exampleTags)
+        [NUnit.Framework.TestCaseAttribute("SEA", "ANC", "PRIORITY", "0316", "2", "20", null)]
+        public virtual void ICargoLoginAndCreateNewShipment(string origin, string destination, string productCode, string commodity, string piece, string weight, string[] exampleTags)
         {
             string[] @__tags = new string[] {
                     "tag1"};
@@ -89,13 +89,10 @@ namespace iCargoUIAutomation.Features
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             argumentsOfScenario.Add("Origin", origin);
             argumentsOfScenario.Add("Destination", destination);
-            argumentsOfScenario.Add("ShippingDate", shippingDate);
             argumentsOfScenario.Add("ProductCode", productCode);
             argumentsOfScenario.Add("Commodity", commodity);
             argumentsOfScenario.Add("Piece", piece);
             argumentsOfScenario.Add("Weight", weight);
-            argumentsOfScenario.Add("FlightDate", flightDate);
-            argumentsOfScenario.Add("FlightNo", flightNo);
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("iCargo Login and Create New Shipment", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
 #line 4
     this.ScenarioInitialize(scenarioInfo);

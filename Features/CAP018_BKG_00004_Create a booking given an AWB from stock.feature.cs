@@ -76,8 +76,8 @@ namespace iCargoUIAutomation.Features
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Create a booking given an AWB from stock and system will create a new awb")]
         [NUnit.Framework.CategoryAttribute("tag1")]
-        [NUnit.Framework.TestCaseAttribute("74426004", "SEA", "ANC", "21-Apr-2024", "GENERAL", "0316", "2", "20", "21-Apr-2024", "AS61", "82165", "82165", "82165", null)]
-        public virtual void CreateABookingGivenAnAWBFromStockAndSystemWillCreateANewAwb(string aWB, string origin, string destination, string shippingDate, string productCode, string commodity, string piece, string weight, string flightDate, string flightNo, string agentCode, string shipper, string consignee, string[] exampleTags)
+        [NUnit.Framework.TestCaseAttribute("74426004", "SEA", "ANC", "GENERAL", "0316", "2", "20", "82165", "82165", "82165", null)]
+        public virtual void CreateABookingGivenAnAWBFromStockAndSystemWillCreateANewAwb(string aWB, string origin, string destination, string productCode, string commodity, string piece, string weight, string agentCode, string shipper, string consignee, string[] exampleTags)
         {
             string[] @__tags = new string[] {
                     "tag1"};
@@ -90,13 +90,10 @@ namespace iCargoUIAutomation.Features
             argumentsOfScenario.Add("AWB", aWB);
             argumentsOfScenario.Add("Origin", origin);
             argumentsOfScenario.Add("Destination", destination);
-            argumentsOfScenario.Add("ShippingDate", shippingDate);
             argumentsOfScenario.Add("ProductCode", productCode);
             argumentsOfScenario.Add("Commodity", commodity);
             argumentsOfScenario.Add("Piece", piece);
             argumentsOfScenario.Add("Weight", weight);
-            argumentsOfScenario.Add("FlightDate", flightDate);
-            argumentsOfScenario.Add("FlightNo", flightNo);
             argumentsOfScenario.Add("AgentCode", agentCode);
             argumentsOfScenario.Add("Shipper", shipper);
             argumentsOfScenario.Add("Consignee", consignee);
@@ -153,7 +150,7 @@ this.ScenarioInitialize(scenarioInfo);
 #line hidden
 #line 15
  testRunner.And(string.Format("User enters shipment details with Origin \"{0}\", Destination \"{1}\",Agent Code \"{2}" +
-                            "\", Shipping Date \"{3}\", Product Code \"{4}\"", origin, destination, agentCode, shippingDate, productCode), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+                            "\", Product Code \"{3}\"", origin, destination, agentCode, productCode), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 16
  testRunner.And(string.Format("User enters Unknown Shipper \"{0}\" and Consignee \"{1}\" details", shipper, consignee), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");

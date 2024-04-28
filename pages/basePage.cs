@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using log4net;
+using AventStack.ExtentReports;
 
 namespace iCargoUIAutomation.pages
 {
@@ -16,16 +17,15 @@ namespace iCargoUIAutomation.pages
         private readonly IWebDriver driver;
 
         public static readonly ILog log = LogManager.GetLogger(typeof(BasePage));
-        private readonly logFileConfiguration logConfig;
-        
+        private readonly logFileConfiguration logConfig;        
 
         public BasePage(IWebDriver driver)
         {
             this.driver = driver;
             this.logConfig = new logFileConfiguration();
             this.logConfig.ConfigureLog4Net();
-        }
-
+        }    
+                
 
         // Browser Actions
         public void Open(string url)
@@ -239,7 +239,7 @@ namespace iCargoUIAutomation.pages
                 IWebElement element = driver.FindElement(byLocator);
                 element.Clear();
                 element.SendKeys(text);
-                Thread.Sleep(2000);
+                //Thread.Sleep(2000);
 
                 if (element.GetAttribute("value") == text)
                 {
@@ -339,6 +339,17 @@ namespace iCargoUIAutomation.pages
             wait.IgnoreExceptionTypes(typeof(ElementNotVisibleException), typeof(NoSuchElementException), typeof(TimeoutException));
             wait.Until(driver => driver.FindElement(byLocator).Displayed);
             log.Info("The element " + byLocator + " is visible");
+
+        }
+
+        // wait for the element to be clickable
+        public void WaitForElementToBeClickable(By byLocator, TimeSpan time)
+        {
+            WebDriverWait wait = new WebDriverWait(driver, time);
+            wait.PollingInterval = TimeSpan.FromSeconds(1);
+            wait.IgnoreExceptionTypes(typeof(ElementNotVisibleException), typeof(NoSuchElementException), typeof(TimeoutException));
+            wait.Until(driver => driver.FindElement(byLocator).Enabled);
+            log.Info("The element " + byLocator + " is clickable");
 
         }
 

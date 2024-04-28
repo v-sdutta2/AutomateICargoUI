@@ -132,7 +132,7 @@ namespace iCargoUIAutomation.pages
         private By flightProductCode_Xpath = By.XPath("//div[@class='d-flex justify-content-between']/strong[1]");
         private By flightdate_Xpath = By.XPath("//div[@data-id='departureArrivalDate']");
         private By flightDepartureTime_Xpath = By.XPath("//div[@data-id='departureTime']");
-        private By selectflightNumber_Xpath = By.XPath("//div[contains(@class, 'ReactVirtualized__Table__rowColumn')]//strong[@class='align-self-center']/label");       
+        private By selectflightNumber_Xpath = By.XPath("//div[contains(@class, 'ReactVirtualized__Table__rowColumn')]//strong[@class='align-self-center']/label");
         private By GeneralProdbtn_Xpath = By.XPath("//strong[text()='GENERAL']/parent::div/parent::div/parent::div");
         private By PriorityProdbtn_Xpath = By.XPath("//strong[text()='PRIORITY']/parent::div/parent::div/parent::div");
         private By EmployeeProdbtn_Xpath = By.XPath("//strong[text()='EMPLOYEE SHIPMENT']/parent::div/parent::div/parent::div");
@@ -164,14 +164,16 @@ namespace iCargoUIAutomation.pages
 
         public void ClickNewListButton()
         {
-            ClickOnElementIfPresent(New_List_XPATH);
+            ClickOnElementIfPresent(New_List_XPATH);            
             //Click(New_List_XPATH);
         }
 
         public void EnterShipmentDetails(string origin, string destination, string ProductCode)
         {
-            WaitForElementToBeVisible(origin_ID, TimeSpan.FromSeconds(10));
-            EnterText(origin_ID, origin);
+            //WaitForElementToBeClickable(origin_ID, TimeSpan.FromSeconds(15));
+            if (IsElementEnabled(origin_ID))            
+                EnterText(origin_ID, origin);            
+            //EnterText(origin_ID, origin);
             EnterText(destination_XPATH, destination);
             ClickOnElementIfPresent(agentCode_ID);
             int agentcode = 10763;
@@ -183,11 +185,13 @@ namespace iCargoUIAutomation.pages
 
         public void EnterShipperConsigneeDetails()
         {
+            GetNumberOfWindowsOpened();
             SwitchToSecondPopupWindow();
             int ShipperCode = 10763;
-            int ConsigneeCode = 10763;
-            EnterTextWithCheck(shipperCode_XPATH, ShipperCode.ToString());
-            EnterTextWithCheck(consigneeCode_XPATH, ConsigneeCode.ToString());
+            int ConsigneeCode = 10763;            
+                EnterText(shipperCode_XPATH, ShipperCode.ToString()); 
+               // await Click(unkShipperName_ID);            
+            EnterText(consigneeCode_XPATH, ConsigneeCode.ToString());
             Click(unkConsigneeName_ID);
             Click(shipperConsigneeOkBtn_ID);
             SwitchToPopupWindow();
@@ -233,7 +237,7 @@ namespace iCargoUIAutomation.pages
         public void ClickSaveButton()
         {
             int noOfWindowsBefore = GetNumberOfWindowsOpened();
-            Click(saveBtn_ID);
+           Click(saveBtn_ID);
             clickingYesOnPopupWarnings();
             WaitForNewWindowToOpen(TimeSpan.FromSeconds(20), noOfWindowsBefore + 1);
             int noOfWindowsAfter = GetNumberOfWindowsOpened();
@@ -243,8 +247,8 @@ namespace iCargoUIAutomation.pages
                 WaitForElementToBeVisible(awbNumber_XPATH, TimeSpan.FromSeconds(15));
                 string awbNumber = GetText(awbNumber_XPATH);
                 Console.WriteLine(awbNumber);
-                Thread.Sleep(5000);
-                Click(btnOkBookingSummaryPopup_XPATH);
+                WaitForElementToBeClickable(btnOkBookingSummaryPopup_XPATH, TimeSpan.FromSeconds(10));
+               Click(btnOkBookingSummaryPopup_XPATH);
                 SwitchToLastWindow();
                 SwitchToCAP018Frame();
             }
@@ -431,13 +435,13 @@ namespace iCargoUIAutomation.pages
             }
         }
 
-        public void UnknownAgentShipmentDetails(string org, string dest, string agtcode, string shippdt, string prodcode)
+        public void UnknownAgentShipmentDetails(string org, string dest, string agtcode, string prodcode)
         {
             EnterText(origin_ID, org);
             EnterText(destination_XPATH, dest);
             ClickOnElementIfPresent(agentCode_ID);
             EnterTextWithCheck(agentCode_ID, agtcode.ToString());
-            EnterText(shippingDate_ID, shippdt);
+            EnterText(shippingDate_ID, shippingDate);
             EnterText(product_XPATH, prodcode);
             Click(shipperConsigneeBtn_ID);
         }
@@ -496,20 +500,31 @@ namespace iCargoUIAutomation.pages
         {
             Click(selectFlightBtn_ID);
             SwitchToFrame(bookingIrregularityFrame_ID);
-            WaitForElementToBeVisible(flightdetailssection_XPATH, TimeSpan.FromSeconds(25));
-            List<IWebElement> noofflights = GetElements(flightdetailssection_XPATH);            
+            WaitForElementToBeVisible(flightdetailssection_XPATH, TimeSpan.FromSeconds(25));           
+            List<IWebElement> noofflights = GetElements(flightdetailssection_XPATH);
+            //WaitForElementToBeVisible(rate_Xpath, TimeSpan.FromSeconds(10));
             List<IWebElement> ratestatusbtn = GetElements(rate_Xpath);
+            //WaitForElementToBeVisible(cap_Xpath, TimeSpan.FromSeconds(10));
             List<IWebElement> capstatusbtn = GetElements(cap_Xpath);
+            //WaitForElementToBeVisible(rest_Xpath, TimeSpan.FromSeconds(10));
             List<IWebElement> reststatusbtn = GetElements(rest_Xpath);
-            List<IWebElement> embstatusbtn = GetElements(emb_Xpath);
+            //WaitForElementToBeVisible(emb_Xpath, TimeSpan.FromSeconds(10));
+            List<IWebElement> embstatusbtn = GetElements(emb_Xpath);    
+           // WaitForElementToBeVisible(flightProductCode_Xpath, TimeSpan.FromSeconds(10));
             List<IWebElement> prodcodes = GetElements(flightProductCode_Xpath);
+            //WaitForElementToBeVisible(flightdate_Xpath, TimeSpan.FromSeconds(10));
             List<IWebElement> flightdates = GetElements(flightdate_Xpath);
+            //WaitForElementToBeVisible(GeneralProdbtn_Xpath, TimeSpan.FromSeconds(10));
             List<IWebElement> GeneralProd = GetElements(GeneralProdbtn_Xpath);
+           // WaitForElementToBeVisible(PriorityProdbtn_Xpath, TimeSpan.FromSeconds(10));
             List<IWebElement> PriorityProd = GetElements(PriorityProdbtn_Xpath);
+           // WaitForElementToBeVisible(EmployeeProdbtn_Xpath, TimeSpan.FromSeconds(10));
             List<IWebElement> EmployeeProd = GetElements(EmployeeProdbtn_Xpath);
+           // WaitForElementToBeVisible(GoldstreakProdbtn_Xpath, TimeSpan.FromSeconds(10));
             List<IWebElement> GoldstreakProd = GetElements(GoldstreakProdbtn_Xpath);
-            List<IWebElement> PetConnectProd = GetElements(PetConnectProdbtn_Xpath);            
-            for (int i= 0 ; i < noofflights.Count ; i++)
+            //WaitForElementToBeVisible(PetConnectProdbtn_Xpath, TimeSpan.FromSeconds(10));
+            List<IWebElement> PetConnectProd = GetElements(PetConnectProdbtn_Xpath);
+            for (int i = 0; i < noofflights.Count; i++)
             {
                 IWebElement item = prodcodes[i];
                 string productcode = GetTextFromElement(item);
@@ -522,7 +537,7 @@ namespace iCargoUIAutomation.pages
                 IWebElement ratestatus = ratestatusbtn[i];
                 string ratecolor = GetAttributeValueFromElement(ratestatus, "class");
                 IWebElement flightdate = flightdates[i];
-                string flightdatevalue = GetTextFromElement(flightdate);              
+                string flightdatevalue = GetTextFromElement(flightdate);
                 if (presentdate == flightdatevalue)
                 {
                     if (productcode == givenproductcode && productcode == "GENERAL")
@@ -530,6 +545,7 @@ namespace iCargoUIAutomation.pages
                         if (capColor != "badge-red" && rescolor != "badge-red" && embcolor != "badge-red" && ratecolor != "badge-red")
                         {
                             IWebElement GeneralProdBtn = GeneralProd[i];
+                            if(IsElementEnabled(GeneralProdbtn_Xpath))
                             ClickOnElement(GeneralProdBtn);
                             Click(flightDetailsOkbtn_Xpath);
                             break;
@@ -540,8 +556,9 @@ namespace iCargoUIAutomation.pages
                         if (capColor != "badge-red" && rescolor != "badge-red" && embcolor != "badge-red" && ratecolor != "badge-red")
                         {
                             IWebElement PriorityProdBtn = PriorityProd[i];
+                            if(IsElementEnabled(PriorityProdbtn_Xpath))
                             ClickOnElement(PriorityProdBtn);
-                            Click(flightDetailsOkbtn_Xpath);
+                           Click(flightDetailsOkbtn_Xpath);
                             break;
                         }
                     }
@@ -550,6 +567,7 @@ namespace iCargoUIAutomation.pages
                         if (capColor != "badge-red" && rescolor != "badge-red" && embcolor != "badge-red" && ratecolor != "badge-red")
                         {
                             IWebElement EmployeeProdBtn = EmployeeProd[i];
+                            if(IsElementEnabled(EmployeeProdbtn_Xpath))
                             ClickOnElement(EmployeeProdBtn);
                             Click(flightDetailsOkbtn_Xpath);
                             break;
@@ -560,8 +578,9 @@ namespace iCargoUIAutomation.pages
                         if (capColor != "badge-red" && rescolor != "badge-red" && embcolor != "badge-red" && ratecolor != "badge-red")
                         {
                             IWebElement GoldstreakProdBtn = GoldstreakProd[i];
+                            if(IsElementEnabled(GoldstreakProdbtn_Xpath))
                             ClickOnElement(GoldstreakProdBtn);
-                            Click(flightDetailsOkbtn_Xpath);
+                           Click(flightDetailsOkbtn_Xpath);
                             break;
                         }
                     }
@@ -594,7 +613,7 @@ namespace iCargoUIAutomation.pages
             List<IWebElement> reststatusbtn = GetElements(rest_Xpath);
             List<IWebElement> multilegflights = GetElements(multilegFlights_Xpath);
             string productcode = GetText(flightProductCode_Xpath);
-            for (int i= 0; i < noofflights.Count;i++)
+            for (int i = 0; i < noofflights.Count; i++)
             {
                 IWebElement reststatus = reststatusbtn[i];
                 string resattribute = GetAttributeValueFromElement(reststatus, "class");
@@ -661,7 +680,7 @@ namespace iCargoUIAutomation.pages
             List<IWebElement> capstatusbtn = GetElements(cap_Xpath);
             List<IWebElement> reststatusbtn = GetElements(rest_Xpath);
             List<IWebElement> embstatusbtn = GetElements(emb_Xpath);
-            for(int i=0; i<nosofflights.Count;i++)
+            for (int i = 0; i < nosofflights.Count; i++)
             {
                 IWebElement item = nosofflights[i];
                 string selectflightnum = GetTextFromElement(item);
@@ -688,6 +707,3 @@ namespace iCargoUIAutomation.pages
 
     }
 }
-
-
-
