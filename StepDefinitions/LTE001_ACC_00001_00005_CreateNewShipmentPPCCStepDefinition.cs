@@ -43,7 +43,7 @@ namespace iCargoUIAutomation.StepDefinitions
         public void WhenUserEntersTheParticipantDetailsWithAgentCodeShipperCodeConsigneeCode(string agent, string shipper, string consignee)
         {
             Log.Info("Step: Entering the Participant details");
-            csp.EnterParticipantDetails(agent,shipper,consignee); 
+            csp.EnterParticipantDetailsAsync(agent,shipper,consignee); 
         }     
 
 

@@ -15,10 +15,11 @@ namespace iCargoUIAutomation.Hooks
     public sealed class Hooks : ExtentReport
     {
         private readonly IObjectContainer _container;
-
+        private readonly ExtentReport _extentReport = new ExtentReport();
         public Hooks(IObjectContainer container)
         {
             _container = container;
+
         }
 
         [BeforeTestRun]
@@ -56,7 +57,7 @@ namespace iCargoUIAutomation.Hooks
 
             //IWebDriver driver = new EdgeDriver();
             IWebDriver driver = new ChromeDriver();
-            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(20);
             driver.Manage().Window.Maximize();
 
             _container.RegisterInstanceAs<IWebDriver>(driver);
@@ -112,22 +113,22 @@ namespace iCargoUIAutomation.Hooks
                 if (stepType == "Given")
                 {
                     _scenario.CreateNode<Given>(stepName).Fail(scenarioContext.TestError.Message,
-                        MediaEntityBuilder.CreateScreenCaptureFromPath(extentReport.addScreenshot(driver, scenarioContext)).Build());
+                    MediaEntityBuilder.CreateScreenCaptureFromPath(extentReport.addScreenshot(driver, scenarioContext)).Build());
                 }
                 else if (stepType == "When")
                 {
                     _scenario.CreateNode<When>(stepName).Fail(scenarioContext.TestError.Message,
-                        MediaEntityBuilder.CreateScreenCaptureFromPath(extentReport.addScreenshot(driver, scenarioContext)).Build());
+                    MediaEntityBuilder.CreateScreenCaptureFromPath(extentReport.addScreenshot(driver, scenarioContext)).Build());
                 }
                 else if (stepType == "Then")
                 {
                     _scenario.CreateNode<Then>(stepName).Fail(scenarioContext.TestError.Message,
-                        MediaEntityBuilder.CreateScreenCaptureFromPath(extentReport.addScreenshot(driver, scenarioContext)).Build());
+                    MediaEntityBuilder.CreateScreenCaptureFromPath(extentReport.addScreenshot(driver, scenarioContext)).Build());
                 }
                 else if (stepType == "And")
                 {
                     _scenario.CreateNode<And>(stepName).Fail(scenarioContext.TestError.Message,
-                        MediaEntityBuilder.CreateScreenCaptureFromPath(extentReport.addScreenshot(driver, scenarioContext)).Build());
+                    MediaEntityBuilder.CreateScreenCaptureFromPath(extentReport.addScreenshot(driver, scenarioContext)).Build());
                 }
             }
         }

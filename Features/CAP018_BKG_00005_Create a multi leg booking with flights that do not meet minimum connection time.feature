@@ -13,7 +13,7 @@ Scenario: Create a multi leg booking with flights that do not meet minimum conne
 	And User enters shipment details with Origin "<Origin>", Destination "<Destination>", Product Code "<ProductCode>"
 	And User enters Shipper and Consignee details
 	And User enters commodity details with Commodity "<Commodity>", Pieces "<Piece>", Weight "<Weight>"
-	And User searches for the multileg flight to verify RES bubble 'red' a warning message as 'Minimum Handling / Connection Time Fails'
+	And User searches for the multileg flight to verify RES bubble 'red' a warning message as 'Minimum Handling / Connection Time Fails' and product code as "<ProductCode>"
 	#And User clicks on select flight to search for the given Flight No "<FlightNo>"
 	#And User gets RES bubble 'red' a warning message as 'Minimum Handling / Connection Time Fails'
 	Then User logs out from the application
