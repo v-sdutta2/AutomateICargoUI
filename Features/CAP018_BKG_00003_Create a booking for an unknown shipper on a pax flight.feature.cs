@@ -76,8 +76,8 @@ namespace iCargoUIAutomation.Features
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Create a booking for an unknown shipper on a pax flight")]
         [NUnit.Framework.CategoryAttribute("tag1")]
-        [NUnit.Framework.TestCaseAttribute("SEA", "ANC", "24-Apr-2024", "GENERAL", "0316", "2", "20", "24-Apr-2024", "AS61", "ASQXGUEST", "C1001", "C1001", null)]
-        public virtual void CreateABookingForAnUnknownShipperOnAPaxFlight(string origin, string destination, string shippingDate, string productCode, string commodity, string piece, string weight, string flightDate, string flightNo, string agentCode, string shipper, string consignee, string[] exampleTags)
+        [NUnit.Framework.TestCaseAttribute("SEA", "ANC", "GENERAL", "0316", "2", "20", "ASQXGUEST", "C1001", "C1001", null)]
+        public virtual void CreateABookingForAnUnknownShipperOnAPaxFlight(string origin, string destination, string productCode, string commodity, string piece, string weight, string agentCode, string shipper, string consignee, string[] exampleTags)
         {
             string[] @__tags = new string[] {
                     "tag1"};
@@ -89,13 +89,10 @@ namespace iCargoUIAutomation.Features
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             argumentsOfScenario.Add("Origin", origin);
             argumentsOfScenario.Add("Destination", destination);
-            argumentsOfScenario.Add("ShippingDate", shippingDate);
             argumentsOfScenario.Add("ProductCode", productCode);
             argumentsOfScenario.Add("Commodity", commodity);
             argumentsOfScenario.Add("Piece", piece);
             argumentsOfScenario.Add("Weight", weight);
-            argumentsOfScenario.Add("FlightDate", flightDate);
-            argumentsOfScenario.Add("FlightNo", flightNo);
             argumentsOfScenario.Add("AgentCode", agentCode);
             argumentsOfScenario.Add("Shipper", shipper);
             argumentsOfScenario.Add("Consignee", consignee);
@@ -146,7 +143,7 @@ testRunner.Given("User lauches the Url of iCargo Staging UI", ((string)(null)), 
 #line hidden
 #line 15
         testRunner.And(string.Format("User enters shipment details with Origin \"{0}\", Destination \"{1}\",Agent Code \"{2}" +
-                            "\", Shipping Date \"{3}\", Product Code \"{4}\"", origin, destination, agentCode, shippingDate, productCode), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+                            "\", Product Code \"{3}\"", origin, destination, agentCode, productCode), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 16
      testRunner.And(string.Format("User enters Unknown Shipper \"{0}\" and Consignee \"{1}\" with all details", shipper, consignee), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
@@ -154,14 +151,13 @@ testRunner.Given("User lauches the Url of iCargo Staging UI", ((string)(null)), 
 #line 17
         testRunner.And(string.Format("User enters commodity details with Commodity \"{0}\", Pieces \"{1}\", Weight \"{2}\"", commodity, piece, weight), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 18
-        testRunner.And(string.Format("User enters Carrier details with Origin \"{0}\", Destination \"{1}\", Flight No \"{2}\"" +
-                            ", Flight Date \"{3}\", Pieces \"{4}\", Weight \"{5}\"", origin, destination, flightNo, flightDate, piece, weight), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
 #line 19
-        testRunner.And("User clicks on Save button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+        testRunner.And(string.Format("User selects flight for \"{0}\"", productCode), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 20
+        testRunner.And("User clicks on Save button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 21
         testRunner.Then("User logs out from the application", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }

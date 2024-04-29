@@ -13,12 +13,12 @@ Scenario Outline: iCargo Login and Rebook an already executed AWB
 	And User clicks on New/List button
 	And User deletes the flight details and adds new flight details
 	#And User enters new Carrier details with Origin "<Origin>", Destination "<Destination>", Flight No "<FlightNo>", Flight Date "<FlightDate>", Pieces "<Piece>", Weight "<Weight>"
-	And User selects flight
+	And User selects new carrier details
 	And User clicks on Save button to save new flight details
 	And User captures the irregularity details
 	Then User logs out from the application
 
 Examples:
-	| AWB      | Origin | Destination |  Piece | Weight | FlightDate  | FlightNo |
-	| 30074520 | SEA    | ANC         |  2     | 20     | 20-Apr-2024 | AS7006     |
+	| AWB      | Origin | Destination | Piece | Weight | FlightDate  | FlightNo |
+	| 74325112 | SEA    | ANC         | 2     | 20     | 20-Apr-2024 | AS7006   |
 	

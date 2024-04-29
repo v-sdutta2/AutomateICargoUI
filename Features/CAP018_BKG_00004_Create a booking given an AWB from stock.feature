@@ -12,13 +12,13 @@ Scenario Outline: Create a booking given an AWB from stock and system will creat
 	And User enters the AWB number as "<AWB>"
 	And User clicks on New/List button
 	And a banner appears for the awb does not exist
-	And User enters shipment details with Origin "<Origin>", Destination "<Destination>",Agent Code "<AgentCode>", Shipping Date "<ShippingDate>", Product Code "<ProductCode>"
+	And User enters shipment details with Origin "<Origin>", Destination "<Destination>",Agent Code "<AgentCode>", Product Code "<ProductCode>"
 	And User enters Unknown Shipper "<Shipper>" and Consignee "<Consignee>" details 
 	And User enters commodity details with Commodity "<Commodity>", Pieces "<Piece>", Weight "<Weight>"
 	#And User enters Carrier details with Origin "<Origin>", Destination "<Destination>", Flight No "<FlightNo>", Flight Date "<FlightDate>", Pieces "<Piece>", Weight "<Weight>"
-	And User selects flight
+	And User selects flight for "<ProductCode>"
 	And User clicks on Save button
 	Then User logs out from the application
 Examples:
-	| AWB      | Origin | Destination | ShippingDate | ProductCode | Commodity | Piece | Weight | FlightDate  | FlightNo | AgentCode | Shipper | Consignee |
-	| 74426004 | SEA    | ANC         | 21-Apr-2024  | GENERAL     | 0316      | 2     | 20     | 21-Apr-2024 | AS61     | 82165     |82165    | 82165    |
+	| AWB      | Origin | Destination |  ProductCode | Commodity | Piece | Weight | AgentCode | Shipper | Consignee |
+	| 74426004 | SEA    | ANC         |  GENERAL     | 0316      | 2     | 20     |  82165     |82165    | 82165    |

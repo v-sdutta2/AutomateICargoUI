@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SeleniumExtras.WaitHelpers;
 using log4net;
+using AventStack.ExtentReports;
 
 namespace iCargoUIAutomation.pages
 {
@@ -18,15 +19,13 @@ namespace iCargoUIAutomation.pages
 
         public static readonly ILog log = LogManager.GetLogger(typeof(BasePage));
         private readonly logFileConfiguration logConfig;
-
-
         public BasePage(IWebDriver driver)
         {
             this.driver = driver;
             this.logConfig = new logFileConfiguration();
             this.logConfig.ConfigureLog4Net();
-        }
-
+        }    
+                
 
         // Browser Actions
 
@@ -270,7 +269,6 @@ namespace iCargoUIAutomation.pages
                 element.SendKeys(text);
                 EnterKeys(byLocator, Keys.Tab.ToString());
 
-
                 if (element.GetAttribute("value") == text)
                 {
                     log.Info("Entered the text " + text + " in the element " + byLocator);
@@ -318,6 +316,31 @@ namespace iCargoUIAutomation.pages
 
         }
 
+        // get the text from the IWebElement and return it       
+        public string GetTextFromElement(IWebElement element)
+        {
+            string textExtracted = element.Text;
+            log.Info("Extracted the text " + textExtracted);
+            return textExtracted;
+        }
+
+        //click on IWebElement
+        public void ClickOnElement(IWebElement element)
+        {
+            element.Click();
+            log.Info("Clicked on the element " + element);
+        }
+
+        //get the attribute value from the IWebElement
+        public string GetAttributeValueFromElement(IWebElement element, string attribute)
+        {
+            string attributeValue = element.GetAttribute(attribute);
+            log.Info("Extracted the attribute value " + attributeValue);
+            return attributeValue;
+        }
+
+        
+
         public void EnterKeys(By byLocator, string key)
         {
 
@@ -344,6 +367,17 @@ namespace iCargoUIAutomation.pages
             wait.IgnoreExceptionTypes(typeof(ElementNotVisibleException), typeof(NoSuchElementException), typeof(TimeoutException));
             wait.Until(driver => driver.FindElement(byLocator).Displayed);
             log.Info("The element " + byLocator + " is visible");
+
+        }
+
+        // wait for the element to be clickable
+        public void WaitForElementToBeClickable(By byLocator, TimeSpan time)
+        {
+            WebDriverWait wait = new WebDriverWait(driver, time);
+            wait.PollingInterval = TimeSpan.FromSeconds(1);
+            wait.IgnoreExceptionTypes(typeof(ElementNotVisibleException), typeof(NoSuchElementException), typeof(TimeoutException));
+            wait.Until(driver => driver.FindElement(byLocator).Enabled);
+            log.Info("The element " + byLocator + " is clickable");
 
         }
 

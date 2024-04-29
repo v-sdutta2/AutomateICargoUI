@@ -13,6 +13,7 @@ namespace iCargoUIAutomation.StepDefinitions
         private homePage hp;
         private MaintainBookingPage mbp;
         string flightnbr = "";
+        string productcode = "";
 
         public CAP018_BKG_00005_CreateAMultiLegBookingWithFlightsThatDoNotMeetMinimumConnectionTimeStepDefinitions(IWebDriver driver) : base(driver)
         {
@@ -36,11 +37,12 @@ namespace iCargoUIAutomation.StepDefinitions
         //    mbp.VerifyMinimumConnectionTimeWarning(rescolr, reswarning);
         //}
 
-        [Then(@"User searches for the multileg flight to verify RES bubble '([^']*)' a warning message as '([^']*)'")]
-        public void ThenUserSearchesForTheMultilegFlightToVerifyRESBubbleAWarningMessageAs(string rescolr, string reswarning)
+        [Then(@"User searches for the multileg flight to verify RES bubble '([^']*)' a warning message as '([^']*)' and product code as ""([^""]*)""")]
+        public void ThenUserSearchesForTheMultilegFlightToVerifyRESBubbleAWarningMessageAs(string rescolr, string reswarning, string productcode)
         {
-           mbp.selectMultilegflight(rescolr, reswarning);
-        }
+            this.productcode = productcode;
+           mbp.selectMultilegflight(rescolr, reswarning, productcode);
+        }                
 
     }
 }

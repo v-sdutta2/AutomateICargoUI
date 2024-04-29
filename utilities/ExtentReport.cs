@@ -8,17 +8,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AventStack.ExtentReports.Gherkin.Model;
+using iCargoUIAutomation.pages;
 
 namespace iCargoUIAutomation.utilities
 {
-    public  class ExtentReport
+    public class ExtentReport
     {
         public static ExtentReports _extentReports;
         public static ExtentTest _feature;
         public static ExtentTest _scenario;
+        //public static ExtentTest test;
 
         public static String dir = AppDomain.CurrentDomain.BaseDirectory;
-        public static String testResultPath = dir.Replace("bin\\Debug\\net6.0", "TestResults");
+        //public static String testResultPath = dir.Replace("bin\\Debug\\net6.0", "Reports");
+        public static String testResultPath = dir.Replace("bin\\Debug\\net6.0", "Reports\\TestResults_" + DateTime.Now.ToString("yyyyMMdd_HHmmss"));
 
         public static void ExtentReportInit()
         {
@@ -27,6 +31,7 @@ namespace iCargoUIAutomation.utilities
             htmlReporter.Config.DocumentTitle = "Automation Status Report";
             htmlReporter.Config.Theme = Theme.Standard;
             htmlReporter.Start();
+            //test = _extentReports.CreateTest("Test");
 
             _extentReports = new ExtentReports();
             _extentReports.AttachReporter(htmlReporter);
@@ -48,7 +53,6 @@ namespace iCargoUIAutomation.utilities
             screenshot.SaveAsFile(screenshotLocation);
             return screenshotLocation;
         }
-
 
     }
 }

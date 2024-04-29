@@ -33,16 +33,26 @@ namespace iCargoUIAutomation.StepDefinitions
             mbp.AWBBookingfromStock();
         }
 
-        [Then(@"User enters shipment details with Origin ""([^""]*)"", Destination ""([^""]*)"",Agent Code ""([^""]*)"", Shipping Date ""([^""]*)"", Product Code ""([^""]*)""")]
-        public void ThenUserEntersShipmentDetailsWithOriginDestinationAgentCodeShippingDateProductCode(string origin, string destination, string agentcode, string shippingdate, string productcode)
+        //[Then(@"User enters shipment details with Origin ""([^""]*)"", Destination ""([^""]*)"",Agent Code ""([^""]*)"", Shipping Date ""([^""]*)"", Product Code ""([^""]*)""")]
+        //public void ThenUserEntersShipmentDetailsWithOriginDestinationAgentCodeShippingDateProductCode(string origin, string destination, string agentcode, string shippingdate, string productcode)
+        //{
+        //    this.origin = origin;
+        //    this.destination = destination;
+        //    this.agentcode = agentcode;
+        //    this.shippingdate = shippingdate;
+        //    this.productcode = productcode;
+        //    mbp.UnknownAgentShipmentDetails(origin, destination, agentcode, shippingdate, productcode);
+        //}
+        [Then(@"User enters shipment details with Origin ""([^""]*)"", Destination ""([^""]*)"",Agent Code ""([^""]*)"", Product Code ""([^""]*)""")]
+        public void ThenUserEntersShipmentDetailsWithOriginDestinationAgentCodeProductCode(string origin, string destination, string agentcode, string productcode)
         {
             this.origin = origin;
             this.destination = destination;
-            this.agentcode = agentcode;
-            this.shippingdate = shippingdate;
+            this.agentcode = agentcode;            
             this.productcode = productcode;
-            mbp.UnknownAgentShipmentDetails(origin, destination, agentcode, shippingdate, productcode);
+            mbp.UnknownAgentShipmentDetails(origin, destination, agentcode, productcode);
         }
+
 
         [Then(@"User enters Unknown Shipper ""([^""]*)"" and Consignee ""([^""]*)"" details")]
         public void ThenUserEntersUnknownShipperAndConsigneeDetails(string shipper, string consignee)

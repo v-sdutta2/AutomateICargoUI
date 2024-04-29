@@ -42,17 +42,24 @@ namespace iCargoUIAutomation.StepDefinitions
             mbp.DeleteAddFlights();
         }
 
-        [Then(@"User enters new Carrier details with Origin ""([^""]*)"", Destination ""([^""]*)"", Flight No ""([^""]*)"", Flight Date ""([^""]*)"", Pieces ""([^""]*)"", Weight ""([^""]*)""")]
-        public void ThenUserEntersNewCarrierDetailsWithOriginDestinationFlightNoFlightDatePiecesWeight(string flightOrigin, string flightDestination, string flightNumber, string flightDate, string flightPieces, string flightWeight)
+        //[Then(@"User enters new Carrier details with Origin ""([^""]*)"", Destination ""([^""]*)"", Flight No ""([^""]*)"", Flight Date ""([^""]*)"", Pieces ""([^""]*)"", Weight ""([^""]*)""")]
+        //public void ThenUserEntersNewCarrierDetailsWithOriginDestinationFlightNoFlightDatePiecesWeight(string flightOrigin, string flightDestination, string flightNumber, string flightDate, string flightPieces, string flightWeight)
+        //{
+        //    this.flightOrigin = flightOrigin;
+        //    this.flightDestination = flightDestination;
+        //    this.flightNumber = flightNumber;
+        //    this.flightDate = flightDate;
+        //    this.flightPieces = flightPieces;
+        //    this.flightWeight = flightWeight;
+        //    mbp.addNewFlightDetails(flightOrigin,flightDestination, flightNumber, flightDate, flightPieces, flightWeight);
+        //}
+
+        [Then(@"User selects new carrier details")]
+        public void ThenUserSelectsNewCarrierDetails()
         {
-            this.flightOrigin = flightOrigin;
-            this.flightDestination = flightDestination;
-            this.flightNumber = flightNumber;
-            this.flightDate = flightDate;
-            this.flightPieces = flightPieces;
-            this.flightWeight = flightWeight;
-            mbp.addNewFlightDetails(flightOrigin,flightDestination, flightNumber, flightDate, flightPieces, flightWeight);
+            mbp.addNewFlightDetails();
         }
+
 
         [Then(@"User clicks on Save button to save new flight details")]
         public void ThenUserClicksOnSaveButtonToSaveNewFlightDetails()
