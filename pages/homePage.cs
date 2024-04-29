@@ -75,7 +75,8 @@ namespace iCargoUIAutomation.pages
             {
                 EnterText(txt_ScreenName_Css, screenName);
                 EnterKeys(txt_ScreenName_Css, Keys.Enter);
-                Thread.Sleep(2000);
+                WaitForElementToBeVisible(By.CssSelector("li[tabindex='0']"), TimeSpan.FromSeconds(5));
+                //Thread.Sleep(2000);
             }
             catch (Exception e)
             {
