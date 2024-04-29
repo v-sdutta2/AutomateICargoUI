@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using log4net;
+using AventStack.ExtentReports;
 
 namespace iCargoUIAutomation.pages
 {
@@ -16,16 +17,15 @@ namespace iCargoUIAutomation.pages
         private readonly IWebDriver driver;
 
         public static readonly ILog log = LogManager.GetLogger(typeof(BasePage));
-        private readonly logFileConfiguration logConfig;
-        
+        private readonly logFileConfiguration logConfig;        
 
         public BasePage(IWebDriver driver)
         {
             this.driver = driver;
             this.logConfig = new logFileConfiguration();
             this.logConfig.ConfigureLog4Net();
-        }
-
+        }    
+                
 
         // Browser Actions
 
@@ -255,7 +255,7 @@ namespace iCargoUIAutomation.pages
                 IWebElement element = driver.FindElement(byLocator);
                 element.Clear();
                 element.SendKeys(text);
-                Thread.Sleep(2000);
+                //Thread.Sleep(2000);
 
                 if (element.GetAttribute("value") == text)
                 {
@@ -304,6 +304,31 @@ namespace iCargoUIAutomation.pages
 
         }
 
+        // get the text from the IWebElement and return it       
+        public string GetTextFromElement(IWebElement element)
+        {
+            string textExtracted = element.Text;
+            log.Info("Extracted the text " + textExtracted);
+            return textExtracted;
+        }
+
+        //click on IWebElement
+        public void ClickOnElement(IWebElement element)
+        {
+            element.Click();
+            log.Info("Clicked on the element " + element);
+        }
+
+        //get the attribute value from the IWebElement
+        public string GetAttributeValueFromElement(IWebElement element, string attribute)
+        {
+            string attributeValue = element.GetAttribute(attribute);
+            log.Info("Extracted the attribute value " + attributeValue);
+            return attributeValue;
+        }
+
+        
+
         public void EnterKeys(By byLocator, string key)
         {
 
@@ -330,6 +355,17 @@ namespace iCargoUIAutomation.pages
             wait.IgnoreExceptionTypes(typeof(ElementNotVisibleException), typeof(NoSuchElementException), typeof(TimeoutException));
             wait.Until(driver => driver.FindElement(byLocator).Displayed);
             log.Info("The element " + byLocator + " is visible");
+
+        }
+
+        // wait for the element to be clickable
+        public void WaitForElementToBeClickable(By byLocator, TimeSpan time)
+        {
+            WebDriverWait wait = new WebDriverWait(driver, time);
+            wait.PollingInterval = TimeSpan.FromSeconds(1);
+            wait.IgnoreExceptionTypes(typeof(ElementNotVisibleException), typeof(NoSuchElementException), typeof(TimeoutException));
+            wait.Until(driver => driver.FindElement(byLocator).Enabled);
+            log.Info("The element " + byLocator + " is clickable");
 
         }
 

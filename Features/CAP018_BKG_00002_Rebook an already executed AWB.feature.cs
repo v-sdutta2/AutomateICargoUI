@@ -75,7 +75,7 @@ namespace iCargoUIAutomation.Features
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("iCargo Login and Rebook an already executed AWB")]
-        [NUnit.Framework.TestCaseAttribute("30074520", "SEA", "ANC", "2", "20", "20-Apr-2024", "AS7006", null)]
+        [NUnit.Framework.TestCaseAttribute("74325112", "SEA", "ANC", "2", "20", "20-Apr-2024", "AS7006", null)]
         public virtual void ICargoLoginAndRebookAnAlreadyExecutedAWB(string aWB, string origin, string destination, string piece, string weight, string flightDate, string flightNo, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
@@ -139,7 +139,7 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.And("User deletes the flight details and adds new flight details", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 16
- testRunner.And("User selects flight", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("User selects new carrier details", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 17
  testRunner.And("User clicks on Save button to save new flight details", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");

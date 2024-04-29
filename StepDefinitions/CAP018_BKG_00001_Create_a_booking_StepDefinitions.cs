@@ -68,13 +68,13 @@ namespace iCargoUIAutomation.StepDefinitions
             mbp.EnterCommodityDetails(commodity, piece, weight);
         }
 
-        [Then(@"User enters Carrier details with Origin ""([^""]*)"", Destination ""([^""]*)"", Flight No ""([^""]*)"", Flight Date ""([^""]*)"", Pieces ""([^""]*)"", Weight ""([^""]*)""")]
-        public void ThenUserEntersCarrierDetailsWithOriginDestinationFlightNoFlightDatePiecesWeight(string origin, string destination, string flightno, string flightdate, string piece, string weight)
-        {
-            this.flightno = flightno;
-            this.flightDate = flightdate;
-            mbp.EnterCarrierDetails(origin, destination, flightno, flightdate, piece, weight);
-        }
+        //[Then(@"User enters Carrier details with Origin ""([^""]*)"", Destination ""([^""]*)"", Flight No ""([^""]*)"", Flight Date ""([^""]*)"", Pieces ""([^""]*)"", Weight ""([^""]*)""")]
+        //public void ThenUserEntersCarrierDetailsWithOriginDestinationFlightNoFlightDatePiecesWeight(string origin, string destination, string flightno, string flightdate, string piece, string weight)
+        //{
+        //    this.flightno = flightno;
+        //    this.flightDate = flightdate;
+        //    mbp.EnterCarrierDetails(origin, destination, flightno, flightdate, piece, weight);
+        //}
 
         [Then(@"User clicks on Save button")]
         public void ThenUserClicksOnSaveButton()
@@ -83,10 +83,15 @@ namespace iCargoUIAutomation.StepDefinitions
             //mbp.GetAWBNumber();
         }
 
-        [Then(@"User selects flight")]
-        public void ThenUserSelectsFlight()
+        //[Then(@"User selects flight")]
+        //public void ThenUserSelectsFlight()
+        //{
+        //    mbp.SelectFlight();
+        //}
+        [Then(@"User selects flight for ""([^""]*)""")]
+        public void ThenUserSelectsFlightFor(string productCode)
         {
-            mbp.SelectFlight();
+            mbp.SelectFlight(productCode);
         }
 
     }
