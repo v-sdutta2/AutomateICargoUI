@@ -200,17 +200,7 @@ namespace iCargoUIAutomation.pages
            // Thread.Sleep(1000);
             log.Info("Clicked on the element " + byLocator);
 
-        }
-
-        //public void Click(By byLocator)
-        //{
-        //    WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(20));
-        //    wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(byLocator));
-        //    driver.FindElement(byLocator).Click();
-        //    log.Info("Clicked on the element " + byLocator);
-        //}
-
-
+        }   
 
 
 
@@ -368,6 +358,12 @@ namespace iCargoUIAutomation.pages
             wait.Until(driver => driver.FindElement(byLocator).Displayed);
             log.Info("The element " + byLocator + " is visible");
 
+        }
+
+        public void WaitForElementToBeInvisible(By byLocator, TimeSpan time)
+        {
+            WebDriverWait wait = new WebDriverWait(driver, time);
+            wait.Until(ExpectedConditions.InvisibilityOfElementLocated(byLocator));
         }
 
         // wait for the element to be clickable

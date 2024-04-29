@@ -960,14 +960,14 @@ namespace iCargoUIAutomation.pages
 
             if (errortype.Equals("Embargo"))
             {
-                if (IsElementDisplayed(lblEmbargoDetails_Xpath, 5))
+                if (IsElementDisplayed(lblEmbargoDetails_Xpath, 3))
                 {
                     Click(btnContinueEmbargo_Xpath);
                 }
             }
             else if (errortype.Equals("Capture Irregularity"))
             {
-                if (IsElementDisplayed(lblCaptureIrregularity_Xpath, 5))
+                if (IsElementDisplayed(lblCaptureIrregularity_Xpath, 3))
                 {
                     cip.captureIrregularity(pieces, weight);
                     switchToLTEContentFrame();
@@ -1234,8 +1234,7 @@ namespace iCargoUIAutomation.pages
             {
                 try
                 {
-                    totalPaybleAmount = clickOnSaveButtonHandlePaymentPortal();
-                    WaitForElementToBeVisible(btnSaveShipment_Name, TimeSpan.FromSeconds(20));
+                    totalPaybleAmount = clickOnSaveButtonHandlePaymentPortal();                   
 
                 }
                 catch (Exception)
@@ -1271,17 +1270,13 @@ namespace iCargoUIAutomation.pages
 
             int noOfWindowsBefore = GetNumberOfWindowsOpened();
             Click(btnSaveShipment_Name);
-            if (IsElementDisplayed(lblEmbargoDetails_Xpath, 3))
-            {
-                Click(btnContinueEmbargo_Xpath);
-            }
+            //clickingYesOnPopupWarnings("Embargo");
             WaitForNewWindowToOpen(TimeSpan.FromSeconds(5), noOfWindowsBefore + 1);
             int noOfWindowsAfter = GetNumberOfWindowsOpened();
             if (noOfWindowsAfter > noOfWindowsBefore)
             {
                 SwitchToLastWindow();
-                totalPaybleAmount = ppp.handlePaymentInPaymentPortal(this.chargeType);
-                WaitForElementToBeVisible(contentFrame_Xpath, TimeSpan.FromSeconds(20));
+                totalPaybleAmount = ppp.handlePaymentInPaymentPortal(this.chargeType);               
                 switchToLTEContentFrame();
             }
             return totalPaybleAmount;

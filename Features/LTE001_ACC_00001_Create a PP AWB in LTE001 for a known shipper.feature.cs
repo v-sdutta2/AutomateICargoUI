@@ -76,7 +76,7 @@ namespace iCargoUIAutomation.Features
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Create a PP AWB in LTE001 for a known shipper")]
-        [NUnit.Framework.CategoryAttribute("tag1")]
+        [NUnit.Framework.CategoryAttribute("LTE001")]
         [NUnit.Framework.TestCaseAttribute("10763", "10763", "10763", "ANC", "LAX", "GENERAL", "None", "0316", "None", "None", "2", "59", "PP", "CREDIT", "CART", null)]
         public virtual void CreateAPPAWBInLTE001ForAKnownShipper(
                     string agentCode, 
@@ -97,7 +97,7 @@ namespace iCargoUIAutomation.Features
                     string[] exampleTags)
         {
             string[] @__tags = new string[] {
-                    "tag1"};
+                    "LTE001"};
             if ((exampleTags != null))
             {
                 @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
@@ -192,46 +192,49 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.And("User clicks on the Select Flight Button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 23
- testRunner.And("User selects an available flight", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("User selects an \"Combination\" flight", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 24
- testRunner.And("User clicks on the ContinueFlightDetails button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("User selects an available flight", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 25
- testRunner.And(string.Format("User enters the Charge details with ChargeType \"{0}\" and ModeOfPayment \"{1}\"", chargeType, modeOfPayment), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("User clicks on the ContinueFlightDetails button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 26
- testRunner.And("User clicks on the CalculateCharges button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And(string.Format("User enters the Charge details with ChargeType \"{0}\" and ModeOfPayment \"{1}\"", chargeType, modeOfPayment), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 27
- testRunner.And("User clicks on the ContinueChargeDetails button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("User clicks on the CalculateCharges button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 28
- testRunner.And("User enters the Acceptance details", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("User clicks on the ContinueChargeDetails button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 29
- testRunner.And("User clicks on the ContinueAcceptanceDetails button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("User enters the Acceptance details", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 30
+ testRunner.And("User clicks on the ContinueAcceptanceDetails button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 31
  testRunner.And("User enters the Screening details for row 1 with screeingMethod as \'Transfer Mani" +
                         "fest Verified\' and ScreeningResult as \'Pass\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 31
+#line 32
  testRunner.And("User clicks on the ContinueScreeningDetails button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 32
+#line 33
  testRunner.And("User checks the AWB_Verified checkbox", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 33
+#line 34
  testRunner.And("User clicks on the save button & handle Payment Portal", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 34
+#line 35
  testRunner.And("User saves all the details & handles all the popups", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 35
+#line 36
  testRunner.And("User closes the LTE screen", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 36
+#line 37
  testRunner.Then("User logs out from the application", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
