@@ -12,7 +12,7 @@ namespace iCargoUIAutomation.pages
     {
         public DangerousGoodsPage(IWebDriver driver) : base(driver)
         {
-           
+
         }
 
         // DG Details Screen //
@@ -48,21 +48,16 @@ namespace iCargoUIAutomation.pages
             ScrollDown();
             EnterText(txtUNID_Xpath, unid);
             EnterKeys(txtUNID_Xpath, Keys.Tab);
-            Thread.Sleep(2000);
-            SelectDropdownByVisibleText(drpdwnProperShippingName_Xpath, propershipmntname);
-
-            EnterText(txtPI_Name, pi);
             EnterText(txtNoOfPkgs_Name, noofpkg);
             EnterText(txtNetQtyPerPkg_Name, netqtyperpkg);
-            //EnterText(txtGrossIndicator_Name, "K");
             SelectDropdownByVisibleText(drpdwnReportableQnty_Name, reportable);
+            SelectDropdownByVisibleText(drpdwnProperShippingName_Xpath, propershipmntname);
+            EnterTextWithCheck(txtPI_Name, pi);
             Click(btnAddDgDetails_Xpath);
             WaitForElementToBeVisible(chkboxDGVerified_Xpath, TimeSpan.FromSeconds(5));
             Click(chkboxDGVerified_Xpath);
             Click(btnOKDGVerified_Xpath);
-
             SwitchToDefaultContent();
-            //switchToLTEContentFrame();
         }
 
 
@@ -78,21 +73,20 @@ namespace iCargoUIAutomation.pages
             ScrollDown();
             EnterText(txtUNID_Xpath, unid);
             EnterKeys(txtUNID_Xpath, Keys.Tab);
-            Thread.Sleep(2000);
-            SelectDropdownByVisibleText(drpdwnProperShippingName_Xpath, propershipmntname);
             Click(chkbxCAO_Xpath);
-            EnterText(txtPI_Name, pi);
             EnterText(txtNoOfPkgs_Name, noofpkg);
             EnterText(txtNetQtyPerPkg_Name, netqtyperpkg);
-            SelectDropdownByVisibleText(drpdwn_NetQtyPerPkgUnit_Name, "KG");            
+            SelectDropdownByVisibleText(drpdwn_NetQtyPerPkgUnit_Name, "KG");
             SelectDropdownByVisibleText(drpdwnReportableQnty_Name, reportable);
+            SelectDropdownByVisibleText(drpdwnProperShippingName_Xpath, propershipmntname);
+            EnterTextWithCheck(txtPI_Name, pi);
             Click(btnAddDgDetails_Xpath);
             WaitForElementToBeVisible(chkboxDGVerified_Xpath, TimeSpan.FromSeconds(5));
+            ScrollDown();
             Click(chkboxDGVerified_Xpath);
             Click(btnOKDGVerified_Xpath);
-
             SwitchToDefaultContent();
-            //switchToLTEContentFrame();
+
         }
 
 
