@@ -61,7 +61,7 @@ namespace iCargoUIAutomation.Hooks
             driver.Manage().Window.Maximize();
 
             _container.RegisterInstanceAs<IWebDriver>(driver);
-            _scenario = _feature.CreateNode<Scenario>(scenarioContext.ScenarioInfo.Title);
+            _scenario = _feature.CreateNode<Scenario>(scenarioContext.ScenarioInfo.Title);            
 
         }
 
