@@ -1,6 +1,6 @@
 ﻿Feature: CAP018_BKG_00001_iCargo Login and Create New Shipment
 
-@tag1
+
     Scenario Outline: iCargo Login and Create New Shipment
         Given User lauches the Url of iCargo Staging UI
 	    Then User enters into the  iCargo 'Sign in to icargoas' page successfully
@@ -20,4 +20,4 @@
         Then User logs out from the application
         Examples:
             | Origin | Destination | ProductCode | Commodity | Piece | Weight |  
-            | SEA    | ANC         |  PRIORITY     | 0316      | 2     | 20   | 
+            | ANC    | SEA         |  PRIORITY     | 0316      | 2     | 20   | 

@@ -1,7 +1,12 @@
-﻿using FluentAssertions.Execution;
+﻿using AventStack.ExtentReports;
+using AventStack.ExtentReports.Gherkin.Model;
+using FluentAssertions.Execution;
+using iCargoUIAutomation.Hooks;
+using log4net;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.DevTools.V121.Debugger;
+using OpenQA.Selenium.Support.UI;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -12,18 +17,22 @@ using System.Threading.Tasks;
 
 namespace iCargoUIAutomation.pages
 {
+
     public class MaintainBookingPage : BasePage
     {
         string shippingDate = DateTime.Now.ToString("dd-MMM-yyyy");
         string presentdate = DateTime.Now.ToString("dd-MMM");
         public static string firstflightnum = "";
+        public static ExtentTest _scenario= Hooks.Hooks._scenario;
+        public static ExtentTest test;
+        ILog Log = LogManager.GetLogger(typeof(MaintainBookingPage));
         public MaintainBookingPage(IWebDriver driver) : base(driver)
         {
         }
 
         private By CAP018Frame_XPATH = By.XPath("//iframe[@name='iCargoContentFrameCAP018']");
         private By New_List_XPATH = By.XPath("//button[@id='btDisplay']");
-
+        private By HomePage_CSS = By.CssSelector(".ic-home-tab");
         // Shipment Details
         private By origin_ID = By.Id("origin");
         private By destination_XPATH = By.XPath("//input[@name='destination']");
@@ -158,65 +167,141 @@ namespace iCargoUIAutomation.pages
         private By unkConsigneeEmail_ID = By.Id("CMP_Capacity_Booking_MaintainReservation_ShipperConsignee_ConsigneeEmail");
         public void SwitchToCAP018Frame()
         {
-            WaitForElementToBeVisible(CAP018Frame_XPATH, TimeSpan.FromSeconds(10));
-            SwitchToFrame(CAP018Frame_XPATH);
+            test = _scenario.CreateNode<Scenario>("Switch to CAP018 Frame");
+            try
+            {                
+                SwitchToFrame(CAP018Frame_XPATH);                
+                test.Pass("Switched to CAP018 Frame");
+                //WaitForElementToBeVisible(awbTextbox_ID, TimeSpan.FromSeconds(10));
+                
+            }
+            catch (Exception e)
+            {
+                test.Fail("Error in Switching to CAP018 Frame: " + e.Message);
+            }
         }
 
         public void ClickNewListButton()
         {
-            ClickOnElementIfPresent(New_List_XPATH);            
-            //Click(New_List_XPATH);
+            test = _scenario.CreateNode<Scenario>("Click New List Button");
+            try
+            {
+                WaitForElementToBeInvisible(HomePage_CSS, TimeSpan.FromSeconds(5));
+                ClickOnElementIfPresent(New_List_XPATH);                
+                test.Pass("Clicked New List Button");
+                //Click(New_List_XPATH);
+            }
+            catch (Exception e)
+            {
+                test.Fail("Error in Clicking New List Button: " + e.Message);
+            }
         }
 
         public void EnterShipmentDetails(string origin, string destination, string ProductCode)
         {
-            //WaitForElementToBeClickable(origin_ID, TimeSpan.FromSeconds(15));
-            if (IsElementEnabled(origin_ID))            
-                EnterText(origin_ID, origin);            
-            //EnterText(origin_ID, origin);
-            EnterText(destination_XPATH, destination);
-            ClickOnElementIfPresent(agentCode_ID);
-            int agentcode = 10763;
-            EnterTextWithCheck(agentCode_ID, agentcode.ToString());
-            EnterText(shippingDate_ID, shippingDate);
-            EnterText(product_XPATH, ProductCode);
-            Click(shipperConsigneeBtn_ID);
+            test = _scenario.CreateNode<Scenario>("Enter Shipment Details");
+            try
+            {
+                //WaitForElementToBeClickable(origin_ID, TimeSpan.FromSeconds(15));                
+                if (IsElementEnabled(origin_ID))
+                {
+                    EnterTextWithCheck(origin_ID, origin);
+                    test.Pass("Entered Origin: " + origin);
+                }
+                EnterText(destination_XPATH, destination);
+                test.Pass("Entered Destination: " + destination);
+                ClickOnElementIfPresent(agentCode_ID);
+                int agentcode = 10763;
+                EnterTextWithCheck(agentCode_ID, agentcode.ToString());
+                test.Pass("Entered Agent Code: " + agentcode);
+                EnterText(shippingDate_ID, shippingDate);
+                test.Pass("Entered Shipping Date: " + shippingDate);
+                EnterText(product_XPATH, ProductCode);
+                test.Pass("Entered Product Code: " + ProductCode);
+                Click(shipperConsigneeBtn_ID);
+                test.Pass("Clicked on Shipper Consignee Button");
+            }
+            catch (Exception e)
+            {
+                test.Fail("Error in Entering Shipment Details: " + e.Message);
+            }
         }
 
         public void EnterShipperConsigneeDetails()
         {
-            GetNumberOfWindowsOpened();
-            SwitchToSecondPopupWindow();
-            int ShipperCode = 10763;
-            int ConsigneeCode = 10763;            
-                EnterText(shipperCode_XPATH, ShipperCode.ToString()); 
-               // await Click(unkShipperName_ID);            
-            EnterText(consigneeCode_XPATH, ConsigneeCode.ToString());
-            Click(unkConsigneeName_ID);
-            Click(shipperConsigneeOkBtn_ID);
-            SwitchToPopupWindow();
+            test = _scenario.CreateNode<Scenario>("Enter Shipper Consignee Details");
+            try
+            {                
+                GetNumberOfWindowsOpened();
+                SwitchToSecondPopupWindow();
+                int ShipperCode = 10763;
+                int ConsigneeCode = 10763;
+                WaitForElementToBeInvisible(CAP018Frame_XPATH, TimeSpan.FromSeconds(10));
+                EnterText(shipperCode_XPATH, ShipperCode.ToString());
+                test.Pass("Entered Shipper Code: " + ShipperCode);
+                if (IsElementEnabled(unkShipperName_ID))
+                {
+                    ClickOnElementIfPresent(unkShipperName_ID);
+                    EnterKeys(unkShipperName_ID, Keys.Tab);
+                }
+                EnterText(consigneeCode_XPATH, ConsigneeCode.ToString());
+                test.Pass("Entered Consignee Code: " + ConsigneeCode);
+                Click(unkConsigneeName_ID);
+                ClickOnElementIfPresent(shipperConsigneeOkBtn_ID);
+                test.Pass("Clicked on Shipper Consignee OK Button");
+                SwitchToPopupWindow();
+            }
+            catch (Exception e)
+            {
+                test.Fail("Error in Entering Shipper Consignee Details: " + e.Message);
+            }
         }
 
         public void EnterCommodityDetails(string commodityCode, string pieces, string weight)
         {
-            //WaitForElementToBeVisible(CAP018Frame_XPATH, TimeSpan.FromSeconds(10)); 
-            SwitchToCAP018Frame();
-            //ClickOnElementIfPresent(bookingPage_XPATH);
-            ClickOnElementIfPresent(commodityCode_XPATH);
-            Click(commodityCode_XPATH);
-            EnterText(commodityCode_XPATH, commodityCode);
-            EnterText(pieces_XPATH, pieces);
-            EnterText(weight_XPATH, weight);
+            test = _scenario.CreateNode<Scenario>("Enter Commodity Details");
+            try
+            {                
+                SwitchToCAP018Frame();
+                WaitForElementToBeVisible(commodityCode_XPATH, TimeSpan.FromSeconds(10));
+                //ClickOnElementIfPresent(bookingPage_XPATH);
+                ClickOnElementIfPresent(commodityCode_XPATH);
+                Click(commodityCode_XPATH);
+                EnterText(commodityCode_XPATH, commodityCode);
+                test.Pass("Entered Commodity Code: " + commodityCode);
+                EnterText(pieces_XPATH, pieces);
+                test.Pass("Entered Pieces: " + pieces);
+                EnterText(weight_XPATH, weight);
+                test.Pass("Entered Weight: " + weight);
+            }
+            catch (Exception e)
+            {
+                test.Fail("Error in Entering Commodity Details: " + e.Message);
+            }
         }
 
         public void EnterCarrierDetails(string flightOrigin, string flightDestination, string flightNumber, string flightDate, string flightPieces, string flightWeight)
         {
-            EnterText(flightOrigin_XPATH, flightOrigin);
-            EnterText(flightDestination_XPATH, flightDestination);
-            EnterText(flightNumber_XPATH, flightNumber);
-            EnterText(flightDate_XPATH, flightDate);
-            EnterText(flightPieces_XPATH, flightPieces);
-            EnterText(flightWeight_XPATH, flightWeight);
+            test = _scenario.CreateNode<Scenario>("Enter Carrier Details");
+            try
+            {                
+                EnterText(flightOrigin_XPATH, flightOrigin);
+                test.Pass("Entered Flight Origin: " + flightOrigin);
+                EnterText(flightDestination_XPATH, flightDestination);
+                test.Pass("Entered Flight Destination: " + flightDestination);
+                EnterText(flightNumber_XPATH, flightNumber);
+                test.Pass("Entered Flight Number: " + flightNumber);
+                EnterText(flightDate_XPATH, flightDate);
+                test.Pass("Entered Flight Date: " + flightDate);
+                EnterText(flightPieces_XPATH, flightPieces);
+                test.Pass("Entered Flight Pieces: " + flightPieces);
+                EnterText(flightWeight_XPATH, flightWeight);
+                test.Pass("Entered Flight Weight: " + flightWeight);
+            }
+            catch (Exception e)
+            {
+                test.Fail("Error in Entering Carrier Details: " + e.Message);
+            }
         }
 
         public string clickingYesOnPopupWarnings()
@@ -236,474 +321,636 @@ namespace iCargoUIAutomation.pages
 
         public void ClickSaveButton()
         {
-            int noOfWindowsBefore = GetNumberOfWindowsOpened();
-           Click(saveBtn_ID);
-            clickingYesOnPopupWarnings();
-            WaitForNewWindowToOpen(TimeSpan.FromSeconds(20), noOfWindowsBefore + 1);
-            int noOfWindowsAfter = GetNumberOfWindowsOpened();
-            if (noOfWindowsAfter > noOfWindowsBefore)
-            {
-                SwitchToLastWindow();
-                WaitForElementToBeVisible(awbNumber_XPATH, TimeSpan.FromSeconds(15));
-                string awbNumber = GetText(awbNumber_XPATH);
-                Console.WriteLine(awbNumber);
-                WaitForElementToBeClickable(btnOkBookingSummaryPopup_XPATH, TimeSpan.FromSeconds(10));
-               Click(btnOkBookingSummaryPopup_XPATH);
-                SwitchToLastWindow();
-                SwitchToCAP018Frame();
+            test = _scenario.CreateNode<Scenario>("Click Save Button");
+            try
+            {                
+                int noOfWindowsBefore = GetNumberOfWindowsOpened();
+                //WaitForElementToBeClickable(saveBtn_ID, TimeSpan.FromSeconds(10));
+                WaitForElementToBeInvisible(btnYesAlertMessageBooking_XPATH, TimeSpan.FromSeconds(15));
+                ClickOnElementIfPresent(saveBtn_ID);
+                test.Pass("Clicked Save Button");
+                clickingYesOnPopupWarnings();
+                WaitForNewWindowToOpen(TimeSpan.FromSeconds(20), noOfWindowsBefore + 1);
+                int noOfWindowsAfter = GetNumberOfWindowsOpened();
+                if (noOfWindowsAfter > noOfWindowsBefore)
+                {
+                    SwitchToLastWindow();
+                    WaitForElementToBeInvisible(btnYesAlertMessageBooking_XPATH, TimeSpan.FromSeconds(15));
+                    WaitForElementToBeVisible(awbNumber_XPATH, TimeSpan.FromSeconds(15));
+                    string awbNumber = GetText(awbNumber_XPATH);
+                    test.Pass("AWB Number: "+awbNumber);
+                    Console.WriteLine(awbNumber);
+                    if (IsElementEnabled(btnOkBookingSummaryPopup_XPATH))
+                    {
+                        WaitForElementToBeClickable(btnOkBookingSummaryPopup_XPATH, TimeSpan.FromSeconds(10));
+                        Click(btnOkBookingSummaryPopup_XPATH);
+                        test.Pass("Clicked OK Button on Booking Summary Popup");
+                    }
+                    //Click(btnOkBookingSummaryPopup_XPATH);
+                    SwitchToLastWindow();
+                    SwitchToCAP018Frame();
+                }
+                ClickOnElementIfPresent(btnCloseMb_XPATH);
+                test.Pass("Clicked Close Button on Maintain Booking Page");
             }
-            ClickOnElementIfPresent(btnCloseMb_XPATH);
+            catch (Exception e)
+            {
+                test.Fail("Error in Clicking Save Button: " + e.Message);
+            }
         }
 
 
         public void EnterAWBNumber(string awbNumber)
         {
-            //SwitchToCAP018Frame();
-            EnterText(awbTextbox_ID, awbNumber);
+            test = _scenario.CreateNode<Scenario>("Enter AWB Number");
+            try
+            {
+                //SwitchToCAP018Frame();                
+                EnterText(awbTextbox_ID, awbNumber);
+                test.Pass("Entered AWB Number: " + awbNumber);
+            }
+            catch (Exception e)
+            {
+                test.Fail("Error in Entering AWB Number: " + e.Message);
+            }
         }
 
         public void DeleteAddFlights()
         {
+            test = _scenario.CreateNode<Scenario>("Delete and Add Flights");
             try
-            {
+            {                
                 SwitchToPopupWindow();
                 WaitForElementToBeVisible(alreadyExecutedPopup_XPATH, TimeSpan.FromSeconds(10));
                 string alreadyExecutedPopUp = GetText(alreadyExecutedPopup_XPATH);
+                test.Pass("Already Executed Popup: " + alreadyExecutedPopUp);
                 Console.WriteLine(alreadyExecutedPopUp);
                 SwitchToCAP018Frame();
+                firstflightnum = GetAttributeValue(flightNumber_XPATH, "value");
+                ClickOnElementIfPresent(flightCheckBox_ID);
+                test.Pass("Clicked on Flight Check Box");
+                WaitForElementToBeVisible(deleteFlightDetails_ID, TimeSpan.FromSeconds(10));
+                Click(deleteFlightDetails_ID);
+                test.Pass("Clicked on Delete Flight Details");
+                WaitForElementToBeVisible(addFlight_ID, TimeSpan.FromSeconds(10));
+                Click(addFlight_ID);
+                test.Pass("Clicked on Add Flight Details");
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                test.Fail("Error in Deleting and Adding Flights: " + e.Message);
             }
-            firstflightnum = GetAttributeValue(flightNumber_XPATH, "value");
-            ClickOnElementIfPresent(flightCheckBox_ID);
-            WaitForElementToBeVisible(deleteFlightDetails_ID, TimeSpan.FromSeconds(10));
-            Click(deleteFlightDetails_ID);
-            WaitForElementToBeVisible(addFlight_ID, TimeSpan.FromSeconds(10));
-            Click(addFlight_ID);
         }
 
-        //public void addNewFlightDetails(string fltorg, string fltdest, string fltNbr, string fltDt, string fltPcs, string fltWgt)
-        //{
-        //    EnterText(dynamicflightOrigin_ID, fltorg);
 
-        //    EnterText(dynamicflightDestination_ID, fltdest);
-
-        //    EnterText(dynamicflightNumber_ID, fltNbr);
-
-        //    EnterText(dynamicflightDate_ID, fltDt);
-
-        //}
 
         public void CaptureIrregularity()
         {
-            SwitchToFrame(bookingIrregularityFrame_ID);
-            Console.WriteLine("Switched to Irregularity Frame");
-            EnterTextToDropdown(irregularityTextbox_ID, "Booking - Incomplete or inaccurate");
-            DoubleClick(irregularityscrollhori_XPATH);
-            Click(irregularityRemarks_XPATH);
-            EnterText(irregularityRemarks_XPATH, "test");
-            int noOfWindowsBefore = GetNumberOfWindowsOpened();
-            Click(irregularitySaveBtn_ID);
-            WaitForNewWindowToOpen(TimeSpan.FromSeconds(10), noOfWindowsBefore + 1);
-            int noOfWindowsAfter = GetNumberOfWindowsOpened();
-            if (noOfWindowsAfter > noOfWindowsBefore)
-            {
-                SwitchToLastWindow();
-                WaitForElementToBeVisible(awbNumber_XPATH, TimeSpan.FromSeconds(10));
-                string awbNumber = GetText(awbNumber_XPATH);
-                Console.WriteLine(awbNumber);
-                WaitForElementToBeVisible(btnOkBookingSummaryPopup_XPATH, TimeSpan.FromSeconds(10));
-                Click(btnOkBookingSummaryPopup_XPATH);
-                SwitchToLastWindow();
-                SwitchToCAP018Frame();
+            test = _scenario.CreateNode<Scenario>("Capture Irregularity");
+            try
+            {                
+                SwitchToFrame(bookingIrregularityFrame_ID);                
+                EnterTextToDropdown(irregularityTextbox_ID, "Booking - Incomplete or inaccurate");
+                test.Pass("Selected Irregularity Code");
+                DoubleClick(irregularityscrollhori_XPATH);
+                Click(irregularityRemarks_XPATH);
+                EnterText(irregularityRemarks_XPATH, "test");
+                test.Pass("Entered Irrgularity Remarks");
+                int noOfWindowsBefore = GetNumberOfWindowsOpened();
+                Click(irregularitySaveBtn_ID);
+                WaitForNewWindowToOpen(TimeSpan.FromSeconds(10), noOfWindowsBefore + 1);
+                int noOfWindowsAfter = GetNumberOfWindowsOpened();
+                if (noOfWindowsAfter > noOfWindowsBefore)
+                {
+                    SwitchToLastWindow();
+                    WaitForElementToBeVisible(awbNumber_XPATH, TimeSpan.FromSeconds(10));
+                    string awbNumber = GetText(awbNumber_XPATH);
+                    test.Pass("AWB Number Captured: " + awbNumber); 
+                    Console.WriteLine(awbNumber);
+                    WaitForElementToBeVisible(btnOkBookingSummaryPopup_XPATH, TimeSpan.FromSeconds(10));
+                    Click(btnOkBookingSummaryPopup_XPATH);
+                    test.Pass("Clicked OK Button on Booking Summary Popup");
+                    SwitchToLastWindow();
+                    SwitchToCAP018Frame();
+                }
+                ClickOnElementIfPresent(btnCloseMb_XPATH);
+                test.Pass("Clicked Close Button on Maintain Booking Page");
             }
-            ClickOnElementIfPresent(btnCloseMb_XPATH);
+            catch (Exception e)
+            {
+                test.Fail("Error in Capturing Irregularity: " + e.Message);
+            }
         }
 
         public void clickOnSaveButtonToSaveNewFlightDetails()
         {
-            ClickOnElementIfPresent(saveBtn_ID);
+            test = _scenario.CreateNode<Scenario>("Click Save Button to Save New Flight Details");
+            try
+            {                
+                ClickOnElementIfPresent(saveBtn_ID);
+                test.Pass("Clicked Save Button");
+            }
+            catch (Exception e)
+            {
+               test.Fail("Error in Clicking Save Button to Save New Flight Details: " + e.Message);
+            }
         }
 
         public void AVIBookingChecksheetDetails()
         {
-            int noOfWindowsBefore = GetNumberOfWindowsOpened();
-            clickOnSaveButtonToSaveNewFlightDetails();
-            clickingYesOnPopupWarnings();
-            //clickingYesOnPopupWarnings();
-            SwitchToCAP018Frame();
-            SwitchToFrame(aviChecksheetframe_XPath);
-            Console.WriteLine("Switched to Irregularity Frame");
-            List<IWebElement> AviChecksheetSections = GetElements(aviTotalChkSheetSections_Xpath);
-            int totalQuestions = 0;
+            test = _scenario.CreateNode<Scenario>("AVI Booking Checksheet Details");
+            try
+            {                
+                int noOfWindowsBefore = GetNumberOfWindowsOpened();
+                clickOnSaveButtonToSaveNewFlightDetails();
+                test.Pass("Clicked Save Button");
+                clickingYesOnPopupWarnings();
+                //clickingYesOnPopupWarnings();
+                SwitchToCAP018Frame();
+                SwitchToFrame(aviChecksheetframe_XPath);
+                Console.WriteLine("Switched to Irregularity Frame");
+                List<IWebElement> AviChecksheetSections = GetElements(aviTotalChkSheetSections_Xpath);
+                int totalQuestions = 0;
 
-            foreach (var section in AviChecksheetSections)
-            {
-                if (section.Text == "AVIHDL Statement")
+                foreach (var section in AviChecksheetSections)
                 {
-
-                    string drpDwnQn = "//*[@id='tabs-1']//div[@id='configId']/h2[text()='aviSectionName']/parent::div/following-sibling::div//select";
-
-                    drpDwnQn = drpDwnQn.Replace("aviSectionName", "AVIHDL Statement");
-                    totalQuestions = GetElementCount(By.XPath(drpDwnQn));
-                    drpDwnQn = drpDwnQn + "[@name= 'questionwithAnswer[0].templateAnswer']";
-                    if (!IsDropdownSelectedByVisibleText((By.XPath(drpDwnQn)), "Yes"))
+                    if (section.Text == "AVIHDL Statement")
                     {
-                        for (int j = 0; j < totalQuestions; j++)
-                        {
-                            SelectDropdownByVisibleText(By.XPath(drpDwnQn.Replace("0", j.ToString())), "Yes");
-                            EnterKeys(By.XPath(drpDwnQn), Keys.Tab);
-                        }
-                    }
 
-                }
-                else if (section.Text == "AVI Booking")
-                {
-                    string drpDwnQn = "//*[@id='tabs-1']//div[@id='configId']/h2[text()='aviSectionName']/parent::div/following-sibling::div//select";
+                        string drpDwnQn = "//*[@id='tabs-1']//div[@id='configId']/h2[text()='aviSectionName']/parent::div/following-sibling::div//select";
 
-                    drpDwnQn = drpDwnQn.Replace("aviSectionName", "AVI Booking");
-                    totalQuestions = GetElementCount(By.XPath(drpDwnQn));
-                    drpDwnQn = drpDwnQn + "[@name= 'questionwithAnswer[0].templateAnswer']";
-                    if (!IsDropdownSelectedByVisibleText((By.XPath(drpDwnQn)), "Yes"))
-                    {
-                        for (int j = 0; j < totalQuestions; j++)
+                        drpDwnQn = drpDwnQn.Replace("aviSectionName", "AVIHDL Statement");
+                        totalQuestions = GetElementCount(By.XPath(drpDwnQn));
+                        drpDwnQn = drpDwnQn + "[@name= 'questionwithAnswer[0].templateAnswer']";
+                        if (!IsDropdownSelectedByVisibleText((By.XPath(drpDwnQn)), "Yes"))
                         {
-                            SelectDropdownByVisibleText(By.XPath(drpDwnQn.Replace("0", j.ToString())), "Yes");
-                            EnterKeys(By.XPath(drpDwnQn), Keys.Tab);
+                            for (int j = 0; j < totalQuestions; j++)
+                            {
+                                SelectDropdownByVisibleText(By.XPath(drpDwnQn.Replace("0", j.ToString())), "Yes");
+                                test.Pass("Selected Yes for AVIHDL Statement Checksheet");
+                                EnterKeys(By.XPath(drpDwnQn), Keys.Tab);
+                            }
                         }
 
                     }
+                    else if (section.Text == "AVI Booking")
+                    {
+                        string drpDwnQn = "//*[@id='tabs-1']//div[@id='configId']/h2[text()='aviSectionName']/parent::div/following-sibling::div//select";
 
+                        drpDwnQn = drpDwnQn.Replace("aviSectionName", "AVI Booking");
+                        totalQuestions = GetElementCount(By.XPath(drpDwnQn));
+                        drpDwnQn = drpDwnQn + "[@name= 'questionwithAnswer[0].templateAnswer']";
+                        if (!IsDropdownSelectedByVisibleText((By.XPath(drpDwnQn)), "Yes"))
+                        {
+                            for (int j = 0; j < totalQuestions; j++)
+                            {
+                                SelectDropdownByVisibleText(By.XPath(drpDwnQn.Replace("0", j.ToString())), "Yes");
+                                test.Pass("Selected Yes for AVI Booking Checksheet");
+                                EnterKeys(By.XPath(drpDwnQn), Keys.Tab);
+                            }
+
+                        }
+
+                    }
                 }
+                Click(aviBookingChecksheetOkBtn_XPATH);
+                test.Pass("Clicked OK Button on AVI Booking Checksheet");
+                SwitchToCAP018Frame();
+                ClickSaveButton();
             }
-            Click(aviBookingChecksheetOkBtn_XPATH);
-            SwitchToCAP018Frame();
-            ClickSaveButton();
+            catch (Exception e)
+            {
+                test.Fail("Error in AVI Booking Checksheet Details: " + e.Message);
+            }
         }
 
         public void AttachOrDetachAWB()
         {
-            ClickOnElementIfPresent(attachDetachBtn_ID);
-            SwitchToSecondPopupWindow();
-            WaitForElementToBeVisible(shipperConsigneePopup_CLASS, TimeSpan.FromSeconds(10));
-            ClearText(attachDetachawbfield_ID);
-            Click(attachDetachpopupBtn_ID);
-            SwitchToPopupWindow();
-            SwitchToCAP018Frame();
+            test = _scenario.CreateNode<Scenario>("Attach/Detach AWB");
+            try
+            {                
+                ClickOnElementIfPresent(attachDetachBtn_ID);
+                test.Pass("Clicked Attach/Detach Button");
+                SwitchToSecondPopupWindow();
+                WaitForElementToBeVisible(shipperConsigneePopup_CLASS, TimeSpan.FromSeconds(10));
+                ClearText(attachDetachawbfield_ID);
+                test.Pass("Cleared AWB Field");
+                Click(attachDetachpopupBtn_ID);
+                test.Pass("Clicked on Attach/Detach Button in Popup");
+                SwitchToPopupWindow();
+                SwitchToCAP018Frame();
+            }
+            catch (Exception e)
+            {
+                test.Fail("Error in Attaching/Detaching AWB: " + e.Message);
+            }
         }
 
         public void EnterNewAgentCode(string agentcode)
         {
-            EnterTextWithCheck(agentCode_ID, agentcode);
+            test = _scenario.CreateNode<Scenario>("Enter New Agent Code");
+            try
+            {                
+                EnterTextWithCheck(agentCode_ID, agentcode);
+                test.Pass("Entered New Agent Code: " + agentcode);
+            }
+            catch (Exception e)
+            {
+                test.Fail("Error in Entering New Agent Code: " + e.Message);
+            }
         }
 
-        //public void MultilegFlightSearch(string flightnbrs)
-        //{
-        //    Click(selectFlightBtn_ID);
-        //    SwitchToFrame(bookingIrregularityFrame_ID);
-        //    WaitForElementToBeVisible(flightSearchtextbox_XPATH, TimeSpan.FromSeconds(10));
-        //    EnterTextWithCheck(flightSearchtextbox_XPATH, flightnbrs);            
-        //}
-
-        //public void VerifyMinimumConnectionTimeWarning(string rescolor,string mincontimewarning)
-        //{
-        //    string resattribute = GetAttributeValue(resColor_Xpath, "class");
-        //    string resColor = resattribute.Split('-')[1];
-        //    Console.WriteLine(resColor);
-        //    Assert.AreEqual(rescolor, resColor);
-        //    Click(resColor_Xpath);
-        //    string resErrorMessage = GetText(resErrorMessage_Xpath);
-        //    Assert.AreEqual(mincontimewarning, resErrorMessage);
-        //    Console.WriteLine(resErrorMessage);
-        //}
 
         public void AWBBookingfromStock()
         {
+            test = _scenario.CreateNode<Scenario>("AWB Booking from Stock");
             try
-            {
+            {                
                 SwitchToPopupWindow();
                 WaitForElementToBeVisible(alreadyExecutedPopup_XPATH, TimeSpan.FromSeconds(10));
                 string alreadyExecutedPopUp = GetText(alreadyExecutedPopup_XPATH);
+                test.Pass("Already Executed Popup: " + alreadyExecutedPopUp);
                 Console.WriteLine(alreadyExecutedPopUp);
                 SwitchToCAP018Frame();
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                test.Fail("Error in AWB Booking from Stock: " + e.Message);
             }
         }
 
         public void UnknownAgentShipmentDetails(string org, string dest, string agtcode, string prodcode)
         {
-            EnterText(origin_ID, org);
-            EnterText(destination_XPATH, dest);
-            ClickOnElementIfPresent(agentCode_ID);
-            EnterTextWithCheck(agentCode_ID, agtcode.ToString());
-            EnterText(shippingDate_ID, shippingDate);
-            EnterText(product_XPATH, prodcode);
-            Click(shipperConsigneeBtn_ID);
+            test = _scenario.CreateNode<Scenario>("Unknown Agent Shipment Details");
+            try
+            {                
+                EnterText(origin_ID, org);
+                test.Pass("Entered Origin: " + org);
+                EnterText(destination_XPATH, dest);
+                test.Pass("Entered Destination: " + dest);
+                ClickOnElementIfPresent(agentCode_ID);
+                EnterTextWithCheck(agentCode_ID, agtcode.ToString());
+                test.Pass("Entered Agent Code: " + agtcode);
+                EnterText(shippingDate_ID, shippingDate);
+                test.Pass("Entered Shipping Date: " + shippingDate);
+                EnterText(product_XPATH, prodcode);
+                test.Pass("Entered Product Code: " + prodcode);
+                Click(shipperConsigneeBtn_ID);
+                test.Pass("Clicked on Shipper Consignee Button");
+            }
+            catch (Exception e)
+            {
+                test.Fail("Error in Entering Unknown Agent Shipment Details: " + e.Message);
+            }
         }
 
         public void UnknownShipperConsigneeDetails(string shipper, string consg)
         {
-            SwitchToSecondPopupWindow();
-            EnterTextWithCheck(shipperCode_XPATH, shipper);
-            EnterTextWithCheck(consigneeCode_XPATH, consg);
-            Click(shipperConsigneeOkBtn_ID);
-            SwitchToPopupWindow();
+            test = _scenario.CreateNode<Scenario>("Unknown Shipper Consignee Details");
+            try
+            {                
+                SwitchToSecondPopupWindow();
+                EnterTextWithCheck(shipperCode_XPATH, shipper);
+                test.Pass("Entered Shipper Code: " + shipper);
+                EnterTextWithCheck(consigneeCode_XPATH, consg);
+                test.Pass("Entered Consignee Code: " + consg);
+                Click(shipperConsigneeOkBtn_ID);
+                test.Pass("Clicked on Shipper Consignee OK Button");
+                SwitchToPopupWindow();
+            }
+            catch (Exception e)
+            {
+                test.Fail("Error in Entering Unknown Shipper Consignee Details: " + e.Message);
+            }
         }
 
         public void UnknownShipperConsigneeALLDetails(string unkshppr, string unkconsgn)
         {
-            SwitchToSecondPopupWindow();
-            EnterText(shipperCode_XPATH, unkshppr);
-            string shipperName = "Test Shipper";
-            EnterTextWithCheck(unkShipperName_ID, shipperName);
-            string shipperFirstAddress = "Test Address1";
-            EnterTextWithCheck(unkShipperFirstAddress_ID, shipperFirstAddress);
-            string shipperSecondAddress = "Test Address2";
-            EnterTextWithCheck(unkShipperSecondAddress, shipperSecondAddress);
-            string shipperCity = "Test City";
-            EnterTextWithCheck(unkShipperCity_ID, shipperCity);
-            string shipperState = "Test State";
-            EnterTextWithCheck(unkShipperState_ID, shipperState);
-            string shipperCountry = "US";
-            EnterTextWithCheck(unkShipperCountry_ID, shipperCountry);
-            string shipperZip = "67890";
-            EnterTextWithCheck(unkShipperZip_ID, shipperZip);
-            string shipperEmail = "TEST@GMAIL.COM.INVALID";
-            EnterTextWithCheck(unkShipperEmail_ID, shipperEmail);
-            EnterText(consigneeCode_XPATH, unkconsgn);
-            string consigneeName = "Test Consignee";
-            EnterTextWithCheck(unkConsigneeName_ID, consigneeName);
-            string consigneeFirstAddress = "Test Address1";
-            EnterTextWithCheck(unkConsigneeFirstAddress_ID, consigneeFirstAddress);
-            string consigneeSecondAddress = "Test Address2";
-            EnterTextWithCheck(unkConsigneeSecondAddress, consigneeSecondAddress);
-            string consigneeCity = "Test City";
-            EnterTextWithCheck(unkConsigneeCity_ID, consigneeCity);
-            string consigneeState = "Test State";
-            EnterTextWithCheck(unkConsigneeState_ID, consigneeState);
-            string consigneeCountry = "US";
-            EnterTextWithCheck(unkConsigneeCountry_ID, consigneeCountry);
-            string consigneeZip = "67890";
-            EnterTextWithCheck(unkConsigneeZip_ID, consigneeZip);
-            string consigneeEmail = "TEST@GMAIL.COM.INVALID";
-            EnterTextWithCheck(unkConsigneeEmail_ID, consigneeEmail);
-            Click(shipperConsigneeOkBtn_ID);
-            SwitchToPopupWindow();
+            test = _scenario.CreateNode<Scenario>("Unknown Shipper Consignee ALL Details");
+            try
+            {                
+                SwitchToSecondPopupWindow();
+                EnterText(shipperCode_XPATH, unkshppr);
+                test.Pass("Entered Shipper Code: " + unkshppr);
+                string shipperName = "Test Shipper";
+                EnterTextWithCheck(unkShipperName_ID, shipperName);
+                test.Pass("Entered Shipper Name: " + shipperName);
+                string shipperFirstAddress = "Test Address1";
+                EnterTextWithCheck(unkShipperFirstAddress_ID, shipperFirstAddress);
+                test.Pass("Entered Shipper First Address: " + shipperFirstAddress);
+                string shipperSecondAddress = "Test Address2";
+                EnterTextWithCheck(unkShipperSecondAddress, shipperSecondAddress);
+                test.Pass("Entered Shipper Second Address: " + shipperSecondAddress);
+                string shipperCity = "Test City";
+                EnterTextWithCheck(unkShipperCity_ID, shipperCity);
+                test.Pass("Entered Shipper City: " + shipperCity);
+                string shipperState = "Test State";
+                EnterTextWithCheck(unkShipperState_ID, shipperState);
+                test.Pass("Entered Shipper State: " + shipperState);
+                string shipperCountry = "US";
+                EnterTextWithCheck(unkShipperCountry_ID, shipperCountry);
+                test.Pass("Entered Shipper Country: " + shipperCountry);
+                string shipperZip = "67890";
+                EnterTextWithCheck(unkShipperZip_ID, shipperZip);
+                test.Pass("Entered Shipper Zip: " + shipperZip);
+                string shipperEmail = "TEST@GMAIL.COM.INVALID";
+                EnterTextWithCheck(unkShipperEmail_ID, shipperEmail);
+                test.Pass("Entered Shipper Email: " + shipperEmail);    
+                EnterText(consigneeCode_XPATH, unkconsgn);
+                test.Pass("Entered Consignee Code: " + unkconsgn);
+                string consigneeName = "Test Consignee";
+                EnterTextWithCheck(unkConsigneeName_ID, consigneeName);
+                test.Pass("Entered Consignee Name: " + consigneeName);
+                string consigneeFirstAddress = "Test Address1";
+                EnterTextWithCheck(unkConsigneeFirstAddress_ID, consigneeFirstAddress);
+                test.Pass("Entered Consignee First Address: " + consigneeFirstAddress);
+                string consigneeSecondAddress = "Test Address2";
+                EnterTextWithCheck(unkConsigneeSecondAddress, consigneeSecondAddress);
+                test.Pass("Entered Consignee Second Address: " + consigneeSecondAddress);
+                string consigneeCity = "Test City";
+                EnterTextWithCheck(unkConsigneeCity_ID, consigneeCity);
+                test.Pass("Entered Consignee City: " + consigneeCity);
+                string consigneeState = "Test State";
+                EnterTextWithCheck(unkConsigneeState_ID, consigneeState);
+                test.Pass("Entered Consignee State: " + consigneeState);
+                string consigneeCountry = "US";
+                EnterTextWithCheck(unkConsigneeCountry_ID, consigneeCountry);
+                test.Pass("Entered Consignee Country: " + consigneeCountry);
+                string consigneeZip = "67890";
+                EnterTextWithCheck(unkConsigneeZip_ID, consigneeZip);
+                test.Pass("Entered Consignee Zip: " + consigneeZip);
+                string consigneeEmail = "TEST@GMAIL.COM.INVALID";
+                EnterTextWithCheck(unkConsigneeEmail_ID, consigneeEmail);
+                test.Pass("Entered Consignee Email: " + consigneeEmail);
+                Click(shipperConsigneeOkBtn_ID);
+                test.Pass("Clicked on Shipper Consignee OK Button");
+                SwitchToPopupWindow();
+            }
+            catch (Exception e)
+            {
+               test.Fail("Error in Entering Unknown Shipper Consignee ALL Details: " + e.Message);
+            }
         }
 
         public void SelectFlight(string givenproductcode)
         {
-            Click(selectFlightBtn_ID);
-            SwitchToFrame(bookingIrregularityFrame_ID);
-            WaitForElementToBeVisible(flightdetailssection_XPATH, TimeSpan.FromSeconds(25));           
-            List<IWebElement> noofflights = GetElements(flightdetailssection_XPATH);
-            //WaitForElementToBeVisible(rate_Xpath, TimeSpan.FromSeconds(10));
-            List<IWebElement> ratestatusbtn = GetElements(rate_Xpath);
-            //WaitForElementToBeVisible(cap_Xpath, TimeSpan.FromSeconds(10));
-            List<IWebElement> capstatusbtn = GetElements(cap_Xpath);
-            //WaitForElementToBeVisible(rest_Xpath, TimeSpan.FromSeconds(10));
-            List<IWebElement> reststatusbtn = GetElements(rest_Xpath);
-            //WaitForElementToBeVisible(emb_Xpath, TimeSpan.FromSeconds(10));
-            List<IWebElement> embstatusbtn = GetElements(emb_Xpath);    
-           // WaitForElementToBeVisible(flightProductCode_Xpath, TimeSpan.FromSeconds(10));
-            List<IWebElement> prodcodes = GetElements(flightProductCode_Xpath);
-            //WaitForElementToBeVisible(flightdate_Xpath, TimeSpan.FromSeconds(10));
-            List<IWebElement> flightdates = GetElements(flightdate_Xpath);
-            //WaitForElementToBeVisible(GeneralProdbtn_Xpath, TimeSpan.FromSeconds(10));
-            List<IWebElement> GeneralProd = GetElements(GeneralProdbtn_Xpath);
-           // WaitForElementToBeVisible(PriorityProdbtn_Xpath, TimeSpan.FromSeconds(10));
-            List<IWebElement> PriorityProd = GetElements(PriorityProdbtn_Xpath);
-           // WaitForElementToBeVisible(EmployeeProdbtn_Xpath, TimeSpan.FromSeconds(10));
-            List<IWebElement> EmployeeProd = GetElements(EmployeeProdbtn_Xpath);
-           // WaitForElementToBeVisible(GoldstreakProdbtn_Xpath, TimeSpan.FromSeconds(10));
-            List<IWebElement> GoldstreakProd = GetElements(GoldstreakProdbtn_Xpath);
-            //WaitForElementToBeVisible(PetConnectProdbtn_Xpath, TimeSpan.FromSeconds(10));
-            List<IWebElement> PetConnectProd = GetElements(PetConnectProdbtn_Xpath);
-            for (int i = 0; i < noofflights.Count; i++)
-            {
-                IWebElement item = prodcodes[i];
-                string productcode = GetTextFromElement(item);
-                IWebElement capstatus = capstatusbtn[i];
-                string capColor = GetAttributeValueFromElement(capstatus, "class");
-                IWebElement reststatus = reststatusbtn[i];
-                string rescolor = GetAttributeValueFromElement(reststatus, "class");
-                IWebElement embstatus = embstatusbtn[i];
-                string embcolor = GetAttributeValueFromElement(embstatus, "class");
-                IWebElement ratestatus = ratestatusbtn[i];
-                string ratecolor = GetAttributeValueFromElement(ratestatus, "class");
-                IWebElement flightdate = flightdates[i];
-                string flightdatevalue = GetTextFromElement(flightdate);
-                if (presentdate == flightdatevalue)
+            test = _scenario.CreateNode<Scenario>("Select Flight");
+            try
+            {                
+                Click(selectFlightBtn_ID);
+                test.Pass("Clicked Select Flight Button");
+                WaitForElementToBeInvisible(CAP018Frame_XPATH, TimeSpan.FromSeconds(10));
+                SwitchToFrame(bookingIrregularityFrame_ID);
+                List<IWebElement> noofflights = GetElements(flightdetailssection_XPATH);
+                List<IWebElement> ratestatusbtn = GetElements(rate_Xpath);
+                List<IWebElement> capstatusbtn = GetElements(cap_Xpath);
+                List<IWebElement> reststatusbtn = GetElements(rest_Xpath);
+                List<IWebElement> embstatusbtn = GetElements(emb_Xpath);
+                List<IWebElement> prodcodes = GetElements(flightProductCode_Xpath);
+                List<IWebElement> flightdates = GetElements(flightdate_Xpath);
+                List<IWebElement> GeneralProd = GetElements(GeneralProdbtn_Xpath);
+                List<IWebElement> PriorityProd = GetElements(PriorityProdbtn_Xpath);
+                List<IWebElement> EmployeeProd = GetElements(EmployeeProdbtn_Xpath);
+                List<IWebElement> GoldstreakProd = GetElements(GoldstreakProdbtn_Xpath);
+                List<IWebElement> PetConnectProd = GetElements(PetConnectProdbtn_Xpath);
+                for (int i = 0; i < noofflights.Count; i++)
                 {
-                    if (productcode == givenproductcode && productcode == "GENERAL")
+                    IWebElement item = prodcodes[i];
+                    string productcode = GetTextFromElement(item);
+                    IWebElement capstatus = capstatusbtn[i];
+                    string capColor = GetAttributeValueFromElement(capstatus, "class");
+                    IWebElement reststatus = reststatusbtn[i];
+                    string rescolor = GetAttributeValueFromElement(reststatus, "class");
+                    IWebElement embstatus = embstatusbtn[i];
+                    string embcolor = GetAttributeValueFromElement(embstatus, "class");
+                    IWebElement ratestatus = ratestatusbtn[i];
+                    string ratecolor = GetAttributeValueFromElement(ratestatus, "class");
+                    IWebElement flightdate = flightdates[i];
+                    string flightdatevalue = GetTextFromElement(flightdate);
+                    if (presentdate == flightdatevalue)
                     {
-                        if (capColor != "badge-red" && rescolor != "badge-red" && embcolor != "badge-red" && ratecolor != "badge-red")
+                        if (productcode == givenproductcode && productcode == "GENERAL")
                         {
-                            IWebElement GeneralProdBtn = GeneralProd[i];
-                            if(IsElementEnabled(GeneralProdbtn_Xpath))
-                            ClickOnElement(GeneralProdBtn);
-                            Click(flightDetailsOkbtn_Xpath);
-                            break;
+                            if (capColor != "badge-red" && rescolor != "badge-red" && embcolor != "badge-red" && ratecolor != "badge-red")
+                            {
+                                IWebElement GeneralProdBtn = GeneralProd[i];
+                                if (IsElementDisplayed(GeneralProdbtn_Xpath))
+                                {
+                                    ClickOnElement(GeneralProdBtn);
+                                    test.Pass("Selected General Product");
+                                }
+                                Click(flightDetailsOkbtn_Xpath);
+                                test.Pass("Clicked Flight Details OK Button");
+                                break;
+                            }
+                        }
+                        else if (productcode == givenproductcode && productcode == "PRIORITY")
+                        {
+                            if (capColor != "badge-red" && rescolor != "badge-red" && embcolor != "badge-red" && ratecolor != "badge-red")
+                            {
+                                IWebElement PriorityProdBtn = PriorityProd[i];
+                                if (IsElementDisplayed(PriorityProdbtn_Xpath))
+                                {
+                                    ClickOnElement(PriorityProdBtn);
+                                    test.Pass("Selected Priority Product");
+                                }
+                                Click(flightDetailsOkbtn_Xpath);
+                                test.Pass("Clicked Flight Details OK Button");
+                                break;
+                            }
+                        }
+                        else if (productcode == givenproductcode && productcode == "EMPLOYEE SHIPMENT")
+                        {
+                            if (capColor != "badge-red" && rescolor != "badge-red" && embcolor != "badge-red" && ratecolor != "badge-red")
+                            {
+                                IWebElement EmployeeProdBtn = EmployeeProd[i];
+                                if (IsElementDisplayed(EmployeeProdbtn_Xpath))
+                                {
+                                    ClickOnElement(EmployeeProdBtn);
+                                    test.Pass("Selected Employee Shipment Product");
+                                }
+                                Click(flightDetailsOkbtn_Xpath);
+                                test.Pass("Clicked Flight Details OK Button");
+                                break;
+                            }
+                        }
+                        else if (productcode == givenproductcode && productcode == "GOLDSTREAK")
+                        {
+                            if (capColor != "badge-red" && rescolor != "badge-red" && embcolor != "badge-red" && ratecolor != "badge-red")
+                            {
+                                IWebElement GoldstreakProdBtn = GoldstreakProd[i];
+                                if (IsElementDisplayed(GoldstreakProdbtn_Xpath))
+                                {
+                                    ClickOnElement(GoldstreakProdBtn);
+                                    test.Pass("Selected Goldstreak Product");
+                                }
+                                Click(flightDetailsOkbtn_Xpath);
+                                test.Pass("Clicked Flight Details OK Button");
+                                break;
+                            }
+                        }
+                        else if (productcode == givenproductcode && productcode == "PET CONNECT")
+                        {
+                            if (capColor != "badge-red" && rescolor != "badge-red" && embcolor != "badge-red" && ratecolor != "badge-red")
+                            {
+                                IWebElement PetConnectProdBtn = PetConnectProd[i];
+                                if (IsElementDisplayed(PetConnectProdbtn_Xpath))
+                                {
+                                    ClickOnElement(PetConnectProdBtn);
+                                    test.Pass("Selected Pet Connect Product");
+                                }
+                                Click(flightDetailsOkbtn_Xpath);
+                                test.Pass("Clicked Flight Details OK Button");
+                                break;
+                            }
                         }
                     }
-                    else if (productcode == givenproductcode && productcode == "PRIORITY")
+                }
+                SwitchToCAP018Frame();
+            }
+            catch (Exception e)
+            {
+                test.Fail(e.ToString());
+            }
+        }
+
+        public void selectMultilegflight(string rescolor, string mincontimewarning, string givenprodcode)
+        {
+            test = _scenario.CreateNode<Scenario>("Select Multileg Flight");
+            try
+            {                
+                Click(selectFlightBtn_ID);
+                test.Pass("Clicked Select Flight Button");
+                SwitchToFrame(bookingIrregularityFrame_ID);
+                WaitForElementToBeVisible(flightdetailssection_XPATH, TimeSpan.FromSeconds(20));
+                Click(multilegFlightsfilter);
+                test.Pass("Clicked Multileg Flights Filter");
+                Click(oneStopFilter_Xpath);
+                test.Pass("Clicked One Stop Filter");
+                Click(twoStopFilter_Xpath);
+                test.Pass("Clicked Two Stop Filter");
+                Click(twoplusStopFilter_Xpath);
+                test.Pass("Clicked Two Plus Stop Filter");
+                Click(filterApplyBtn_Xpath);
+                test.Pass("Clicked Filter Apply Button");
+                List<IWebElement> noofflights = GetElements(flightdetailssection_XPATH);
+                List<IWebElement> reststatusbtn = GetElements(rest_Xpath);
+                List<IWebElement> multilegflights = GetElements(multilegFlights_Xpath);
+                string productcode = GetText(flightProductCode_Xpath);
+                for (int i = 0; i < noofflights.Count; i++)
+                {
+                    IWebElement reststatus = reststatusbtn[i];
+                    string resattribute = GetAttributeValueFromElement(reststatus, "class");
+                    string nooflegscount = GetTextFromElement(multilegflights[i]);
+                    int count = int.Parse(nooflegscount);
+                    if (count >= 2)
                     {
-                        if (capColor != "badge-red" && rescolor != "badge-red" && embcolor != "badge-red" && ratecolor != "badge-red")
+                        if (resattribute == "badge-red" && productcode == "GENERAL" && productcode == givenprodcode)
                         {
-                            IWebElement PriorityProdBtn = PriorityProd[i];
-                            if(IsElementEnabled(PriorityProdbtn_Xpath))
-                            ClickOnElement(PriorityProdBtn);
-                           Click(flightDetailsOkbtn_Xpath);
+                            string resColors = resattribute.Split('-')[1];
+                            Console.WriteLine(resColors);
+                            test.Pass("Rest Status Color: " + resColors);
+                            Assert.AreEqual(rescolor, resColors);
+                            Click(resColor_Xpath);
+                            string resErrorMessage = GetText(resErrorMessage_Xpath);
+                            Assert.AreEqual(mincontimewarning, resErrorMessage);
+                            test.Pass("Rest Error Message: " + resErrorMessage);
+                            Console.WriteLine(resErrorMessage);
                             break;
                         }
-                    }
-                    else if (productcode == givenproductcode && productcode == "EMPLOYEE SHIPMENT")
-                    {
-                        if (capColor != "badge-red" && rescolor != "badge-red" && embcolor != "badge-red" && ratecolor != "badge-red")
+                        if (resattribute == "badge-red" && productcode == "PRIORITY" && productcode == givenprodcode)
                         {
-                            IWebElement EmployeeProdBtn = EmployeeProd[i];
-                            if(IsElementEnabled(EmployeeProdbtn_Xpath))
-                            ClickOnElement(EmployeeProdBtn);
-                            Click(flightDetailsOkbtn_Xpath);
+                            string resColors = resattribute.Split('-')[1];
+                            Console.WriteLine(resColors);
+                            Assert.AreEqual(rescolor, resColors);
+                            test.Pass("Rest Status Color: " + resColors);
+                            Click(resColor_Xpath);
+                            string resErrorMessage = GetText(resErrorMessage_Xpath);
+                            Assert.AreEqual(mincontimewarning, resErrorMessage);
+                            test.Pass("Rest Error" + resErrorMessage);
+                            Console.WriteLine(resErrorMessage);
                             break;
                         }
-                    }
-                    else if (productcode == givenproductcode && productcode == "GOLDSTREAK")
-                    {
-                        if (capColor != "badge-red" && rescolor != "badge-red" && embcolor != "badge-red" && ratecolor != "badge-red")
+                        if (resattribute == "badge-red" && productcode == "GOLDSTREAK" && productcode == givenprodcode)
                         {
-                            IWebElement GoldstreakProdBtn = GoldstreakProd[i];
-                            if(IsElementEnabled(GoldstreakProdbtn_Xpath))
-                            ClickOnElement(GoldstreakProdBtn);
-                           Click(flightDetailsOkbtn_Xpath);
+                            string resColors = resattribute.Split('-')[1];
+                            Console.WriteLine(resColors);
+                            Assert.AreEqual(rescolor, resColors);
+                            test.Pass("Rest Status Color: " + resColors);
+                            Click(resColor_Xpath);
+                            string resErrorMessage = GetText(resErrorMessage_Xpath);
+                            Assert.AreEqual(mincontimewarning, resErrorMessage);
+                            test.Pass("Rest Error Message: " + resErrorMessage);
+                            Console.WriteLine(resErrorMessage);
                             break;
                         }
-                    }
-                    else if (productcode == givenproductcode && productcode == "PET CONNECT")
-                    {
-                        if (capColor != "badge-red" && rescolor != "badge-red" && embcolor != "badge-red" && ratecolor != "badge-red")
+                        if (resattribute == "badge-red" && productcode == "PET CONNECT" && productcode == givenprodcode)
                         {
-                            IWebElement PetConnectProdBtn = PetConnectProd[i];
-                            ClickOnElement(PetConnectProdBtn);
-                            Click(flightDetailsOkbtn_Xpath);
+                            string resColors = resattribute.Split('-')[1];
+                            Console.WriteLine(resColors);
+                            Assert.AreEqual(rescolor, resColors);
+                            test.Pass("Rest Status Color: " + resColors);
+                            Click(resColor_Xpath);
+                            string resErrorMessage = GetText(resErrorMessage_Xpath);
+                            Assert.AreEqual(mincontimewarning, resErrorMessage);
+                            test.Pass("Rest Error Message: " + resErrorMessage);
+                            Console.WriteLine(resErrorMessage);
                             break;
                         }
                     }
                 }
             }
-            SwitchToCAP018Frame();
-        }
-
-        public void selectMultilegflight(string rescolor, string mincontimewarning, string givenprodcode)
-        {
-            Click(selectFlightBtn_ID);
-            SwitchToFrame(bookingIrregularityFrame_ID);
-            WaitForElementToBeVisible(flightdetailssection_XPATH, TimeSpan.FromSeconds(20));
-            Click(multilegFlightsfilter);
-            Click(oneStopFilter_Xpath);
-            Click(twoStopFilter_Xpath);
-            Click(twoplusStopFilter_Xpath);
-            Click(filterApplyBtn_Xpath);
-            List<IWebElement> noofflights = GetElements(flightdetailssection_XPATH);
-            List<IWebElement> reststatusbtn = GetElements(rest_Xpath);
-            List<IWebElement> multilegflights = GetElements(multilegFlights_Xpath);
-            string productcode = GetText(flightProductCode_Xpath);
-            for (int i = 0; i < noofflights.Count; i++)
+            catch (Exception e)
             {
-                IWebElement reststatus = reststatusbtn[i];
-                string resattribute = GetAttributeValueFromElement(reststatus, "class");
-                string nooflegscount = GetTextFromElement(multilegflights[i]);
-                int count = int.Parse(nooflegscount);
-                if (count >= 2)
-                {
-                    if (resattribute == "badge-red" && productcode == "GENERAL" && productcode == givenprodcode)
-                    {
-                        string resColors = resattribute.Split('-')[1];
-                        Console.WriteLine(resColors);
-                        Assert.AreEqual(rescolor, resColors);
-                        Click(resColor_Xpath);
-                        string resErrorMessage = GetText(resErrorMessage_Xpath);
-                        Assert.AreEqual(mincontimewarning, resErrorMessage);
-                        Console.WriteLine(resErrorMessage);
-                        break;
-                    }
-                    if (resattribute == "badge-red" && productcode == "PRIORITY" && productcode == givenprodcode)
-                    {
-                        string resColors = resattribute.Split('-')[1];
-                        Console.WriteLine(resColors);
-                        Assert.AreEqual(rescolor, resColors);
-                        Click(resColor_Xpath);
-                        string resErrorMessage = GetText(resErrorMessage_Xpath);
-                        Assert.AreEqual(mincontimewarning, resErrorMessage);
-                        Console.WriteLine(resErrorMessage);
-                        break;
-                    }
-                    if (resattribute == "badge-red" && productcode == "GOLDSTREAK" && productcode == givenprodcode)
-                    {
-                        string resColors = resattribute.Split('-')[1];
-                        Console.WriteLine(resColors);
-                        Assert.AreEqual(rescolor, resColors);
-                        Click(resColor_Xpath);
-                        string resErrorMessage = GetText(resErrorMessage_Xpath);
-                        Assert.AreEqual(mincontimewarning, resErrorMessage);
-                        Console.WriteLine(resErrorMessage);
-                        break;
-                    }
-                    if (resattribute == "badge-red" && productcode == "PET CONNECT" && productcode == givenprodcode)
-                    {
-                        string resColors = resattribute.Split('-')[1];
-                        Console.WriteLine(resColors);
-                        Assert.AreEqual(rescolor, resColors);
-                        Click(resColor_Xpath);
-                        string resErrorMessage = GetText(resErrorMessage_Xpath);
-                        Assert.AreEqual(mincontimewarning, resErrorMessage);
-                        Console.WriteLine(resErrorMessage);
-                        break;
-                    }
-                }
+                test.Fail("Error in Selecting Multileg Flight: " + e.Message);
             }
         }
 
         public void addNewFlightDetails()
         {
-            Click(selectFlightBtn_ID);
-            SwitchToFrame(bookingIrregularityFrame_ID);
-            WaitForElementToBeVisible(rebookflightdetails_Xpath, TimeSpan.FromSeconds(20));
-            List<IWebElement> nosofflights = GetElements(rebookflightdetails_Xpath);
-            List<IWebElement> flightnumbersbtn = GetElements(rebookSelectflightbtn_Xpath);
-            List<IWebElement> ratestatusbtn = GetElements(rate_Xpath);
-            List<IWebElement> capstatusbtn = GetElements(cap_Xpath);
-            List<IWebElement> reststatusbtn = GetElements(rest_Xpath);
-            List<IWebElement> embstatusbtn = GetElements(emb_Xpath);
-            for (int i = 0; i < nosofflights.Count; i++)
+            test = _scenario.CreateNode<Scenario>("Add New Flight Details");
+            try
             {
-                IWebElement item = nosofflights[i];
-                string selectflightnum = GetTextFromElement(item);
-                IWebElement capstatus = capstatusbtn[i];
-                string capColor = GetAttributeValueFromElement(capstatus, "class");
-                IWebElement reststatus = reststatusbtn[i];
-                string rescolor = GetAttributeValueFromElement(reststatus, "class");
-                IWebElement embstatus = embstatusbtn[i];
-                string embcolor = GetAttributeValueFromElement(embstatus, "class");
-                IWebElement ratestatus = ratestatusbtn[i];
-                string ratecolor = GetAttributeValueFromElement(ratestatus, "class");
-
-                if (capColor != "badge-red" && rescolor != "badge-red" && embcolor != "badge-red" && ratecolor != "badge-red" && presentdate == GetText(flightdate_Xpath) && firstflightnum != selectflightnum)
+                Click(selectFlightBtn_ID);
+                test.Pass("Clicked Select Flight Button");
+                SwitchToFrame(bookingIrregularityFrame_ID);
+                WaitForElementToBeVisible(rebookflightdetails_Xpath, TimeSpan.FromSeconds(20));
+                List<IWebElement> nosofflights = GetElements(rebookflightdetails_Xpath);
+                List<IWebElement> flightnumbersbtn = GetElements(rebookSelectflightbtn_Xpath);
+                List<IWebElement> ratestatusbtn = GetElements(rate_Xpath);
+                List<IWebElement> capstatusbtn = GetElements(cap_Xpath);
+                List<IWebElement> reststatusbtn = GetElements(rest_Xpath);
+                List<IWebElement> embstatusbtn = GetElements(emb_Xpath);
+                for (int i = 0; i < nosofflights.Count; i++)
                 {
-                    IWebElement selectflightbtn = flightnumbersbtn[i];
-                    ClickOnElement(selectflightbtn);
-                    Click(flightDetailsOkbtn_Xpath);
-                    break;
+                    IWebElement item = nosofflights[i];
+                    string selectflightnum = GetTextFromElement(item);
+                    IWebElement capstatus = capstatusbtn[i];
+                    string capColor = GetAttributeValueFromElement(capstatus, "class");
+                    IWebElement reststatus = reststatusbtn[i];
+                    string rescolor = GetAttributeValueFromElement(reststatus, "class");
+                    IWebElement embstatus = embstatusbtn[i];
+                    string embcolor = GetAttributeValueFromElement(embstatus, "class");
+                    IWebElement ratestatus = ratestatusbtn[i];
+                    string ratecolor = GetAttributeValueFromElement(ratestatus, "class");
+
+                    if (capColor != "badge-red" && rescolor != "badge-red" && embcolor != "badge-red" && ratecolor != "badge-red" && presentdate == GetText(flightdate_Xpath) && firstflightnum != selectflightnum)
+                    {
+                        IWebElement selectflightbtn = flightnumbersbtn[i];
+                        ClickOnElement(selectflightbtn);
+                        test.Pass("Selected Flight Number: " + selectflightnum);
+                        Click(flightDetailsOkbtn_Xpath);
+                        test.Pass("Clicked Flight Details OK Button");
+                        break;
+                    }
                 }
+
+                SwitchToCAP018Frame();
             }
-
-            SwitchToCAP018Frame();
+            catch (Exception e)
+            {
+                Log.Error("Error in Adding New Flight Details: " + e.Message);
+            }
         }
-
     }
 }
