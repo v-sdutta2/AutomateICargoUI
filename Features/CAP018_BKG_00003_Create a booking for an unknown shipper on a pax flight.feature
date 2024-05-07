@@ -21,4 +21,4 @@ Given User lauches the Url of iCargo Staging UI
         Then User logs out from the application
         Examples:
             | Origin | Destination | ProductCode | Commodity | Piece | Weight |  AgentCode | Shipper | Consignee |
-            | SEA    | ANC         |  GENERAL     | 0316      | 2     | 20     |  ASQXGUEST |C1001   | C1001    |
+            | SEA    | FAI         |  GENERAL     | 0316      | 2     | 20     |  ASQXGUEST |C1001   | C1001    |

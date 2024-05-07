@@ -579,11 +579,36 @@ namespace iCargoUIAutomation.pages
             }
         }
 
-        public void UnknownAgentShipmentDetails(string org, string dest, string agtcode, string prodcode)
+        public void UnknownAgentShipmentDetails(string org, string dest, string prodcode)
         {
             test = _scenario.CreateNode<Scenario>("Unknown Agent Shipment Details");
             try
             {                
+                EnterText(origin_ID, org);
+                test.Pass("Entered Origin: " + org);
+                EnterText(destination_XPATH, dest);
+                test.Pass("Entered Destination: " + dest);
+                ClickOnElementIfPresent(agentCode_ID);
+                //EnterTextWithCheck(agentCode_ID, agtcode.ToString());
+                //test.Pass("Entered Agent Code: " + agtcode);
+                EnterText(shippingDate_ID, shippingDate);
+                test.Pass("Entered Shipping Date: " + shippingDate);
+                EnterText(product_XPATH, prodcode);
+                test.Pass("Entered Product Code: " + prodcode);
+                Click(shipperConsigneeBtn_ID);
+                test.Pass("Clicked on Shipper Consignee Button");
+            }
+            catch (Exception e)
+            {
+                test.Fail("Error in Entering Unknown Agent Shipment Details: " + e.Message);
+            }
+        }
+
+        public void NewUnknownAgentShipmentDetails(string org, string dest,string agtcode, string prodcode)
+        {
+            test = _scenario.CreateNode<Scenario>("Unknown Agent Shipment Details");
+            try
+            {
                 EnterText(origin_ID, org);
                 test.Pass("Entered Origin: " + org);
                 EnterText(destination_XPATH, dest);
@@ -630,9 +655,11 @@ namespace iCargoUIAutomation.pages
             try
             {                
                 SwitchToSecondPopupWindow();
+                WaitForElementToBeInvisible(CAP018Frame_XPATH, TimeSpan.FromSeconds(10));
                 EnterText(shipperCode_XPATH, unkshppr);
                 test.Pass("Entered Shipper Code: " + unkshppr);
                 string shipperName = "Test Shipper";
+                ClickOnElementIfPresent(unkShipperName_ID);
                 EnterTextWithCheck(unkShipperName_ID, shipperName);
                 test.Pass("Entered Shipper Name: " + shipperName);
                 string shipperFirstAddress = "Test Address1";
@@ -659,6 +686,7 @@ namespace iCargoUIAutomation.pages
                 EnterText(consigneeCode_XPATH, unkconsgn);
                 test.Pass("Entered Consignee Code: " + unkconsgn);
                 string consigneeName = "Test Consignee";
+                ClickOnElementIfPresent(unkConsigneeName_ID);
                 EnterTextWithCheck(unkConsigneeName_ID, consigneeName);
                 test.Pass("Entered Consignee Name: " + consigneeName);
                 string consigneeFirstAddress = "Test Address1";

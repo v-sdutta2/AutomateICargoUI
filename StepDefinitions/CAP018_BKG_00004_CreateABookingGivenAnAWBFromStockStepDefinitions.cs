@@ -43,14 +43,13 @@ namespace iCargoUIAutomation.StepDefinitions
         //    this.productcode = productcode;
         //    mbp.UnknownAgentShipmentDetails(origin, destination, agentcode, shippingdate, productcode);
         //}
-        [Then(@"User enters shipment details with Origin ""([^""]*)"", Destination ""([^""]*)"",Agent Code ""([^""]*)"", Product Code ""([^""]*)""")]
-        public void ThenUserEntersShipmentDetailsWithOriginDestinationAgentCodeProductCode(string origin, string destination, string agentcode, string productcode)
+        [Then(@"User enters unknown shipment details with Origin ""([^""]*)"", Destination ""([^""]*)"", Product Code ""([^""]*)""")]
+        public void ThenUserEntersShipmentDetailsWithOriginDestinationAgentCodeProductCode(string origin, string destination, string productcode)
         {
             this.origin = origin;
-            this.destination = destination;
-            this.agentcode = agentcode;            
+            this.destination = destination;                       
             this.productcode = productcode;
-            mbp.UnknownAgentShipmentDetails(origin, destination, agentcode, productcode);
+            mbp.UnknownAgentShipmentDetails(origin, destination,productcode);
         }
 
 

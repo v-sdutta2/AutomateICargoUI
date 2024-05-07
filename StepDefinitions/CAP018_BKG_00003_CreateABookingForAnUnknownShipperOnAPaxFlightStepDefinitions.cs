@@ -14,6 +14,10 @@ namespace iCargoUIAutomation.StepDefinitions
         private MaintainBookingPage mbp;
         string unkShipper = "";
         string unkConsignee = "";
+        string origin = "";
+        string destination = "";
+        string agentCode = "";
+        string productCode = "";
 
         public CAP018_BKG_00003_CreateABookingForAnUnknownShipperOnAPaxFlightStepDefinitions(IWebDriver driver)
         {
@@ -29,5 +33,17 @@ namespace iCargoUIAutomation.StepDefinitions
             this.unkConsignee = unkConsignee;
             mbp.UnknownShipperConsigneeALLDetails(unkShipper, unkConsignee);
         }
+
+        [Then(@"User enters shipment details with Origin ""([^""]*)"", Destination ""([^""]*)"",Agent Code ""([^""]*)"", Product Code ""([^""]*)""")]
+        public void ThenUserEntersShipmentDetailsWithOriginDestinationAgentCodeProductCode(string origin, string destination, string agentcode, string productCode)
+        {
+            this.origin = origin;
+            this.destination = destination;
+            this.agentCode = agentcode;
+            this.productCode = productCode;
+            mbp.NewUnknownAgentShipmentDetails(origin, destination, agentcode, productCode);
+            
+        }
+
     }
 }

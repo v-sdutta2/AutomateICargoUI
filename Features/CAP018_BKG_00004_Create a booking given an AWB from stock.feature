@@ -12,7 +12,8 @@ Scenario Outline: Create a booking given an AWB from stock and system will creat
 	And User enters the AWB number as "<AWB>"
 	And User clicks on New/List button
 	And a banner appears for the awb does not exist
-	And User enters shipment details with Origin "<Origin>", Destination "<Destination>",Agent Code "<AgentCode>", Product Code "<ProductCode>"
+	#And User enters shipment details with Origin "<Origin>", Destination "<Destination>",Agent Code "<AgentCode>", Product Code "<ProductCode>"
+	And User enters unknown shipment details with Origin "<Origin>", Destination "<Destination>", Product Code "<ProductCode>"
 	And User enters Unknown Shipper "<Shipper>" and Consignee "<Consignee>" details 
 	And User enters commodity details with Commodity "<Commodity>", Pieces "<Piece>", Weight "<Weight>"
 	#And User enters Carrier details with Origin "<Origin>", Destination "<Destination>", Flight No "<FlightNo>", Flight Date "<FlightDate>", Pieces "<Piece>", Weight "<Weight>"
