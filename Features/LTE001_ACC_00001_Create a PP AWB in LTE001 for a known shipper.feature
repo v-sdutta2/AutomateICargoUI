@@ -2,7 +2,7 @@
 
 Create a New Shipment, Acceptance of that new shipment & screening as a CGO or CGODG user
 
-@tag1
+@LTE001
 Scenario Outline: Create a PP AWB in LTE001 for a known shipper
 	Given User lauches the Url of iCargo Staging UI
 	Then User enters into the  iCargo 'Sign in to icargoas' page successfully
@@ -20,6 +20,7 @@ Scenario Outline: Create a PP AWB in LTE001 for a known shipper
 	And User enters the Shipment details with Origin "<Origin>", Destination "<Destination>", ProductCode "<ProductCode>", SCCCode "<SCC>", Commodity "<Commodity>", ShipmentDescription"<ShipmentDescription>", ServiceCargoClass "<ServiceCargoClass>", Piece "<Piece>", Weight "<Weight>"
 	And User clicks on the ContinueShipment button
 	And User clicks on the Select Flight Button
+	And User selects an "Combination" flight
 	And User selects an available flight	
 	And User clicks on the ContinueFlightDetails button
 	And User enters the Charge details with ChargeType "<ChargeType>" and ModeOfPayment "<ModeOfPayment>"

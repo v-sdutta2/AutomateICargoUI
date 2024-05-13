@@ -75,12 +75,12 @@ namespace iCargoUIAutomation.Features
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Create a booking given an AWB from stock and system will create a new awb")]
-        [NUnit.Framework.CategoryAttribute("tag1")]
-        [NUnit.Framework.TestCaseAttribute("74426004", "SEA", "ANC", "GENERAL", "0316", "2", "20", "82165", "82165", "82165", null)]
+        [NUnit.Framework.CategoryAttribute("Cap018")]
+        [NUnit.Framework.TestCaseAttribute("74426004", "ANC", "ANC", "GENERAL", "0316", "2", "20", "82165", "82165", "82165", null)]
         public virtual void CreateABookingGivenAnAWBFromStockAndSystemWillCreateANewAwb(string aWB, string origin, string destination, string productCode, string commodity, string piece, string weight, string agentCode, string shipper, string consignee, string[] exampleTags)
         {
             string[] @__tags = new string[] {
-                    "tag1"};
+                    "Cap018"};
             if ((exampleTags != null))
             {
                 @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
@@ -149,8 +149,8 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.And("a banner appears for the awb does not exist", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 15
- testRunner.And(string.Format("User enters shipment details with Origin \"{0}\", Destination \"{1}\",Agent Code \"{2}" +
-                            "\", Product Code \"{3}\"", origin, destination, agentCode, productCode), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And(string.Format("User enters unknown shipment details with Origin \"{0}\", Destination \"{1}\", Produc" +
+                            "t Code \"{2}\"", origin, destination, productCode), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 16
  testRunner.And(string.Format("User enters Unknown Shipper \"{0}\" and Consignee \"{1}\" details", shipper, consignee), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
@@ -158,13 +158,13 @@ this.ScenarioInitialize(scenarioInfo);
 #line 17
  testRunner.And(string.Format("User enters commodity details with Commodity \"{0}\", Pieces \"{1}\", Weight \"{2}\"", commodity, piece, weight), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 19
+#line 18
  testRunner.And(string.Format("User selects flight for \"{0}\"", productCode), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 20
+#line 19
  testRunner.And("User clicks on Save button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 21
+#line 20
  testRunner.Then("User logs out from the application", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }

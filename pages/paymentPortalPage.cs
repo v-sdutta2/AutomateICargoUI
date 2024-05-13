@@ -37,21 +37,20 @@ namespace iCargoUIAutomation.pages
             {
                 if (chargetyp.Equals("PP") || chargetyp.Equals("CC"))
                 {
-                    if (IsElementDisplayed(txtPleaseCloseTabRetry_Xpath,3))
+                    if (IsElementDisplayed(txtPleaseCloseTabRetry_Xpath, 3))
                     {
                         CloseCurrentWindow();
                     }
                     else if (chargetyp.Equals("PP"))
                     {
                         confirmManualPayment();
-                        //WaitForElementToBeVisible(btnDone_Xpath, TimeSpan.FromSeconds(15));
+                       
                         WaitForElementToBeVisible(lblPaymentSuccess_Xpath, TimeSpan.FromSeconds(15));
                         ScrollDown();
                         totalPaybleAmount = GetText(lblTotalAmount_Xpath).Split("$")[1];
                         ClickOnElementIfEnabled(btnDone_Xpath);
-                       Thread.Sleep(2000);
-                        //WaitForElementToBeVisible(btnDone_Xpath, TimeSpan.FromSeconds(15));
-                        //DoubleClick(btnDone_Xpath);
+                        Thread.Sleep(2000);
+                        
                     }
                     else if (chargetyp.Equals("CC"))
                     {
@@ -60,7 +59,7 @@ namespace iCargoUIAutomation.pages
                         Click(btnContinuePlsConfirm);
                     }
                     SwitchToLastWindow();
-                   
+
                 }
 
             }
@@ -68,7 +67,7 @@ namespace iCargoUIAutomation.pages
             {
                 Log.Error("Error in handling Payment in Payment Portal" + e.Message);
             }
-            
+
             return totalPaybleAmount;
         }
 
@@ -80,7 +79,7 @@ namespace iCargoUIAutomation.pages
             Click(optionManualPaymentMethod_Xpath);
             Click(btnNext_Xpath);
             Click(btnConfirmManualPayment_Xpath);
-            
+
         }
 
 

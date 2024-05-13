@@ -78,20 +78,17 @@ namespace iCargoUIAutomation.Features
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Create a multi leg booking with flights that do not meet minimum connection time " +
             "and system should display a warning message")]
-        [NUnit.Framework.TestCaseAttribute("ANC", "LAX", "24-Apr-2024", "PRIORITY", "0091", "2", "50", "24-Apr-2024", "108 1246", null)]
-        public virtual void CreateAMultiLegBookingWithFlightsThatDoNotMeetMinimumConnectionTimeAndSystemShouldDisplayAWarningMessage(string origin, string destination, string shippingDate, string productCode, string commodity, string piece, string weight, string flightDate, string flightNo, string[] exampleTags)
+        [NUnit.Framework.TestCaseAttribute("SEA", "FAI", "PRIORITY", "0091", "2", "50", null)]
+        public virtual void CreateAMultiLegBookingWithFlightsThatDoNotMeetMinimumConnectionTimeAndSystemShouldDisplayAWarningMessage(string origin, string destination, string productCode, string commodity, string piece, string weight, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             argumentsOfScenario.Add("Origin", origin);
             argumentsOfScenario.Add("Destination", destination);
-            argumentsOfScenario.Add("ShippingDate", shippingDate);
             argumentsOfScenario.Add("ProductCode", productCode);
             argumentsOfScenario.Add("Commodity", commodity);
             argumentsOfScenario.Add("Piece", piece);
             argumentsOfScenario.Add("Weight", weight);
-            argumentsOfScenario.Add("FlightDate", flightDate);
-            argumentsOfScenario.Add("FlightNo", flightNo);
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Create a multi leg booking with flights that do not meet minimum connection time " +
                     "and system should display a warning message", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
 #line 4
@@ -152,7 +149,7 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.And(string.Format("User searches for the multileg flight to verify RES bubble \'red\' a warning messag" +
                             "e as \'Minimum Handling / Connection Time Fails\' and product code as \"{0}\"", productCode), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 19
+#line 17
  testRunner.Then("User logs out from the application", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
