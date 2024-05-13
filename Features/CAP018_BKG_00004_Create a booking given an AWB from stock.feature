@@ -1,6 +1,6 @@
 ﻿Feature: CAP018_BKG_00004_Create a booking given an AWB from stock
 
-@tag1
+@Cap018
 Scenario Outline: Create a booking given an AWB from stock and system will create a new awb
 	Given User lauches the Url of iCargo Staging UI
 	Then User enters into the  iCargo 'Sign in to icargoas' page successfully
@@ -11,15 +11,13 @@ Scenario Outline: Create a booking given an AWB from stock and system will creat
 	Then User enters into the  iCargo 'Maintain Booking' page successfully
 	And User enters the AWB number as "<AWB>"
 	And User clicks on New/List button
-	And a banner appears for the awb does not exist
-	#And User enters shipment details with Origin "<Origin>", Destination "<Destination>",Agent Code "<AgentCode>", Product Code "<ProductCode>"
+	And a banner appears for the awb does not exist	
 	And User enters unknown shipment details with Origin "<Origin>", Destination "<Destination>", Product Code "<ProductCode>"
 	And User enters Unknown Shipper "<Shipper>" and Consignee "<Consignee>" details 
-	And User enters commodity details with Commodity "<Commodity>", Pieces "<Piece>", Weight "<Weight>"
-	#And User enters Carrier details with Origin "<Origin>", Destination "<Destination>", Flight No "<FlightNo>", Flight Date "<FlightDate>", Pieces "<Piece>", Weight "<Weight>"
+	And User enters commodity details with Commodity "<Commodity>", Pieces "<Piece>", Weight "<Weight>"	
 	And User selects flight for "<ProductCode>"
 	And User clicks on Save button
 	Then User logs out from the application
 Examples:
 	| AWB      | Origin | Destination |  ProductCode | Commodity | Piece | Weight | AgentCode | Shipper | Consignee |
-	| 74426004 | SEA    | ANC         |  GENERAL     | 0316      | 2     | 20     |  82165     |82165    | 82165    |
+	| 74426004 | ANC    | ANC         |  GENERAL     | 0316      | 2     | 20     |  82165     |82165    | 82165    |
