@@ -78,7 +78,7 @@ namespace iCargoUIAutomation.Features
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Create a multi leg booking with flights that do not meet minimum connection time " +
             "and system should display a warning message")]
-        [NUnit.Framework.TestCaseAttribute("SEA", "FAI", "PRIORITY", "0091", "2", "50", null)]
+        [NUnit.Framework.TestCaseAttribute("LAX", "FAI", "PRIORITY", "0091", "2", "50", null)]
         public virtual void CreateAMultiLegBookingWithFlightsThatDoNotMeetMinimumConnectionTimeAndSystemShouldDisplayAWarningMessage(string origin, string destination, string productCode, string commodity, string piece, string weight, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
