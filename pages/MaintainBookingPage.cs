@@ -129,6 +129,7 @@ namespace iCargoUIAutomation.pages
         private By twoplusStopFilter_Xpath = By.XPath("//input[@name='stops.stop2plus']");
         private By filterApplyBtn_Xpath = By.XPath("//button[@id='flightsTable-datafilter-applybtn']");
         private By multilegFlights_Xpath = By.XPath("//div[@data-id='totalNoOfflights']/div/span/strong[1]");
+        private By selectFlightError_Xpath = By.XPath("//div[(@class='errorrow row')]/div[2]/p");
 
         //Select Flight
         private By cap_Xpath = By.XPath("//label[contains(@id,'capStatus')]");
@@ -588,8 +589,6 @@ namespace iCargoUIAutomation.pages
                 EnterText(destination_XPATH, dest);
                 test.Pass("Entered Destination: " + dest);
                 ClickOnElementIfPresent(agentCode_ID);
-                //EnterTextWithCheck(agentCode_ID, agtcode.ToString());
-                //test.Pass("Entered Agent Code: " + agtcode);
                 EnterText(shippingDate_ID, shippingDate);
                 test.Pass("Entered Shipping Date: " + shippingDate);
                 EnterText(product_XPATH, prodcode);
@@ -658,9 +657,16 @@ namespace iCargoUIAutomation.pages
                 EnterText(shipperCode_XPATH, unkshppr);
                 test.Pass("Entered Shipper Code: " + unkshppr);
                 string shipperName = "Test Shipper";
-                ClickOnElementIfPresent(unkShipperName_ID);
-                EnterTextWithCheck(unkShipperName_ID, shipperName);
-                test.Pass("Entered Shipper Name: " + shipperName);
+                if (checkTextboxIsNotEmpty(unkShipperName_ID))
+                {
+                    ClickOnElementIfPresent(unkShipperName_ID);
+                }
+                else
+                {
+                    WaitForElementToBeInvisible(CAP018Frame_XPATH, TimeSpan.FromSeconds(10));
+                    EnterTextWithCheck(unkShipperName_ID, shipperName);
+                    test.Pass("Entered Shipper Name: " + shipperName);
+                }
                 string shipperFirstAddress = "Test Address1";
                 EnterTextWithCheck(unkShipperFirstAddress_ID, shipperFirstAddress);
                 test.Pass("Entered Shipper First Address: " + shipperFirstAddress);
@@ -685,9 +691,16 @@ namespace iCargoUIAutomation.pages
                 EnterText(consigneeCode_XPATH, unkconsgn);
                 test.Pass("Entered Consignee Code: " + unkconsgn);
                 string consigneeName = "Test Consignee";
-                ClickOnElementIfPresent(unkConsigneeName_ID);
-                EnterTextWithCheck(unkConsigneeName_ID, consigneeName);
-                test.Pass("Entered Consignee Name: " + consigneeName);
+                if (checkTextboxIsNotEmpty(unkConsigneeName_ID))
+                {
+                    ClickOnElementIfPresent(unkConsigneeName_ID);
+                }
+                else
+                {
+                    WaitForElementToBeInvisible(CAP018Frame_XPATH, TimeSpan.FromSeconds(10));
+                    EnterTextWithCheck(unkConsigneeName_ID, consigneeName);
+                    test.Pass("Entered Consignee Name: " + consigneeName);
+                }
                 string consigneeFirstAddress = "Test Address1";
                 EnterTextWithCheck(unkConsigneeFirstAddress_ID, consigneeFirstAddress);
                 test.Pass("Entered Consignee First Address: " + consigneeFirstAddress);
@@ -883,6 +896,12 @@ namespace iCargoUIAutomation.pages
                             Assert.AreEqual(mincontimewarning, resErrorMessage);
                             test.Pass("Rest Error Message: " + resErrorMessage);
                             Console.WriteLine(resErrorMessage);
+                            Click(resColor_Xpath);
+                            Click(flightDetailsOkbtn_Xpath);
+                            WaitForElementToBeVisible(selectFlightError_Xpath, TimeSpan.FromSeconds(10));
+                            string popUpMessage = GetText(selectFlightError_Xpath);
+                            Console.WriteLine(popUpMessage);
+                            Assert.AreEqual("Please select at least one flight.", popUpMessage);
                             break;
                         }
                         if (resattribute == "badge-red" && productcode == "PRIORITY" && productcode == givenprodcode)
@@ -896,6 +915,12 @@ namespace iCargoUIAutomation.pages
                             Assert.AreEqual(mincontimewarning, resErrorMessage);
                             test.Pass("Rest Error" + resErrorMessage);
                             Console.WriteLine(resErrorMessage);
+                            Click(resColor_Xpath);
+                            Click(flightDetailsOkbtn_Xpath);
+                            WaitForElementToBeVisible(selectFlightError_Xpath, TimeSpan.FromSeconds(10));
+                            string popUpMessage = GetText(selectFlightError_Xpath);
+                            Console.WriteLine(popUpMessage);
+                            Assert.AreEqual("Please select at least one flight.", popUpMessage);
                             break;
                         }
                         if (resattribute == "badge-red" && productcode == "GOLDSTREAK" && productcode == givenprodcode)
@@ -909,6 +934,12 @@ namespace iCargoUIAutomation.pages
                             Assert.AreEqual(mincontimewarning, resErrorMessage);
                             test.Pass("Rest Error Message: " + resErrorMessage);
                             Console.WriteLine(resErrorMessage);
+                            Click(resColor_Xpath);
+                            Click(flightDetailsOkbtn_Xpath);
+                            WaitForElementToBeVisible(selectFlightError_Xpath, TimeSpan.FromSeconds(10));
+                            string popUpMessage = GetText(selectFlightError_Xpath);
+                            Console.WriteLine(popUpMessage);
+                            Assert.AreEqual("Please select at least one flight.", popUpMessage);
                             break;
                         }
                         if (resattribute == "badge-red" && productcode == "PET CONNECT" && productcode == givenprodcode)
@@ -922,6 +953,12 @@ namespace iCargoUIAutomation.pages
                             Assert.AreEqual(mincontimewarning, resErrorMessage);
                             test.Pass("Rest Error Message: " + resErrorMessage);
                             Console.WriteLine(resErrorMessage);
+                            Click(resColor_Xpath);
+                            Click(flightDetailsOkbtn_Xpath);
+                            WaitForElementToBeVisible(selectFlightError_Xpath, TimeSpan.FromSeconds(10));
+                            string popUpMessage = GetText(selectFlightError_Xpath);
+                            Console.WriteLine(popUpMessage);
+                            Assert.AreEqual("Please select at least one flight.", popUpMessage);
                             break;
                         }
                     }

@@ -17,4 +17,4 @@ Scenario: Create a multi leg booking with flights that do not meet minimum conne
 	Then User logs out from the application
 Examples:
 	| Origin | Destination |  ProductCode | Commodity | Piece | Weight | 
-	| SEA    | FAI         |  PRIORITY     | 0091      | 2     | 50    | 
+	| LAX    | FAI         |  PRIORITY     | 0091      | 2     | 50    | 
