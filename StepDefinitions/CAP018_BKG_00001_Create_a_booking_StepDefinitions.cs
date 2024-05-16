@@ -1,4 +1,5 @@
 using iCargoUIAutomation.pages;
+using NUnit.Framework.Internal.Execution;
 using OpenQA.Selenium;
 using System;
 using TechTalk.SpecFlow;
@@ -40,11 +41,11 @@ namespace iCargoUIAutomation.StepDefinitions
         [Then(@"User clicks on New/List button")]
         public void ThenUserClicksOnNewListButton()
         {
-           // mbp.SwitchToCAP018Frame();
+            // mbp.SwitchToCAP018Frame();
             mbp.ClickNewListButton();
         }
 
-        [Then(@"User enters shipment details with Origin ""([^""]*)"", Destination ""([^""]*)"", Product Code ""([^""]*)""")]
+        [Then(@"User enters shipment details with Origin ""([^""]*)"", Destination ""([^""]*)"", Product Code ""([^""]*)"" and Agent code")]
         public void ThenUserEntersShipmentDetailsWithOriginDestinationShippingDateProductCode(string origin, string destination, string productCode)
         {
             this.origin = origin;

@@ -76,8 +76,8 @@ namespace iCargoUIAutomation.Features
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("iCargo Login and Create New AVI Shipment")]
         [NUnit.Framework.CategoryAttribute("tag1")]
-        [NUnit.Framework.TestCaseAttribute("SEA", "ANC", "24-Apr-2024", "PET CONNECT", "9730", "2", "50", null)]
-        public virtual void ICargoLoginAndCreateNewAVIShipment(string origin, string destination, string shippingDate, string productCode, string commodity, string piece, string weight, string[] exampleTags)
+        [NUnit.Framework.TestCaseAttribute("ANC", "FAI", "PET CONNECT", "9730", "2", "50", null)]
+        public virtual void ICargoLoginAndCreateNewAVIShipment(string origin, string destination, string productCode, string commodity, string piece, string weight, string[] exampleTags)
         {
             string[] @__tags = new string[] {
                     "tag1"};
@@ -89,7 +89,6 @@ namespace iCargoUIAutomation.Features
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             argumentsOfScenario.Add("Origin", origin);
             argumentsOfScenario.Add("Destination", destination);
-            argumentsOfScenario.Add("ShippingDate", shippingDate);
             argumentsOfScenario.Add("ProductCode", productCode);
             argumentsOfScenario.Add("Commodity", commodity);
             argumentsOfScenario.Add("Piece", piece);
@@ -141,7 +140,7 @@ namespace iCargoUIAutomation.Features
 #line hidden
 #line 13
         testRunner.And(string.Format("User enters shipment details with Origin \"{0}\", Destination \"{1}\", Product Code \"" +
-                            "{2}\"", origin, destination, productCode), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+                            "{2}\" and Agent code", origin, destination, productCode), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 14
         testRunner.And("User enters Shipper and Consignee details", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
@@ -152,10 +151,10 @@ namespace iCargoUIAutomation.Features
 #line 16
         testRunner.And(string.Format("User selects flight for \"{0}\"", productCode), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 18
+#line 17
         testRunner.And("User clicks on Save button and fills the checksheet details to generate awb", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 19
+#line 18
         testRunner.Then("User logs out from the application", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }

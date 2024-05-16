@@ -150,7 +150,7 @@ this.ScenarioInitialize(scenarioInfo);
 #line hidden
 #line 15
  testRunner.And(string.Format("User enters unknown shipment details with Origin \"{0}\", Destination \"{1}\", Produc" +
-                            "t Code \"{2}\"", origin, destination, productCode), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+                            "t Code \"{2}\" and Agent code", origin, destination, productCode), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 16
  testRunner.And(string.Format("User enters Unknown Shipper \"{0}\" and Consignee \"{1}\" details", shipper, consignee), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
