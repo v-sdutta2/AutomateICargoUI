@@ -15,7 +15,7 @@ namespace iCargoUIAutomation.StepDefinitions
     {
         private IWebDriver driver;
         private PageObjectManager pageObjectManager;
-        private createShipmentPage csp;
+        private CreateShipmentPage csp;
         ILog Log = LogManager.GetLogger(typeof(LTE001_ACC_00010_ReopenAWBchangefinaldestinationandreexecute));
 
         public LTE001_ACC_00010_ReopenAWBchangefinaldestinationandreexecute(IWebDriver driver) : base(driver)

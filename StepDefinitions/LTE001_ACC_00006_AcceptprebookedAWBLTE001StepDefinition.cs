@@ -16,7 +16,7 @@ namespace iCargoUIAutomation.StepDefinitions
         private IWebDriver driver;
         private PageObjectManager pageObjectManager;
        
-        private createShipmentPage csp;
+        private CreateShipmentPage csp;
         public static string preBookedpieces="";
         ILog Log = LogManager.GetLogger(typeof(LTE001_ACC_00006_AcceptprebookedAWBLTE001));
 
