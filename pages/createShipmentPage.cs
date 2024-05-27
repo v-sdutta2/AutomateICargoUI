@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace iCargoUIAutomation.pages
 {
-    public class createShipmentPage : BasePage
+    public class CreateShipmentPage : BasePage
     {
         private DangerousGoodsPage dgp;
         private PaymentPortalPage ppp;
@@ -41,9 +41,9 @@ namespace iCargoUIAutomation.pages
         public static string ConnectingflightNum = "";
         string flightSegment = "";
         string generatedAWB = "";
-        ILog Log = LogManager.GetLogger(typeof(createShipmentPage));
+        ILog Log = LogManager.GetLogger(typeof(CreateShipmentPage));
 
-        public createShipmentPage(IWebDriver driver) : base(driver)
+        public CreateShipmentPage(IWebDriver driver) : base(driver)
         {
             dgp = new DangerousGoodsPage(driver);
             ppp = new PaymentPortalPage(driver);

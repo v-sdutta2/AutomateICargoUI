@@ -10,7 +10,7 @@
         When User enters screen name as 'CAP018'
         Then User enters into the  iCargo 'Maintain Booking' page successfully
         And User clicks on New/List button
-        And User enters shipment details with Origin "<Origin>", Destination "<Destination>", Product Code "<ProductCode>"
+        And User enters shipment details with Origin "<Origin>", Destination "<Destination>", Product Code "<ProductCode>" and Agent code
         And User enters Shipper and Consignee details
         And User enters commodity details with Commodity "<Commodity>", Pieces "<Piece>", Weight "<Weight>"
         #And User selects flight

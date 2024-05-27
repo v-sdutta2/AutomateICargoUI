@@ -202,7 +202,7 @@ namespace iCargoUIAutomation.pages
             test = _scenario.CreateNode<Scenario>("Enter Shipment Details");
             try
             {
-                //WaitForElementToBeClickable(origin_ID, TimeSpan.FromSeconds(15));                
+                WaitForElementToBeVisible(origin_ID, TimeSpan.FromSeconds(15));                
                 if (IsElementEnabled(origin_ID))
                 {
                     EnterTextWithCheck(origin_ID, origin);

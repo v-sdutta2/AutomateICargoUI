@@ -20,22 +20,22 @@ namespace iCargoUIAutomation.Features
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.9.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [NUnit.Framework.TestFixtureAttribute()]
-    [NUnit.Framework.DescriptionAttribute("CAP018_BKG_00007_Create a booking for an AVI")]
-    public partial class CAP018_BKG_00007_CreateABookingForAnAVIFeature
+    [NUnit.Framework.DescriptionAttribute("GreenpointLogin&AWBValidation")]
+    public partial class GreenpointLoginAWBValidationFeature
     {
         
         private TechTalk.SpecFlow.ITestRunner testRunner;
         
         private string[] _featureTags = ((string[])(null));
         
-#line 1 "CAP018_BKG_00007_Create a booking for an AVI.feature"
+#line 1 "GreenpointLogin&AWBValidation.feature"
 #line hidden
         
         [NUnit.Framework.OneTimeSetUpAttribute()]
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "CAP018_BKG_00007_Create a booking for an AVI", null, ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "GreenpointLogin&AWBValidation", "A short summary of the feature", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -74,10 +74,10 @@ namespace iCargoUIAutomation.Features
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("iCargo Login and Create New AVI Shipment")]
+        [NUnit.Framework.DescriptionAttribute("Greenpoint Login and AWB Validation")]
         [NUnit.Framework.CategoryAttribute("tag1")]
-        [NUnit.Framework.TestCaseAttribute("ANC", "FAI", "PET CONNECT", "9730", "2", "50", null)]
-        public virtual void ICargoLoginAndCreateNewAVIShipment(string origin, string destination, string productCode, string commodity, string piece, string weight, string[] exampleTags)
+        [NUnit.Framework.TestCaseAttribute("1234567890", "61", null)]
+        public virtual void GreenpointLoginAndAWBValidation(string aWB, string flightNumber, string[] exampleTags)
         {
             string[] @__tags = new string[] {
                     "tag1"};
@@ -87,15 +87,11 @@ namespace iCargoUIAutomation.Features
             }
             string[] tagsOfScenario = @__tags;
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            argumentsOfScenario.Add("Origin", origin);
-            argumentsOfScenario.Add("Destination", destination);
-            argumentsOfScenario.Add("ProductCode", productCode);
-            argumentsOfScenario.Add("Commodity", commodity);
-            argumentsOfScenario.Add("Piece", piece);
-            argumentsOfScenario.Add("Weight", weight);
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("iCargo Login and Create New AVI Shipment", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
-#line 4
- this.ScenarioInitialize(scenarioInfo);
+            argumentsOfScenario.Add("AWB", aWB);
+            argumentsOfScenario.Add("FlightNumber", flightNumber);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Greenpoint Login and AWB Validation", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
+#line 6
+this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
             bool isFeatureIgnored = default(bool);
@@ -114,48 +110,26 @@ namespace iCargoUIAutomation.Features
             else
             {
                 this.ScenarioStart();
-#line 5
-        testRunner.Given("User lauches the Url of iCargo Staging UI", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line hidden
-#line 6
-     testRunner.Then("User enters into the  iCargo \'Sign in to icargoas\' page successfully", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line hidden
 #line 7
-     testRunner.When("User clicks on the oidc button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.Given("User launches to Greenpoint Application", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 8
-     testRunner.Then("A new window is opened", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.When("User enter valid username and password", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 9
-        testRunner.And("User enters into the  iCargo \'Home\' page successfully", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.Then("logs into the Greenpoint Application", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
 #line 10
-        testRunner.When("User enters screen name as \'CAP018\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.And(string.Format("User searches for flight \"{0}\"", flightNumber), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 11
-        testRunner.Then("User enters into the  iCargo \'Maintain Booking\' page successfully", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.And("User selects the cargo gate of the flight", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 12
-        testRunner.And("User clicks on New/List button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And(string.Format("validates the manifested \"{0}\" number", aWB), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 13
-        testRunner.And(string.Format("User enters shipment details with Origin \"{0}\", Destination \"{1}\", Product Code \"" +
-                            "{2}\" and Agent code", origin, destination, productCode), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-#line 14
-        testRunner.And("User enters Shipper and Consignee details", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-#line 15
-        testRunner.And(string.Format("User enters commodity details with Commodity \"{0}\", Pieces \"{1}\", Weight \"{2}\"", commodity, piece, weight), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-#line 16
-        testRunner.And(string.Format("User selects flight for \"{0}\"", productCode), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-#line 17
-        testRunner.And("User clicks on Save button and fills the checksheet details to generate awb", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-#line 18
-        testRunner.Then("User logs out from the application", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.And("User logs out of the Greenpoint application", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }
             this.ScenarioCleanup();

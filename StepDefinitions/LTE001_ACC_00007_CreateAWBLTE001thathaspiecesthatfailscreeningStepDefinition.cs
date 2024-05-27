@@ -15,7 +15,7 @@ namespace iCargoUIAutomation.StepDefinitions
     {
         private IWebDriver driver;
         private PageObjectManager pageObjectManager;       
-        private createShipmentPage csp;
+        private CreateShipmentPage csp;
         ILog Log = LogManager.GetLogger(typeof(LTE001_ACC_00007_CreateAWBLTE001thathaspiecesthatfailscreening));
 
 
