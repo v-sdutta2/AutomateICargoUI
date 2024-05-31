@@ -76,8 +76,8 @@ namespace iCargoUIAutomation.Features
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Greenpoint Login and AWB Validation")]
         [NUnit.Framework.CategoryAttribute("tag1")]
-        [NUnit.Framework.TestCaseAttribute("1234567890", "61", null)]
-        public virtual void GreenpointLoginAndAWBValidation(string aWB, string flightNumber, string[] exampleTags)
+        [NUnit.Framework.TestCaseAttribute("027-30077003", "164", "25", "124", null)]
+        public virtual void GreenpointLoginAndAWBValidation(string aWB, string flightNumber, string pieces, string weight, string[] exampleTags)
         {
             string[] @__tags = new string[] {
                     "tag1"};
@@ -89,6 +89,8 @@ namespace iCargoUIAutomation.Features
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             argumentsOfScenario.Add("AWB", aWB);
             argumentsOfScenario.Add("FlightNumber", flightNumber);
+            argumentsOfScenario.Add("Pieces", pieces);
+            argumentsOfScenario.Add("Weight", weight);
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Greenpoint Login and AWB Validation", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
 #line 6
 this.ScenarioInitialize(scenarioInfo);
@@ -120,15 +122,12 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.Then("logs into the Greenpoint Application", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
 #line 10
- testRunner.And(string.Format("User searches for flight \"{0}\"", flightNumber), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And(string.Format("User searches for flight \"{0}\" and clicks on the cargo gate", flightNumber), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 11
- testRunner.And("User selects the cargo gate of the flight", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And(string.Format("validates the manifested \"{0}\" number, \"{1}\" and \"{2}\"", aWB, pieces, weight), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 12
- testRunner.And(string.Format("validates the manifested \"{0}\" number", aWB), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-#line 13
  testRunner.And("User logs out of the Greenpoint application", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }

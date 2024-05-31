@@ -12,6 +12,9 @@ namespace iCargoUIAutomation.StepDefinitions
         private PageObjectManager pageObjectManager;
         private GreenpointPage gp;
         string fltnbr;
+        string awb;
+        string pieces;
+        string weight;
 
         public string gpAppUrl = "https://smartsuite.qa.insideaag.com/shell/login.html";
 
@@ -43,31 +46,29 @@ namespace iCargoUIAutomation.StepDefinitions
         {
             gp.ClickOnAgentSelectEnterBtn();
             gp.ChooseAssignment();
-        }
+        }       
 
-        [Then(@"User searches for flight ""([^""]*)""")]
-        public void ThenUserSearchesForTheFlight(string fltnbr)
+        [Then(@"User searches for flight ""([^""]*)"" and clicks on the cargo gate")]
+        public void ThenUserSearchesForFlightAndClicksOnTheCargoGate(string fltnbr)
         {
             this.fltnbr = fltnbr;
             gp.SearchFlight(fltnbr);
         }
 
-        [Then(@"User selects the cargo gate of the flight")]
-        public void ThenUserSelectsTheCargoGateOfTheFlight()
+        [Then(@"validates the manifested ""([^""]*)"" number, ""([^""]*)"" and ""([^""]*)""")]
+        public void ThenValidatesTheManifestedNumberAnd(string awb, string pieces, string weight)
         {
-            throw new PendingStepException();
+            this.awb = awb;
+            this.pieces = pieces;
+            this.weight = weight;
+            gp.CargoAwbValidation(awb,pieces,weight);
         }
 
-        [Then(@"validates the manifested ""([^""]*)"" number")]
-        public void ThenValidatesTheManifestedNumber(string p0)
-        {
-            throw new PendingStepException();
-        }
 
         [Then(@"User logs out of the Greenpoint application")]
         public void ThenUserLogsOutOfTheGreenpointApplication()
         {
-            throw new PendingStepException();
+           gp.GreenpointLogOut();
         }
     }
 }
