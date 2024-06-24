@@ -19,6 +19,7 @@ namespace iCargoUIAutomation.StepDefinitions
         string productcode = "";
         string unknownshipper = "";
         string consignee = "";
+        string awb = "";
 
         public CAP018_BKG_00004_CreateABookingGivenAnAWBFromStockStepDefinitions(IWebDriver driver) : base(driver)
         {
@@ -60,6 +61,14 @@ namespace iCargoUIAutomation.StepDefinitions
             this.consignee = consignee;
             mbp.UnknownShipperConsigneeDetails(shipper, consignee);
         }
+
+        [Then(@"User enters the AWB number as ""([^""]*)""")]
+        public void ThenUserEntersTheAWBNumberAs(string awb)     //new method
+        {
+            this.awb = awb;
+            mbp.EnterAWBNumberFromStock(awb);
+        }
+
 
     }
 }

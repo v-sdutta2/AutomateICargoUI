@@ -3,12 +3,14 @@ using AventStack.ExtentReports.Gherkin.Model;
 using FluentAssertions.Execution;
 using iCargoUIAutomation.Hooks;
 using log4net;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.DevTools.V121.Debugger;
 using OpenQA.Selenium.Support.UI;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Globalization;
 using System.Linq;
 using System.Security.Policy;
@@ -22,10 +24,10 @@ namespace iCargoUIAutomation.pages
     {
         string shippingDate = DateTime.Now.ToString("dd-MMM-yyyy");
         string presentdate = DateTime.Now.ToString("dd-MMM");
-        public static string firstflightnum = "";
-        public static ExtentTest _scenario= Hooks.Hooks._scenario;
-        public static ExtentTest test;
+        public static string firstflightnum = "";      
+        public static string awbNumber = "";             //new line added
         ILog Log = LogManager.GetLogger(typeof(MaintainBookingPage));
+
         public MaintainBookingPage(IWebDriver driver) : base(driver)
         {
         }
@@ -117,13 +119,15 @@ namespace iCargoUIAutomation.pages
         private By attachDetachBtn_ID = By.Id("btDetach");
         private By attachDetachAwbField_ID = By.Id("awbNumNew_b");
         private By attachDetachPopupBtn_ID = By.Id("CMP_CAPACITY_BOOKING_DETACHAWB_DETACH_BUTTON");
+        private By clearAWBBtn_ID = By.Id("btClear");               //new line added
 
         //Minimum Connection Time for MultiLeg Flight
         private By selectFlightBtn_ID = By.Id("btSelectFlight");
         private By flightSearchTextBox_XPATH = By.XPath("//input[@placeholder='Enter the keywords to search']");
         private By resColor_Xpath = By.XPath("//label[@class='badge-red']");
         private By resErrorMessage_Xpath = By.XPath("//div[@class='fs12 mar-t-xs text-gray multy-list-flight']/p");
-        private By multilegFlightsfilter = By.Id("flightsTable-datafiltercontainer");
+        private By multilegFlightsfilter = By.XPath("//div[@id='flightsTable-datafilter']/i");
+        private By flightSearchBox_Xpath = By.XPath("//input[@placeholder='Enter the keywords to search']");
         private By oneStopFilter_Xpath = By.XPath("//input[@name='stops.stop1']");
         private By twoStopFilter_Xpath = By.XPath("//input[@name='stops.stop2']");
         private By twoplusStopFilter_Xpath = By.XPath("//input[@name='stops.stop2plus']");
@@ -147,6 +151,7 @@ namespace iCargoUIAutomation.pages
         private By employeeProdBtn_Xpath = By.XPath("//strong[text()='EMPLOYEE SHIPMENT']/parent::div/parent::div/parent::div");
         private By goldstreakProdBtn_Xpath = By.XPath("//strong[text()='GOLDSTREAK']/parent::div/parent::div/parent::div");
         private By petConnectProdBtn_Xpath = By.XPath("//strong[text()='PET CONNECT']/parent::div/parent::div/parent::div");
+        private By destinationErrorPopup_Xpath = By.XPath("//div[@id='error-body']/div/span");
 
         //Unknown Shipper Consignee Details
         private By unkShipperName_ID = By.Id("CMP_Capacity_Booking_MaintainReservation_ShipperConsignee_ShipperName_NEW");
@@ -165,142 +170,165 @@ namespace iCargoUIAutomation.pages
         private By unkConsigneeCountry_ID = By.Id("CMP_Capacity_Booking_Permanent_ShipperConsignee_ConsigneeCountry");
         private By unkConsigneeZip_ID = By.Id("CMP_Capacity_Booking_MaintainReservation_ShipperConsignee_ConsigneePostalCode");
         private By unkConsigneeEmail_ID = By.Id("CMP_Capacity_Booking_MaintainReservation_ShipperConsignee_ConsigneeEmail");
+
+
         public void SwitchToCAP018Frame()
         {
-            test = _scenario.CreateNode<Scenario>("Switch to CAP018 Frame");
             try
-            {                
-                SwitchToFrame(CAP018Frame_XPATH);                
-                test.Pass("Switched to CAP018 Frame");
-                //WaitForElementToBeVisible(awbTextbox_ID, TimeSpan.FromSeconds(10));
-                
+            {
+                SwitchToFrame(CAP018Frame_XPATH);
+                Log.Info("Switched to CAP018 Frame");
+
             }
             catch (Exception e)
             {
-                test.Fail("Error in Switching to CAP018 Frame: " + e.Message);
+                Log.Error("Error in Switching to CAP018 Frame: " + e.Message);
             }
         }
 
         public void ClickNewListButton()
         {
-            test = _scenario.CreateNode<Scenario>("Click New List Button");
+            Hooks.Hooks.createNode();
             try
             {
                 WaitForElementToBeInvisible(homePage_CSS, TimeSpan.FromSeconds(5));
-                ClickOnElementIfPresent(newList_XPATH);                
-                test.Pass("Clicked New List Button");
-                //Click(New_List_XPATH);
+                ClickOnElementIfPresent(newList_XPATH);
+                Hooks.Hooks.UpdateTest(Status.Pass, "Clicked New List Button");
+                Log.Info("Clicked New List Button"); 
             }
             catch (Exception e)
             {
-                test.Fail("Error in Clicking New List Button: " + e.Message);
+                Hooks.Hooks.UpdateTest(Status.Fail, "Error in Clicking New List Button: " + e.Message);
+                Log.Error("Error in Clicking New List Button: " + e.Message);
             }
         }
 
         public void EnterShipmentDetails(string origin, string destination, string ProductCode)
         {
-            test = _scenario.CreateNode<Scenario>("Enter Shipment Details");
+            Hooks.Hooks.createNode();
             try
             {
-                WaitForElementToBeVisible(origin_ID, TimeSpan.FromSeconds(15));                
+                //WaitForElementToBeVisible(origin_ID, TimeSpan.FromSeconds(15));
+                WaitForElementToBeInvisible(homePage_CSS, TimeSpan.FromSeconds(10));            //new line added                                                       
                 if (IsElementEnabled(origin_ID))
                 {
                     EnterTextWithCheck(origin_ID, origin);
-                    test.Pass("Entered Origin: " + origin);
+                    Hooks.Hooks.UpdateTest(Status.Pass, "Entered Origin: " + origin);
+                    Log.Info("Entered Origin: " + origin);
                 }
                 EnterText(destination_XPATH, destination);
-                test.Pass("Entered Destination: " + destination);
+                Hooks.Hooks.UpdateTest(Status.Pass, "Entered Destination: " + destination);
+                Log.Info("Entered Destination: " + destination);
                 ClickOnElementIfPresent(agentCode_ID);
                 int agentcode = 10763;
                 EnterTextWithCheck(agentCode_ID, agentcode.ToString());
-                test.Pass("Entered Agent Code: " + agentcode);
+                Hooks.Hooks.UpdateTest(Status.Pass, "Entered Agent Code: " + agentcode);
+                Log.Info("Entered Agent Code: " + agentcode);
                 EnterText(shippingDate_ID, shippingDate);
-                test.Pass("Entered Shipping Date: " + shippingDate);
+                Hooks.Hooks.UpdateTest(Status.Pass, "Entered Shipping Date: " + shippingDate);
+                Log.Info("Entered Shipping Date: " + shippingDate);
                 EnterText(product_XPATH, ProductCode);
-                test.Pass("Entered Product Code: " + ProductCode);
+                Hooks.Hooks.UpdateTest(Status.Pass, "Entered Product Code: " + ProductCode);
+                Log.Info("Entered Product Code: " + ProductCode);
                 Click(shipperConsigneeBtn_ID);
-                test.Pass("Clicked on Shipper Consignee Button");
+                Hooks.Hooks.UpdateTest(Status.Pass, "Clicked on Shipper Consignee Button");
+                Log.Info("Clicked on Shipper Consignee Button");
             }
             catch (Exception e)
             {
-                test.Fail("Error in Entering Shipment Details: " + e.Message);
+                Hooks.Hooks.UpdateTest(Status.Fail, "Error in Entering Shipment Details: " + e.Message);
+                Log.Error("Error in Entering Shipment Details: " + e.Message);
             }
         }
 
         public void EnterShipperConsigneeDetails()
         {
-            test = _scenario.CreateNode<Scenario>("Enter Shipper Consignee Details");
+            Hooks.Hooks.createNode();
             try
-            {                
+            {
                 GetNumberOfWindowsOpened();
                 SwitchToSecondPopupWindow();
                 int ShipperCode = 10763;
                 int ConsigneeCode = 10763;
                 WaitForElementToBeInvisible(CAP018Frame_XPATH, TimeSpan.FromSeconds(10));
                 EnterText(shipperCode_XPATH, ShipperCode.ToString());
-                test.Pass("Entered Shipper Code: " + ShipperCode);
+                Hooks.Hooks.UpdateTest(Status.Pass, "Entered Shipper Code: " + ShipperCode);
+                Log.Info("Entered Shipper Code: " + ShipperCode);
                 if (IsElementEnabled(unkShipperName_ID))
                 {
                     ClickOnElementIfPresent(unkShipperName_ID);
                     EnterKeys(unkShipperName_ID, Keys.Tab);
                 }
                 EnterText(consigneeCode_XPATH, ConsigneeCode.ToString());
-                test.Pass("Entered Consignee Code: " + ConsigneeCode);
+                Hooks.Hooks.UpdateTest(Status.Pass, "Entered Consignee Code: " + ConsigneeCode);
+                Log.Info("Entered Consignee Code: " + ConsigneeCode);
                 Click(unkConsigneeName_ID);
                 ClickOnElementIfPresent(shipperConsigneeOkBtn_ID);
-                test.Pass("Clicked on Shipper Consignee OK Button");
+                Hooks.Hooks.UpdateTest(Status.Pass, "Clicked on Shipper Consignee OK Button");
+                Log.Info("Clicked on Shipper Consignee OK Button");
                 SwitchToPopupWindow();
             }
             catch (Exception e)
             {
-                test.Fail("Error in Entering Shipper Consignee Details: " + e.Message);
+                Hooks.Hooks.UpdateTest(Status.Fail, "Error in Entering Shipper Consignee Details: " + e.Message);
+                Log.Error("Error in Entering Shipper Consignee Details: " + e.Message);
             }
         }
 
         public void EnterCommodityDetails(string commodityCode, string pieces, string weight)
         {
-            test = _scenario.CreateNode<Scenario>("Enter Commodity Details");
+            Hooks.Hooks.createNode();
             try
-            {                
+            {
                 SwitchToCAP018Frame();
                 WaitForElementToBeVisible(commodityCode_XPATH, TimeSpan.FromSeconds(10));
-                //ClickOnElementIfPresent(bookingPage_XPATH);
                 ClickOnElementIfPresent(commodityCode_XPATH);
                 Click(commodityCode_XPATH);
                 EnterText(commodityCode_XPATH, commodityCode);
-                test.Pass("Entered Commodity Code: " + commodityCode);
+                Hooks.Hooks.UpdateTest(Status.Pass, "Entered Commodity Code: " + commodityCode);
+                Log.Info("Entered Commodity Code: " + commodityCode);
                 EnterText(pieces_XPATH, pieces);
-                test.Pass("Entered Pieces: " + pieces);
+                Hooks.Hooks.UpdateTest(Status.Pass, "Entered Pieces: " + pieces);
+                Log.Info("Entered Pieces: " + pieces);
                 EnterText(weight_XPATH, weight);
-                test.Pass("Entered Weight: " + weight);
+                Hooks.Hooks.UpdateTest(Status.Pass, "Entered Weight: " + weight);
+                Log.Info("Entered Weight: " + weight);
             }
             catch (Exception e)
             {
-                test.Fail("Error in Entering Commodity Details: " + e.Message);
+                Hooks.Hooks.UpdateTest(Status.Fail, "Error in Entering Commodity Details: " + e.Message);
+                Log.Error("Error in Entering Commodity Details: " + e.Message);
             }
         }
 
         public void EnterCarrierDetails(string flightOrigin, string flightDestination, string flightNumber, string flightDate, string flightPieces, string flightWeight)
         {
-            test = _scenario.CreateNode<Scenario>("Enter Carrier Details");
+            Hooks.Hooks.createNode();
             try
-            {                
+            {
                 EnterText(flightOrigin_XPATH, flightOrigin);
-                test.Pass("Entered Flight Origin: " + flightOrigin);
+                Hooks.Hooks.UpdateTest(Status.Pass, "Entered Flight Origin: " + flightOrigin);
+                Log.Info("Entered Flight Origin: " + flightOrigin);
                 EnterText(flightDestination_XPATH, flightDestination);
-                test.Pass("Entered Flight Destination: " + flightDestination);
+                Hooks.Hooks.UpdateTest(Status.Pass, "Entered Flight Destination: " + flightDestination);
+                Log.Info("Entered Flight Destination: " + flightDestination);
                 EnterText(flightNumber_XPATH, flightNumber);
-                test.Pass("Entered Flight Number: " + flightNumber);
+                Hooks.Hooks.UpdateTest(Status.Pass, "Entered Flight Number: " + flightNumber);
+                Log.Info("Entered Flight Number: " + flightNumber);
                 EnterText(flightDate_XPATH, flightDate);
-                test.Pass("Entered Flight Date: " + flightDate);
+                Hooks.Hooks.UpdateTest(Status.Pass, "Entered Flight Date: " + flightDate);
+                Log.Info("Entered Flight Date: " + flightDate);
                 EnterText(flightPieces_XPATH, flightPieces);
-                test.Pass("Entered Flight Pieces: " + flightPieces);
+                Hooks.Hooks.UpdateTest(Status.Pass, "Entered Flight Pieces: " + flightPieces);
+                Log.Info("Entered Flight Pieces: " + flightPieces);
                 EnterText(flightWeight_XPATH, flightWeight);
-                test.Pass("Entered Flight Weight: " + flightWeight);
+                Hooks.Hooks.UpdateTest(Status.Pass, "Entered Flight Weight: " + flightWeight);
+                Log.Info("Entered Flight Weight: " + flightWeight);
             }
             catch (Exception e)
             {
-                test.Fail("Error in Entering Carrier Details: " + e.Message);
+                Hooks.Hooks.UpdateTest(Status.Fail, "Error in Entering Carrier Details: " + e.Message);
+                Log.Error("Error in Entering Carrier Details: " + e.Message);
             }
         }
 
@@ -315,90 +343,122 @@ namespace iCargoUIAutomation.pages
                 WaitForElementToBeVisible(btnYesAlertMessageBooking_XPATH, TimeSpan.FromSeconds(10));
                 Click(btnYesAlertMessageBooking_XPATH);
             }
-            //SwitchToCAP018Frame();
             return errorText;
         }
 
         public void ClickSaveButton()
         {
-            test = _scenario.CreateNode<Scenario>("Click Save Button");
+            Hooks.Hooks.createNode();
             try
             {                
                 int noOfWindowsBefore = GetNumberOfWindowsOpened();
-                //WaitForElementToBeClickable(saveBtn_ID, TimeSpan.FromSeconds(10));
-                WaitForElementToBeInvisible(btnYesAlertMessageBooking_XPATH, TimeSpan.FromSeconds(15));
+                WaitForElementToBeInvisible(flightDetailsOkbtn_Xpath, TimeSpan.FromSeconds(15));
                 ClickOnElementIfPresent(saveBtn_ID);
-                test.Pass("Clicked Save Button");
+                Hooks.Hooks.UpdateTest(Status.Pass, "Clicked Save Button");
+                Log.Info("Clicked Save Button");
                 clickingYesOnPopupWarnings();
+                Hooks.Hooks.UpdateTest(Status.Pass, "Clicked Yes on Popup Warnings");
+                Log.Info("Clicked Yes on Popup Warnings");
                 WaitForNewWindowToOpen(TimeSpan.FromSeconds(20), noOfWindowsBefore + 1);
                 int noOfWindowsAfter = GetNumberOfWindowsOpened();
                 if (noOfWindowsAfter > noOfWindowsBefore)
                 {
                     SwitchToLastWindow();
+                    Log.Info("Switched to Last Window");
                     WaitForElementToBeInvisible(btnYesAlertMessageBooking_XPATH, TimeSpan.FromSeconds(15));
                     WaitForElementToBeVisible(awbNumber_XPATH, TimeSpan.FromSeconds(15));
-                    string awbNumber = GetText(awbNumber_XPATH);
-                    test.Pass("AWB Number: "+awbNumber);
-                    Console.WriteLine(awbNumber);
+                    awbNumber = GetText(awbNumber_XPATH);
+                    Hooks.Hooks.UpdateTest(Status.Pass, "AWB Number: " + awbNumber);
+                    Log.Info("AWB Number: " + awbNumber);
                     if (IsElementEnabled(btnOkBookingSummaryPopup_XPATH))
                     {
                         WaitForElementToBeClickable(btnOkBookingSummaryPopup_XPATH, TimeSpan.FromSeconds(10));
                         Click(btnOkBookingSummaryPopup_XPATH);
-                        test.Pass("Clicked OK Button on Booking Summary Popup");
+                        Hooks.Hooks.UpdateTest(Status.Pass, "Clicked OK Button on Booking Summary Popup");
+                        Log.Info("Clicked OK Button on Booking Summary Popup");
                     }
-                    //Click(btnOkBookingSummaryPopup_XPATH);
                     SwitchToLastWindow();
+                    Log.Info("Switched to Last Window");
                     SwitchToCAP018Frame();
+                    Log.Info("Switched to CAP018 Frame");
                 }
                 ClickOnElementIfPresent(btnCloseMb_XPATH);
-                test.Pass("Clicked Close Button on Maintain Booking Page");
+                Hooks.Hooks.UpdateTest(Status.Pass, "Clicked Close Button on Maintain Booking Page");
+                Log.Info("Clicked Close Button on Maintain Booking Page");
             }
             catch (Exception e)
             {
-                test.Fail("Error in Clicking Save Button: " + e.Message);
+                Hooks.Hooks.UpdateTest(Status.Fail, "Error in Clicking Save Button: " + e.Message);
+                Log.Error("Error in Clicking Save Button: " + e.Message);
             }
         }
 
 
-        public void EnterAWBNumber(string awbNumber)
+        public void EnterAWBNumber()
         {
-            test = _scenario.CreateNode<Scenario>("Enter AWB Number");
+            Hooks.Hooks.createNode();
             try
             {
-                //SwitchToCAP018Frame();                
+                Click(clearAWBBtn_ID);   //new lines added
+                awbNumber = awbNumber.Split('-')[1];
                 EnterText(awbTextbox_ID, awbNumber);
-                test.Pass("Entered AWB Number: " + awbNumber);
+                Hooks.Hooks.UpdateTest(Status.Pass, "Entered AWB Number: " + awbNumber);
+                Log.Info("Entered AWB Number: " + awbNumber);
             }
             catch (Exception e)
             {
-                test.Fail("Error in Entering AWB Number: " + e.Message);
+                Hooks.Hooks.UpdateTest(Status.Fail, "Error in Entering AWB Number: " + e.Message);
+                Log.Error("Error in Entering AWB Number: " + e.Message);
+            }
+        }
+
+        public void EnterAWBNumberFromStock(string awb)  // new method
+        {
+            Hooks.Hooks.createNode();
+            try
+            {                
+                EnterText(awbTextbox_ID, awb);
+                Hooks.Hooks.UpdateTest(Status.Pass, "Entered AWB Number: " + awb);
+                Log.Info("Entered AWB Number: " + awb);
+            }
+            catch (Exception e)
+            {
+                Hooks.Hooks.UpdateTest(Status.Fail, "Error in Entering AWB Number: " + e.Message);
+                Log.Error("Error in Entering AWB Number: " + e.Message);
             }
         }
 
         public void DeleteAddFlights()
         {
-            test = _scenario.CreateNode<Scenario>("Delete and Add Flights");
+            Hooks.Hooks.createNode();
             try
-            {                
+            {
                 SwitchToPopupWindow();
+                Log.Info("Switched to Popup Window");
                 WaitForElementToBeVisible(alreadyExecutedPopup_XPATH, TimeSpan.FromSeconds(10));
                 string alreadyExecutedPopUp = GetText(alreadyExecutedPopup_XPATH);
-                test.Pass("Already Executed Popup: " + alreadyExecutedPopUp);
-                Console.WriteLine(alreadyExecutedPopUp);
+                Hooks.Hooks.UpdateTest(Status.Pass, "Already Executed Popup: " + alreadyExecutedPopUp);
+                Log.Info("Already Executed Popup: " + alreadyExecutedPopUp);
                 SwitchToCAP018Frame();
+                Log.Info("Switched to CAP018 Frame");
                 firstflightnum = GetAttributeValue(flightNumber_XPATH, "value");
+                Log.Info("First Flight Number: " + firstflightnum);
                 ClickOnElementIfPresent(flightCheckBox_ID);
-                test.Pass("Clicked on Flight Check Box");
+                Hooks.Hooks.UpdateTest(Status.Pass, "Clicked on Flight Check Box");
+                Log.Info("Clicked on Flight Check Box");
                 WaitForElementToBeVisible(deleteFlightDetails_ID, TimeSpan.FromSeconds(10));
                 Click(deleteFlightDetails_ID);
-                test.Pass("Clicked on Delete Flight Details");
+                Hooks.Hooks.UpdateTest(Status.Pass, "Clicked on Delete Flight Details");
+                Log.Info("Clicked on Delete Flight Details");
                 WaitForElementToBeVisible(addFlight_ID, TimeSpan.FromSeconds(10));
                 Click(addFlight_ID);
-                test.Pass("Clicked on Add Flight Details");
+                Hooks.Hooks.UpdateTest(Status.Pass, "Clicked on Add Flight Details");
+                Log.Info("Clicked on Add Flight Details");
             }
             catch (Exception e)
             {
-                test.Fail("Error in Deleting and Adding Flights: " + e.Message);
+                Hooks.Hooks.UpdateTest(Status.Fail, "Error in Deleting and Adding Flights: " + e.Message);
+                Log.Error("Error in Deleting and Adding Flights: " + e.Message);
             }
         }
 
@@ -406,70 +466,88 @@ namespace iCargoUIAutomation.pages
 
         public void CaptureIrregularity()
         {
-            test = _scenario.CreateNode<Scenario>("Capture Irregularity");
+            Hooks.Hooks.createNode();
             try
-            {                
-                SwitchToFrame(bookingIrregularityFrame_ID);                
+            {
+                WaitForElementToBeInvisible(CAP018Frame_XPATH, TimeSpan.FromSeconds(10));
+                SwitchToFrame(bookingIrregularityFrame_ID);
+                Log.Info("Switched to Irregularity Frame");
                 EnterTextToDropdown(irregularityTextbox_ID, "Booking - Incomplete or inaccurate");
-                test.Pass("Selected Irregularity Code");
+                Hooks.Hooks.UpdateTest(Status.Pass, "Selected Irregularity Code");
+                Log.Info("Selected Irregularity Code");
                 DoubleClick(irregularityScrollHori_XPATH);
+                Log.Info("Double Clicked on Horizontal Scroll");
                 Click(irregularityRemarks_XPATH);
+                Log.Info("Clicked on Irregularity Remarks");
                 EnterText(irregularityRemarks_XPATH, "test");
-                test.Pass("Entered Irrgularity Remarks");
+                Hooks.Hooks.UpdateTest(Status.Pass, "Entered Irrgularity Remarks");
+                Log.Info("Entered Irrgularity Remarks");
                 int noOfWindowsBefore = GetNumberOfWindowsOpened();
                 Click(irregularitySaveBtn_ID);
+                Log.Info("Clicked on Irregularity Save Button");
                 WaitForNewWindowToOpen(TimeSpan.FromSeconds(10), noOfWindowsBefore + 1);
                 int noOfWindowsAfter = GetNumberOfWindowsOpened();
                 if (noOfWindowsAfter > noOfWindowsBefore)
                 {
                     SwitchToLastWindow();
+                    WaitForElementToBeInvisible(bookingIrregularityFrame_ID, TimeSpan.FromSeconds(15));
                     WaitForElementToBeVisible(awbNumber_XPATH, TimeSpan.FromSeconds(10));
                     string awbNumber = GetText(awbNumber_XPATH);
-                    test.Pass("AWB Number Captured: " + awbNumber); 
-                    Console.WriteLine(awbNumber);
-                    WaitForElementToBeVisible(btnOkBookingSummaryPopup_XPATH, TimeSpan.FromSeconds(10));
-                    Click(btnOkBookingSummaryPopup_XPATH);
-                    test.Pass("Clicked OK Button on Booking Summary Popup");
+                    Hooks.Hooks.UpdateTest(Status.Pass, "AWB Number Captured: " + awbNumber);
+                    Log.Info("AWB Number Captured: " + awbNumber);
+                    if (IsElementEnabled(btnOkBookingSummaryPopup_XPATH))
+                    {
+                        WaitForElementToBeClickable(btnOkBookingSummaryPopup_XPATH, TimeSpan.FromSeconds(10));
+                        Click(btnOkBookingSummaryPopup_XPATH);
+                        Hooks.Hooks.UpdateTest(Status.Pass, "Clicked OK Button on Booking Summary Popup");
+                        Log.Info("Clicked OK Button on Booking Summary Popup");
+                    }
                     SwitchToLastWindow();
+                    Log.Info("Switched to Last Window");
                     SwitchToCAP018Frame();
+                    Log.Info("Switched to CAP018 Frame");
                 }
                 ClickOnElementIfPresent(btnCloseMb_XPATH);
-                test.Pass("Clicked Close Button on Maintain Booking Page");
+                Hooks.Hooks.UpdateTest(Status.Pass, "Clicked Close Button on Maintain Booking Page");
+                Log.Info("Clicked Close Button on Maintain Booking Page");
             }
             catch (Exception e)
             {
-                test.Fail("Error in Capturing Irregularity: " + e.Message);
+                Hooks.Hooks.UpdateTest(Status.Fail, "Error in Capturing Irregularity: " + e.Message);
+                Log.Error("Error in Capturing Irregularity: " + e.Message);
             }
         }
 
         public void clickOnSaveButtonToSaveNewFlightDetails()
         {
-            test = _scenario.CreateNode<Scenario>("Click Save Button to Save New Flight Details");
             try
-            {                
+            {
+                WaitForElementToBeInvisible(flightDetailsOkbtn_Xpath, TimeSpan.FromSeconds(15));
                 ClickOnElementIfPresent(saveBtn_ID);
-                test.Pass("Clicked Save Button");
+                Log.Info("Clicked Save Button to save new flight details");
             }
             catch (Exception e)
             {
-               test.Fail("Error in Clicking Save Button to Save New Flight Details: " + e.Message);
+                Log.Error("Error in Clicking Save Button to Save New Flight Details: " + e.Message);
             }
         }
 
         public void AVIBookingChecksheetDetails()
         {
-            test = _scenario.CreateNode<Scenario>("AVI Booking Checksheet Details");
+            Hooks.Hooks.createNode();
             try
-            {                
+            {
                 int noOfWindowsBefore = GetNumberOfWindowsOpened();
                 clickOnSaveButtonToSaveNewFlightDetails();
-                test.Pass("Clicked Save Button");
+                Hooks.Hooks.UpdateTest(Status.Pass, "Clicked Save Button to save new flight details");
                 clickingYesOnPopupWarnings();
-                //clickingYesOnPopupWarnings();
+                Hooks.Hooks.UpdateTest(Status.Pass, "Clicked Yes on Popup Warnings");
+                Log.Info("Clicked Yes on Popup Warnings");
                 SwitchToCAP018Frame();
                 SwitchToFrame(aviChecksheetFrame_XPath);
-                Console.WriteLine("Switched to Irregularity Frame");
+                Log.Info("Switched to Irregularity Frame");
                 List<IWebElement> AviChecksheetSections = GetElements(aviTotalChkSheetSections_Xpath);
+                Log.Info("Total AVI Checksheet Sections: " + AviChecksheetSections.Count);
                 int totalQuestions = 0;
 
                 foreach (var section in AviChecksheetSections)
@@ -481,14 +559,17 @@ namespace iCargoUIAutomation.pages
 
                         drpDwnQn = drpDwnQn.Replace("aviSectionName", "AVIHDL Statement");
                         totalQuestions = GetElementCount(By.XPath(drpDwnQn));
+                        Log.Info("Total Questions in AVIHDL Statement: " + totalQuestions);
                         drpDwnQn = drpDwnQn + "[@name= 'questionwithAnswer[0].templateAnswer']";
                         if (!IsDropdownSelectedByVisibleText((By.XPath(drpDwnQn)), "Yes"))
                         {
                             for (int j = 0; j < totalQuestions; j++)
                             {
                                 SelectDropdownByVisibleText(By.XPath(drpDwnQn.Replace("0", j.ToString())), "Yes");
-                                test.Pass("Selected Yes for AVIHDL Statement Checksheet");
+                                Hooks.Hooks.UpdateTest(Status.Pass, "Selected Yes for AVIHDL Statement Checksheet");
+                                Log.Info("Selected Yes for AVIHDL Statement Checksheet");
                                 EnterKeys(By.XPath(drpDwnQn), Keys.Tab);
+                                Log.Info("Entered Tab Key");
                             }
                         }
 
@@ -499,13 +580,15 @@ namespace iCargoUIAutomation.pages
 
                         drpDwnQn = drpDwnQn.Replace("aviSectionName", "AVI Booking");
                         totalQuestions = GetElementCount(By.XPath(drpDwnQn));
+                        Log.Info("Total Questions in AVI Booking Checksheet: " + totalQuestions);
                         drpDwnQn = drpDwnQn + "[@name= 'questionwithAnswer[0].templateAnswer']";
                         if (!IsDropdownSelectedByVisibleText((By.XPath(drpDwnQn)), "Yes"))
                         {
                             for (int j = 0; j < totalQuestions; j++)
                             {
                                 SelectDropdownByVisibleText(By.XPath(drpDwnQn.Replace("0", j.ToString())), "Yes");
-                                test.Pass("Selected Yes for AVI Booking Checksheet");
+                                Hooks.Hooks.UpdateTest(Status.Pass, "Selected Yes for AVI Booking Checksheet");
+                                Log.Info("Selected Yes for AVI Booking Checksheet");
                                 EnterKeys(By.XPath(drpDwnQn), Keys.Tab);
                             }
 
@@ -514,245 +597,328 @@ namespace iCargoUIAutomation.pages
                     }
                 }
                 Click(aviBookingChecksheetOkBtn_XPATH);
-                test.Pass("Clicked OK Button on AVI Booking Checksheet");
+                Hooks.Hooks.UpdateTest(Status.Pass, "Clicked OK Button on AVI Booking Checksheet");
+                Log.Info("Clicked OK Button on AVI Booking Checksheet");
                 SwitchToCAP018Frame();
                 ClickSaveButton();
             }
             catch (Exception e)
             {
-                test.Fail("Error in AVI Booking Checksheet Details: " + e.Message);
+                Hooks.Hooks.UpdateTest(Status.Fail, "Error in AVI Booking Checksheet Details: " + e.Message);
+                Log.Error("Error in AVI Booking Checksheet Details: " + e.Message);
             }
         }
 
         public void AttachOrDetachAWB()
         {
-            test = _scenario.CreateNode<Scenario>("Attach/Detach AWB");
+            Hooks.Hooks.createNode();
             try
-            {                
+            {
+                int noOfWindowsBefore = GetNumberOfWindowsOpened();
+                WaitForElementToBeInvisible(homePage_CSS, TimeSpan.FromSeconds(5));
                 ClickOnElementIfPresent(attachDetachBtn_ID);
-                test.Pass("Clicked Attach/Detach Button");
-                SwitchToSecondPopupWindow();
-                WaitForElementToBeVisible(shipperConsigneePopup_CLASS, TimeSpan.FromSeconds(10));
-                ClearText(attachDetachAwbField_ID);
-                test.Pass("Cleared AWB Field");
-                Click(attachDetachPopupBtn_ID);
-                test.Pass("Clicked on Attach/Detach Button in Popup");
+                Hooks.Hooks.UpdateTest(Status.Pass, "Clicked Attach/Detach Button");
+                Log.Info("Clicked Attach/Detach Button");                
+                WaitForNewWindowToOpen(TimeSpan.FromSeconds(20), noOfWindowsBefore + 1);
+                int noOfWindowsAfter = GetNumberOfWindowsOpened();
+                if (noOfWindowsAfter > noOfWindowsBefore)
+                {
+                    SwitchToSecondPopupWindow();
+                    Log.Info("Switched to Second Popup Window");
+                    WaitForElementToBeInvisible(CAP018Frame_XPATH, TimeSpan.FromSeconds(10));
+                    WaitForElementToBeVisible(shipperConsigneePopup_CLASS, TimeSpan.FromSeconds(10));
+                    Click(attachDetachAwbField_ID);
+                    ClearText(attachDetachAwbField_ID);                    
+                    Hooks.Hooks.UpdateTest(Status.Pass, "Cleared AWB Field");
+                    Click(attachDetachPopupBtn_ID);
+                    Hooks.Hooks.UpdateTest(Status.Pass, "Clicked on Attach/Detach Button in Popup");
+                    Log.Info("Clicked on Attach/Detach Button in Popup");
+                }
                 SwitchToPopupWindow();
+                Log.Info("Switched to Popup Window");
                 SwitchToCAP018Frame();
             }
             catch (Exception e)
             {
-                test.Fail("Error in Attaching/Detaching AWB: " + e.Message);
+                Hooks.Hooks.UpdateTest(Status.Fail, "Error in Attaching/Detaching AWB: " + e.Message);
+                Log.Error("Error in Attaching/Detaching AWB: " + e.Message);
             }
         }
 
         public void EnterNewAgentCode(string agentcode)
         {
-            test = _scenario.CreateNode<Scenario>("Enter New Agent Code");
+            Hooks.Hooks.createNode();
             try
-            {                
+            {
+                WaitForElementToBeInvisible(awbNumber_XPATH, TimeSpan.FromSeconds(5));
                 EnterTextWithCheck(agentCode_ID, agentcode);
-                test.Pass("Entered New Agent Code: " + agentcode);
+                Hooks.Hooks.UpdateTest(Status.Pass, "Entered New Agent Code: " + agentcode);
+                Log.Info("Entered New Agent Code: " + agentcode);
             }
             catch (Exception e)
             {
-                test.Fail("Error in Entering New Agent Code: " + e.Message);
+                Hooks.Hooks.UpdateTest(Status.Fail, "Error in Entering New Agent Code: " + e.Message);
+                Log.Error("Error in Entering New Agent Code: " + e.Message);
             }
         }
 
 
         public void AWBBookingfromStock()
         {
-            test = _scenario.CreateNode<Scenario>("AWB Booking from Stock");
+            Hooks.Hooks.createNode();
             try
-            {                
+            {
                 SwitchToPopupWindow();
+                Log.Info("Switched to Popup Window");
                 WaitForElementToBeVisible(alreadyExecutedPopup_XPATH, TimeSpan.FromSeconds(10));
                 string alreadyExecutedPopUp = GetText(alreadyExecutedPopup_XPATH);
-                test.Pass("Already Executed Popup: " + alreadyExecutedPopUp);
-                Console.WriteLine(alreadyExecutedPopUp);
+                Hooks.Hooks.UpdateTest(Status.Pass, "Already Executed Popup: " + alreadyExecutedPopUp);
+                Log.Info("Already Executed Popup: " + alreadyExecutedPopUp);
                 SwitchToCAP018Frame();
             }
             catch (Exception e)
             {
-                test.Fail("Error in AWB Booking from Stock: " + e.Message);
+                Hooks.Hooks.UpdateTest(Status.Fail, "Error in AWB Booking from Stock: " + e.Message);
+                Log.Error("Error in AWB Booking from Stock: " + e.Message);
             }
         }
 
         public void UnknownAgentShipmentDetails(string org, string dest, string prodcode)
         {
-            test = _scenario.CreateNode<Scenario>("Unknown Agent Shipment Details");
+            Hooks.Hooks.createNode();
             try
-            {                
+            {
                 EnterText(origin_ID, org);
-                test.Pass("Entered Origin: " + org);
+                Hooks.Hooks.UpdateTest(Status.Pass, "Entered Origin: " + org);
+                Log.Info("Entered Origin: " + org);
                 EnterText(destination_XPATH, dest);
-                test.Pass("Entered Destination: " + dest);
+                Hooks.Hooks.UpdateTest(Status.Pass, "Entered Destination: " + dest);
+                Log.Info("Entered Destination: " + dest);
                 ClickOnElementIfPresent(agentCode_ID);
+                Log.Info("Clicked on Agent Code field");
                 EnterText(shippingDate_ID, shippingDate);
-                test.Pass("Entered Shipping Date: " + shippingDate);
+                Hooks.Hooks.UpdateTest(Status.Pass, "Entered Shipping Date: " + shippingDate);
+                Log.Info("Entered Shipping Date: " + shippingDate);
                 EnterText(product_XPATH, prodcode);
-                test.Pass("Entered Product Code: " + prodcode);
+                Hooks.Hooks.UpdateTest(Status.Pass, "Entered Product Code: " + prodcode);
+                Log.Info("Entered Product Code: " + prodcode);
                 Click(shipperConsigneeBtn_ID);
-                test.Pass("Clicked on Shipper Consignee Button");
+                Hooks.Hooks.UpdateTest(Status.Pass, "Clicked on Shipper Consignee Button");
+                Log.Info("Clicked on Shipper Consignee Button");
             }
             catch (Exception e)
             {
-                test.Fail("Error in Entering Unknown Agent Shipment Details: " + e.Message);
+                Hooks.Hooks.UpdateTest(Status.Fail, "Error in Entering Unknown Agent Shipment Details: " + e.Message);
+                Log.Error("Error in Entering Unknown Agent Shipment Details: " + e.Message);
             }
         }
 
-        public void NewUnknownAgentShipmentDetails(string org, string dest,string agtcode, string prodcode)
+        public void NewUnknownAgentShipmentDetails(string org, string dest, string agtcode, string prodcode)
         {
-            test = _scenario.CreateNode<Scenario>("Unknown Agent Shipment Details");
+            Hooks.Hooks.createNode();
             try
             {
-                EnterText(origin_ID, org);
-                test.Pass("Entered Origin: " + org);
+                WaitForElementToBeInvisible(homePage_CSS, TimeSpan.FromSeconds(10));            //new line added                                                       
+                if (IsElementEnabled(origin_ID))
+                {
+                    EnterTextWithCheck(origin_ID, org);
+                    Hooks.Hooks.UpdateTest(Status.Pass, "Entered Origin: " + org);
+                    Log.Info("Entered Origin: " + org);
+                }
                 EnterText(destination_XPATH, dest);
-                test.Pass("Entered Destination: " + dest);
+                Hooks.Hooks.UpdateTest(Status.Pass, "Entered Destination: " + dest);
+                Log.Info("Entered Destination: " + dest);
                 ClickOnElementIfPresent(agentCode_ID);
+                Log.Info("Clicked on Agent Code field");
                 EnterTextWithCheck(agentCode_ID, agtcode.ToString());
-                test.Pass("Entered Agent Code: " + agtcode);
+                Hooks.Hooks.UpdateTest(Status.Pass, "Entered Agent Code: " + agtcode);
+                Log.Info("Entered Agent Code: " + agtcode);
                 EnterText(shippingDate_ID, shippingDate);
-                test.Pass("Entered Shipping Date: " + shippingDate);
+                Hooks.Hooks.UpdateTest(Status.Pass, "Entered Shipping Date: " + shippingDate);
+                Log.Info("Entered Shipping Date: " + shippingDate);
                 EnterText(product_XPATH, prodcode);
-                test.Pass("Entered Product Code: " + prodcode);
+                Hooks.Hooks.UpdateTest(Status.Pass, "Entered Product Code: " + prodcode);
+                Log.Info("Entered Product Code: " + prodcode);
                 Click(shipperConsigneeBtn_ID);
-                test.Pass("Clicked on Shipper Consignee Button");
+                Hooks.Hooks.UpdateTest(Status.Pass, "Clicked on Shipper Consignee Button");
+                Log.Info("Clicked on Shipper Consignee Button");
             }
             catch (Exception e)
             {
-                test.Fail("Error in Entering Unknown Agent Shipment Details: " + e.Message);
+                Hooks.Hooks.UpdateTest(Status.Fail, "Error in Entering Unknown Agent Shipment Details: " + e.Message);
+                Log.Error("Error in Entering Unknown Agent Shipment Details: " + e.Message);
             }
         }
 
         public void UnknownShipperConsigneeDetails(string shipper, string consg)
         {
-            test = _scenario.CreateNode<Scenario>("Unknown Shipper Consignee Details");
+            Hooks.Hooks.createNode();
             try
-            {                
+            {
                 SwitchToSecondPopupWindow();
+                Log.Info("Switched to Second Popup Window");
                 EnterTextWithCheck(shipperCode_XPATH, shipper);
-                test.Pass("Entered Shipper Code: " + shipper);
+                Hooks.Hooks.UpdateTest(Status.Pass, "Entered Shipper Code: " + shipper);
+                Log.Info("Entered Shipper Code: " + shipper);
                 EnterTextWithCheck(consigneeCode_XPATH, consg);
-                test.Pass("Entered Consignee Code: " + consg);
+                Hooks.Hooks.UpdateTest(Status.Pass, "Entered Consignee Code: " + consg);
+                Log.Info("Entered Consignee Code: " + consg);
                 Click(shipperConsigneeOkBtn_ID);
-                test.Pass("Clicked on Shipper Consignee OK Button");
+                Hooks.Hooks.UpdateTest(Status.Pass, "Clicked on Shipper Consignee OK Button");
+                Log.Info("Clicked on Shipper Consignee OK Button");
                 SwitchToPopupWindow();
+                Log.Info("Switched to Popup Window");
             }
             catch (Exception e)
             {
-                test.Fail("Error in Entering Unknown Shipper Consignee Details: " + e.Message);
+                Hooks.Hooks.UpdateTest(Status.Fail, "Error in Entering Unknown Shipper Consignee Details: " + e.Message);
+                Log.Error("Error in Entering Unknown Shipper Consignee Details: " + e.Message);
             }
         }
 
         public void UnknownShipperConsigneeALLDetails(string unkshppr, string unkconsgn)
         {
-            test = _scenario.CreateNode<Scenario>("Unknown Shipper Consignee ALL Details");
+            Hooks.Hooks.createNode();
             try
-            {                
+            {
                 SwitchToSecondPopupWindow();
+                Log.Info("Switched to Second Popup Window");
                 WaitForElementToBeInvisible(CAP018Frame_XPATH, TimeSpan.FromSeconds(10));
                 EnterText(shipperCode_XPATH, unkshppr);
-                test.Pass("Entered Shipper Code: " + unkshppr);
+                Hooks.Hooks.UpdateTest(Status.Pass, "Entered Shipper Code: " + unkshppr);
+                Log.Info("Entered Shipper Code: " + unkshppr);
                 string shipperName = "Test Shipper";
                 if (checkTextboxIsNotEmpty(unkShipperName_ID))
                 {
                     ClickOnElementIfPresent(unkShipperName_ID);
+                    Log.Info("Clicked on Shipper Name Field");
                 }
                 else
                 {
                     WaitForElementToBeInvisible(CAP018Frame_XPATH, TimeSpan.FromSeconds(10));
                     EnterTextWithCheck(unkShipperName_ID, shipperName);
-                    test.Pass("Entered Shipper Name: " + shipperName);
+                    Hooks.Hooks.UpdateTest(Status.Pass, "Entered Shipper Name: " + shipperName);
+                    Log.Info("Entered Shipper Name: " + shipperName);
                 }
                 string shipperFirstAddress = "Test Address1";
                 EnterTextWithCheck(unkShipperFirstAddress_ID, shipperFirstAddress);
-                test.Pass("Entered Shipper First Address: " + shipperFirstAddress);
+                Hooks.Hooks.UpdateTest(Status.Pass, "Entered Shipper First Address: " + shipperFirstAddress);
+                Log.Info("Entered Shipper First Address: " + shipperFirstAddress);
                 string shipperSecondAddress = "Test Address2";
                 EnterTextWithCheck(unkShipperSecondAddress, shipperSecondAddress);
-                test.Pass("Entered Shipper Second Address: " + shipperSecondAddress);
+                Hooks.Hooks.UpdateTest(Status.Pass, "Entered Shipper Second Address: " + shipperSecondAddress);
+                Log.Info("Entered Shipper Second Address: " + shipperSecondAddress);
                 string shipperCity = "Test City";
                 EnterTextWithCheck(unkShipperCity_ID, shipperCity);
-                test.Pass("Entered Shipper City: " + shipperCity);
+                Hooks.Hooks.UpdateTest(Status.Pass, "Entered Shipper City: " + shipperCity);
+                Log.Info("Entered Shipper City: " + shipperCity);
                 string shipperState = "Test State";
                 EnterTextWithCheck(unkShipperState_ID, shipperState);
-                test.Pass("Entered Shipper State: " + shipperState);
+                Hooks.Hooks.UpdateTest(Status.Pass, "Entered Shipper State: " + shipperState);
+                Log.Info("Entered Shipper State: " + shipperState);
                 string shipperCountry = "US";
                 EnterTextWithCheck(unkShipperCountry_ID, shipperCountry);
-                test.Pass("Entered Shipper Country: " + shipperCountry);
+                Hooks.Hooks.UpdateTest(Status.Pass, "Entered Shipper Country: " + shipperCountry);
+                Log.Info("Entered Shipper Country: " + shipperCountry);
                 string shipperZip = "67890";
                 EnterTextWithCheck(unkShipperZip_ID, shipperZip);
-                test.Pass("Entered Shipper Zip: " + shipperZip);
+                Hooks.Hooks.UpdateTest(Status.Pass, "Entered Shipper Zip: " + shipperZip);
+                Log.Info("Entered Shipper Zip: " + shipperZip);
                 string shipperEmail = "TEST@GMAIL.COM.INVALID";
                 EnterTextWithCheck(unkShipperEmail_ID, shipperEmail);
-                test.Pass("Entered Shipper Email: " + shipperEmail);    
+                Hooks.Hooks.UpdateTest(Status.Pass, "Entered Shipper Email: " + shipperEmail);
+                Log.Info("Entered Shipper Email: " + shipperEmail);
                 EnterText(consigneeCode_XPATH, unkconsgn);
-                test.Pass("Entered Consignee Code: " + unkconsgn);
+                Hooks.Hooks.UpdateTest(Status.Pass, "Entered Consignee Code: " + unkconsgn);
+                Log.Info("Entered Consignee Code: " + unkconsgn);
                 string consigneeName = "Test Consignee";
                 if (checkTextboxIsNotEmpty(unkConsigneeName_ID))
                 {
                     ClickOnElementIfPresent(unkConsigneeName_ID);
+                    Log.Info("Clicked on Consignee Name Field");
                 }
                 else
                 {
                     WaitForElementToBeInvisible(CAP018Frame_XPATH, TimeSpan.FromSeconds(10));
                     EnterTextWithCheck(unkConsigneeName_ID, consigneeName);
-                    test.Pass("Entered Consignee Name: " + consigneeName);
+                    Hooks.Hooks.UpdateTest(Status.Pass, "Entered Consignee Name: " + consigneeName);
+                    Log.Info("Entered Consignee Name: " + consigneeName);
                 }
                 string consigneeFirstAddress = "Test Address1";
                 EnterTextWithCheck(unkConsigneeFirstAddress_ID, consigneeFirstAddress);
-                test.Pass("Entered Consignee First Address: " + consigneeFirstAddress);
+                Hooks.Hooks.UpdateTest(Status.Pass, "Entered Consignee First Address: " + consigneeFirstAddress);
+                Log.Info("Entered Consignee First Address: " + consigneeFirstAddress);
                 string consigneeSecondAddress = "Test Address2";
                 EnterTextWithCheck(unkConsigneeSecondAddress, consigneeSecondAddress);
-                test.Pass("Entered Consignee Second Address: " + consigneeSecondAddress);
+                Hooks.Hooks.UpdateTest(Status.Pass, "Entered Consignee Second Address: " + consigneeSecondAddress);
+                Log.Info("Entered Consignee Second Address: " + consigneeSecondAddress);
                 string consigneeCity = "Test City";
                 EnterTextWithCheck(unkConsigneeCity_ID, consigneeCity);
-                test.Pass("Entered Consignee City: " + consigneeCity);
+                Hooks.Hooks.UpdateTest(Status.Pass, "Entered Consignee City: " + consigneeCity);
+                Log.Info("Entered Consignee City: " + consigneeCity);
                 string consigneeState = "Test State";
                 EnterTextWithCheck(unkConsigneeState_ID, consigneeState);
-                test.Pass("Entered Consignee State: " + consigneeState);
+                Hooks.Hooks.UpdateTest(Status.Pass, "Entered Consignee State: " + consigneeState);
+                Log.Info("Entered Consignee State: " + consigneeState);
                 string consigneeCountry = "US";
                 EnterTextWithCheck(unkConsigneeCountry_ID, consigneeCountry);
-                test.Pass("Entered Consignee Country: " + consigneeCountry);
+                Hooks.Hooks.UpdateTest(Status.Pass, "Entered Consignee Country: " + consigneeCountry);
                 string consigneeZip = "67890";
                 EnterTextWithCheck(unkConsigneeZip_ID, consigneeZip);
-                test.Pass("Entered Consignee Zip: " + consigneeZip);
+                Hooks.Hooks.UpdateTest(Status.Pass, "Entered Consignee Zip: " + consigneeZip);
+                Log.Info("Entered Consignee Zip: " + consigneeZip);
                 string consigneeEmail = "TEST@GMAIL.COM.INVALID";
                 EnterTextWithCheck(unkConsigneeEmail_ID, consigneeEmail);
-                test.Pass("Entered Consignee Email: " + consigneeEmail);
+                Hooks.Hooks.UpdateTest(Status.Pass, "Entered Consignee Email: " + consigneeEmail);
+                Log.Info("Entered Consignee Email: " + consigneeEmail);
                 Click(shipperConsigneeOkBtn_ID);
-                test.Pass("Clicked on Shipper Consignee OK Button");
+                Hooks.Hooks.UpdateTest(Status.Pass, "Clicked on Shipper Consignee OK Button");
+                Log.Info("Clicked on Shipper Consignee OK Button");
                 SwitchToPopupWindow();
+                Log.Info("Switched to Popup Window");
             }
             catch (Exception e)
             {
-               test.Fail("Error in Entering Unknown Shipper Consignee ALL Details: " + e.Message);
+                Hooks.Hooks.UpdateTest(Status.Fail, "Error in Entering Unknown Shipper Consignee ALL Details: " + e.Message);
+                Log.Error("Error in Entering Unknown Shipper Consignee ALL Details: " + e.Message);
             }
         }
 
         public void SelectFlight(string givenproductcode)
         {
-            test = _scenario.CreateNode<Scenario>("Select Flight");
+            Hooks.Hooks.createNode();
             try
-            {                
+            {
                 Click(selectFlightBtn_ID);
-                test.Pass("Clicked Select Flight Button");
+                Hooks.Hooks.UpdateTest(Status.Pass, "Clicked Select Flight Button");
+                Log.Info("Clicked Select Flight Button");                
                 WaitForElementToBeInvisible(CAP018Frame_XPATH, TimeSpan.FromSeconds(10));
                 SwitchToFrame(bookingIrregularityFrame_ID);
+                Log.Info("Switched to Irregularity Frame");
                 List<IWebElement> noofflights = GetElements(flightDetailsSection_XPATH);
+                Log.Info("Total Flights: " + noofflights.Count);
                 List<IWebElement> ratestatusbtn = GetElements(rate_Xpath);
+                Log.Info("Total Rate Status Buttons: " + ratestatusbtn.Count);
                 List<IWebElement> capstatusbtn = GetElements(cap_Xpath);
+                Log.Info("Total CAP Status Buttons: " + capstatusbtn.Count);
                 List<IWebElement> reststatusbtn = GetElements(rest_Xpath);
+                Log.Info("Total REST Status Buttons: " + reststatusbtn.Count);
                 List<IWebElement> embstatusbtn = GetElements(emb_Xpath);
+                Log.Info("Total EMB Status Buttons: " + embstatusbtn.Count);
                 List<IWebElement> prodcodes = GetElements(flightProductCode_Xpath);
+                Log.Info("Total Product Codes: " + prodcodes.Count);
                 List<IWebElement> flightdates = GetElements(flightDate_Xpath);
+                Log.Info("Total Flight Dates: " + flightdates.Count);
                 List<IWebElement> GeneralProd = GetElements(generalProdBtn_Xpath);
+                Log.Info("Total General Product Buttons: " + GeneralProd.Count);
                 List<IWebElement> PriorityProd = GetElements(priorityProdBtn_Xpath);
+                Log.Info("Total Priority Product Buttons: " + PriorityProd.Count);
                 List<IWebElement> EmployeeProd = GetElements(employeeProdBtn_Xpath);
+                Log.Info("Total Employee Product Buttons: " + EmployeeProd.Count);
                 List<IWebElement> GoldstreakProd = GetElements(goldstreakProdBtn_Xpath);
+                Log.Info("Total Goldstreak Product Buttons: " + GoldstreakProd.Count);
                 List<IWebElement> PetConnectProd = GetElements(petConnectProdBtn_Xpath);
+                Log.Info("Total Pet Connect Product Buttons: " + PetConnectProd.Count);
                 for (int i = 0; i < noofflights.Count; i++)
                 {
                     IWebElement item = prodcodes[i];
@@ -777,10 +943,12 @@ namespace iCargoUIAutomation.pages
                                 if (IsElementDisplayed(generalProdBtn_Xpath))
                                 {
                                     ClickOnElement(GeneralProdBtn);
-                                    test.Pass("Selected General Product");
+                                    Hooks.Hooks.UpdateTest(Status.Pass, "Selected General Product");
+                                    Log.Info("Selected General Product");
                                 }
                                 Click(flightDetailsOkbtn_Xpath);
-                                test.Pass("Clicked Flight Details OK Button");
+                                Hooks.Hooks.UpdateTest(Status.Pass, "Clicked Flight Details OK Button");
+                                Log.Info("Clicked Flight Details OK Button");
                                 break;
                             }
                         }
@@ -792,10 +960,12 @@ namespace iCargoUIAutomation.pages
                                 if (IsElementDisplayed(priorityProdBtn_Xpath))
                                 {
                                     ClickOnElement(PriorityProdBtn);
-                                    test.Pass("Selected Priority Product");
+                                    Hooks.Hooks.UpdateTest(Status.Pass, "Selected Priority Product");
+                                    Log.Info("Selected Priority Product");
                                 }
                                 Click(flightDetailsOkbtn_Xpath);
-                                test.Pass("Clicked Flight Details OK Button");
+                                Hooks.Hooks.UpdateTest(Status.Pass, "Clicked Flight Details OK Button");
+                                Log.Info("Clicked Flight Details OK Button");
                                 break;
                             }
                         }
@@ -807,10 +977,12 @@ namespace iCargoUIAutomation.pages
                                 if (IsElementDisplayed(employeeProdBtn_Xpath))
                                 {
                                     ClickOnElement(EmployeeProdBtn);
-                                    test.Pass("Selected Employee Shipment Product");
+                                    Hooks.Hooks.UpdateTest(Status.Pass, "Selected Employee Shipment Product");
+                                    Log.Info("Selected Employee Shipment Product");
                                 }
                                 Click(flightDetailsOkbtn_Xpath);
-                                test.Pass("Clicked Flight Details OK Button");
+                                Hooks.Hooks.UpdateTest(Status.Pass, "Clicked Flight Details OK Button");
+                                Log.Info("Clicked Flight Details OK Button");
                                 break;
                             }
                         }
@@ -822,10 +994,12 @@ namespace iCargoUIAutomation.pages
                                 if (IsElementDisplayed(goldstreakProdBtn_Xpath))
                                 {
                                     ClickOnElement(GoldstreakProdBtn);
-                                    test.Pass("Selected Goldstreak Product");
+                                    Hooks.Hooks.UpdateTest(Status.Pass, "Selected Goldstreak Product");
+                                    Log.Info("Selected Goldstreak Product");
                                 }
                                 Click(flightDetailsOkbtn_Xpath);
-                                test.Pass("Clicked Flight Details OK Button");
+                                Hooks.Hooks.UpdateTest(Status.Pass, "Clicked Flight Details OK Button");
+                                Log.Info("Clicked Flight Details OK Button");
                                 break;
                             }
                         }
@@ -837,45 +1011,62 @@ namespace iCargoUIAutomation.pages
                                 if (IsElementDisplayed(petConnectProdBtn_Xpath))
                                 {
                                     ClickOnElement(PetConnectProdBtn);
-                                    test.Pass("Selected Pet Connect Product");
+                                    Hooks.Hooks.UpdateTest(Status.Pass, "Selected Pet Connect Product");
+                                    Log.Info("Selected Pet Connect Product");
                                 }
                                 Click(flightDetailsOkbtn_Xpath);
-                                test.Pass("Clicked Flight Details OK Button");
+                                Hooks.Hooks.UpdateTest(Status.Pass, "Clicked Flight Details OK Button");
+                                Log.Info("Clicked Flight Details OK Button");
                                 break;
                             }
                         }
                     }
                 }
+                SwitchToPopupWindow();
                 SwitchToCAP018Frame();
             }
             catch (Exception e)
             {
-                test.Fail(e.ToString());
+                Hooks.Hooks.UpdateTest(Status.Fail, e.ToString());
+                Log.Error(e.ToString());
             }
         }
 
         public void selectMultilegflight(string rescolor, string mincontimewarning, string givenprodcode)
         {
-            test = _scenario.CreateNode<Scenario>("Select Multileg Flight");
+            Hooks.Hooks.createNode();
             try
-            {                
+            {
                 Click(selectFlightBtn_ID);
-                test.Pass("Clicked Select Flight Button");
+                Hooks.Hooks.UpdateTest(Status.Pass, "Clicked Select Flight Button");
+                Log.Info("Clicked Select Flight Button");
+                WaitForElementToBeInvisible(CAP018Frame_XPATH, TimeSpan.FromSeconds(10));
                 SwitchToFrame(bookingIrregularityFrame_ID);
-                WaitForElementToBeVisible(flightDetailsSection_XPATH, TimeSpan.FromSeconds(20));
-                Click(multilegFlightsfilter);
-                test.Pass("Clicked Multileg Flights Filter");
+                Log.Info("Switched to Irregularity Frame");
+                WaitForElementToBeVisible(flightDetailsSection_XPATH, TimeSpan.FromSeconds(30));
+                Click(flightSearchBox_Xpath);
+                Log.Info("Clicked Flight Search Box");
+                ClickOnElementIfPresent(multilegFlightsfilter);
+                Hooks.Hooks.UpdateTest(Status.Pass, "Clicked Multileg Flights Filter");
+                Log.Info("Clicked Multileg Flights Filter");
                 Click(oneStopFilter_Xpath);
-                test.Pass("Clicked One Stop Filter");
+                Hooks.Hooks.UpdateTest(Status.Pass, "Clicked One Stop Filter");
+                Log.Info("Clicked One Stop Filter");
                 Click(twoStopFilter_Xpath);
-                test.Pass("Clicked Two Stop Filter");
+                Hooks.Hooks.UpdateTest(Status.Pass, "Clicked Two Stop Filter");
+                Log.Info("Clicked Two Stop Filter");
                 Click(twoplusStopFilter_Xpath);
-                test.Pass("Clicked Two Plus Stop Filter");
+                Hooks.Hooks.UpdateTest(Status.Pass, "Clicked Two Plus Stop Filter");
+                Log.Info("Clicked Two Plus Stop Filter");
                 Click(filterApplyBtn_Xpath);
-                test.Pass("Clicked Filter Apply Button");
+                Hooks.Hooks.UpdateTest(Status.Pass, "Clicked Filter Apply Button");
+                Log.Info("Clicked Filter Apply Button");
                 List<IWebElement> noofflights = GetElements(flightDetailsSection_XPATH);
+                Log.Info("Total Flights: " + noofflights.Count);
                 List<IWebElement> reststatusbtn = GetElements(rest_Xpath);
+                Log.Info("Total REST Status Buttons: " + reststatusbtn.Count);
                 List<IWebElement> multilegflights = GetElements(multilegFlights_Xpath);
+                Log.Info("Total Multileg Flights: " + multilegflights.Count);
                 string productcode = GetText(flightProductCode_Xpath);
                 for (int i = 0; i < noofflights.Count; i++)
                 {
@@ -888,77 +1079,93 @@ namespace iCargoUIAutomation.pages
                         if (resattribute == "badge-red" && productcode == "GENERAL" && productcode == givenprodcode)
                         {
                             string resColors = resattribute.Split('-')[1];
-                            Console.WriteLine(resColors);
-                            test.Pass("Rest Status Color: " + resColors);
+                            Hooks.Hooks.UpdateTest(Status.Pass, "Rest Status Color: " + resColors);
+                            Log.Info("Rest Status Color: " + resColors);
                             Assert.AreEqual(rescolor, resColors);
+                            Log.Info("Rest Status Color: " + resColors);
                             Click(resColor_Xpath);
+                            Log.Info("Clicked on Rest Status Color");
                             string resErrorMessage = GetText(resErrorMessage_Xpath);
                             Assert.AreEqual(mincontimewarning, resErrorMessage);
-                            test.Pass("Rest Error Message: " + resErrorMessage);
-                            Console.WriteLine(resErrorMessage);
+                            Log.Info("Rest Error Message: " + resErrorMessage);
+                            Hooks.Hooks.UpdateTest(Status.Pass, "Rest Error Message: " + resErrorMessage);
                             Click(resColor_Xpath);
+                            Log.Info("Clicked on Rest Status Color");
                             Click(flightDetailsOkbtn_Xpath);
+                            Log.Info("Clicked Flight Details OK Button");
                             WaitForElementToBeVisible(selectFlightError_Xpath, TimeSpan.FromSeconds(10));
                             string popUpMessage = GetText(selectFlightError_Xpath);
-                            Console.WriteLine(popUpMessage);
+                            Log.Info("PopUp Message: " + popUpMessage);
                             Assert.AreEqual("Please select at least one flight.", popUpMessage);
+                            Hooks.Hooks.UpdateTest(Status.Pass, "PopUp Message: " + popUpMessage);
                             break;
                         }
                         if (resattribute == "badge-red" && productcode == "PRIORITY" && productcode == givenprodcode)
                         {
                             string resColors = resattribute.Split('-')[1];
-                            Console.WriteLine(resColors);
+                            Log.Info(resColors);
                             Assert.AreEqual(rescolor, resColors);
-                            test.Pass("Rest Status Color: " + resColors);
+                            Hooks.Hooks.UpdateTest(Status.Pass, "Rest Status Color: " + resColors);
                             Click(resColor_Xpath);
                             string resErrorMessage = GetText(resErrorMessage_Xpath);
                             Assert.AreEqual(mincontimewarning, resErrorMessage);
-                            test.Pass("Rest Error" + resErrorMessage);
-                            Console.WriteLine(resErrorMessage);
+                            Hooks.Hooks.UpdateTest(Status.Pass, "Rest Error" + resErrorMessage);
+                            Log.Info(resErrorMessage);
                             Click(resColor_Xpath);
+                            Log.Info("Clicked on Rest Status Color");
                             Click(flightDetailsOkbtn_Xpath);
+                            Log.Info("Clicked Flight Details OK Button");
                             WaitForElementToBeVisible(selectFlightError_Xpath, TimeSpan.FromSeconds(10));
                             string popUpMessage = GetText(selectFlightError_Xpath);
-                            Console.WriteLine(popUpMessage);
+                            Log.Info(popUpMessage);
                             Assert.AreEqual("Please select at least one flight.", popUpMessage);
+                            Hooks.Hooks.UpdateTest(Status.Pass, popUpMessage);
                             break;
                         }
                         if (resattribute == "badge-red" && productcode == "GOLDSTREAK" && productcode == givenprodcode)
                         {
                             string resColors = resattribute.Split('-')[1];
-                            Console.WriteLine(resColors);
+                            Log.Info(resColors);
                             Assert.AreEqual(rescolor, resColors);
-                            test.Pass("Rest Status Color: " + resColors);
+                            Hooks.Hooks.UpdateTest(Status.Pass, "Rest Status Color: " + resColors);
                             Click(resColor_Xpath);
+                            Log.Info("Clicked on Rest Status Color");
                             string resErrorMessage = GetText(resErrorMessage_Xpath);
                             Assert.AreEqual(mincontimewarning, resErrorMessage);
-                            test.Pass("Rest Error Message: " + resErrorMessage);
-                            Console.WriteLine(resErrorMessage);
+                            Hooks.Hooks.UpdateTest(Status.Pass, "Rest Error Message: " + resErrorMessage);
+                            Log.Info(resErrorMessage);
                             Click(resColor_Xpath);
+                            Log.Info("Clicked on Rest Status Color");
                             Click(flightDetailsOkbtn_Xpath);
+                            Log.Info("Clicked Flight Details OK Button");
                             WaitForElementToBeVisible(selectFlightError_Xpath, TimeSpan.FromSeconds(10));
                             string popUpMessage = GetText(selectFlightError_Xpath);
-                            Console.WriteLine(popUpMessage);
+                            Log.Info(popUpMessage);
                             Assert.AreEqual("Please select at least one flight.", popUpMessage);
+                            Hooks.Hooks.UpdateTest(Status.Pass, popUpMessage);
                             break;
                         }
                         if (resattribute == "badge-red" && productcode == "PET CONNECT" && productcode == givenprodcode)
                         {
                             string resColors = resattribute.Split('-')[1];
-                            Console.WriteLine(resColors);
+                            Log.Info(resColors);
                             Assert.AreEqual(rescolor, resColors);
-                            test.Pass("Rest Status Color: " + resColors);
+                            Hooks.Hooks.UpdateTest(Status.Pass, "Rest Status Color: " + resColors);
                             Click(resColor_Xpath);
+                            Log.Info("Clicked on Rest Status Color");
                             string resErrorMessage = GetText(resErrorMessage_Xpath);
+                            Log.Info(resErrorMessage);
                             Assert.AreEqual(mincontimewarning, resErrorMessage);
-                            test.Pass("Rest Error Message: " + resErrorMessage);
-                            Console.WriteLine(resErrorMessage);
+                            Hooks.Hooks.UpdateTest(Status.Pass, "Rest Error Message: " + resErrorMessage);
                             Click(resColor_Xpath);
+                            Log.Info("Clicked on Rest Status Color");
                             Click(flightDetailsOkbtn_Xpath);
+                            Log.Info("Clicked Flight Details OK Button");
                             WaitForElementToBeVisible(selectFlightError_Xpath, TimeSpan.FromSeconds(10));
                             string popUpMessage = GetText(selectFlightError_Xpath);
-                            Console.WriteLine(popUpMessage);
+                            Log.Info(popUpMessage);
                             Assert.AreEqual("Please select at least one flight.", popUpMessage);
+                            Hooks.Hooks.UpdateTest(Status.Pass, popUpMessage);
                             break;
                         }
                     }
@@ -966,25 +1173,35 @@ namespace iCargoUIAutomation.pages
             }
             catch (Exception e)
             {
-                test.Fail("Error in Selecting Multileg Flight: " + e.Message);
+                Hooks.Hooks.UpdateTest(Status.Fail, "Error in Selecting Multileg Flight: " + e.Message);
+                Log.Error("Error in Selecting Multileg Flight: " + e.Message);
             }
         }
 
         public void addNewFlightDetails()
         {
-            test = _scenario.CreateNode<Scenario>("Add New Flight Details");
+            Hooks.Hooks.createNode();
             try
             {
                 Click(selectFlightBtn_ID);
-                test.Pass("Clicked Select Flight Button");
+                Hooks.Hooks.UpdateTest(Status.Pass, "Clicked Select Flight Button");
+                Log.Info("Clicked Select Flight Button");
+                WaitForElementToBeInvisible(CAP018Frame_XPATH, TimeSpan.FromSeconds(10));
                 SwitchToFrame(bookingIrregularityFrame_ID);
+                Log.Info("Switched to Irregularity Frame");
                 WaitForElementToBeVisible(rebookFlightDetails_Xpath, TimeSpan.FromSeconds(20));
                 List<IWebElement> nosofflights = GetElements(rebookFlightDetails_Xpath);
+                Log.Info("Total Flights: " + nosofflights.Count);
                 List<IWebElement> flightnumbersbtn = GetElements(rebookSelectFlightbtn_Xpath);
+                Log.Info("Total Flight Numbers: " + flightnumbersbtn.Count);
                 List<IWebElement> ratestatusbtn = GetElements(rate_Xpath);
+                Log.Info("Total Rate Status Buttons: " + ratestatusbtn.Count);
                 List<IWebElement> capstatusbtn = GetElements(cap_Xpath);
+                Log.Info("Total CAP Status Buttons: " + capstatusbtn.Count);
                 List<IWebElement> reststatusbtn = GetElements(rest_Xpath);
+                Log.Info("Total REST Status Buttons: " + reststatusbtn.Count);
                 List<IWebElement> embstatusbtn = GetElements(emb_Xpath);
+                Log.Info("Total EMB Status Buttons: " + embstatusbtn.Count);
                 for (int i = 0; i < nosofflights.Count; i++)
                 {
                     IWebElement item = nosofflights[i];
@@ -998,13 +1215,15 @@ namespace iCargoUIAutomation.pages
                     IWebElement ratestatus = ratestatusbtn[i];
                     string ratecolor = GetAttributeValueFromElement(ratestatus, "class");
 
-                    if (capColor != "badge-red" && rescolor != "badge-red" && embcolor != "badge-red" && ratecolor != "badge-red" && presentdate == GetText(flightDate_Xpath) && firstflightnum != selectflightnum)
+                    if (capColor != "badge-red" && rescolor != "badge-red" && embcolor != "badge-red" && ratecolor != "badge-red" && firstflightnum != selectflightnum)
                     {
                         IWebElement selectflightbtn = flightnumbersbtn[i];
                         ClickOnElement(selectflightbtn);
-                        test.Pass("Selected Flight Number: " + selectflightnum);
+                        Hooks.Hooks.UpdateTest(Status.Pass, "Selected Flight Number: " + selectflightnum);
+                        Log.Info("Selected Flight Number: " + selectflightnum);
                         Click(flightDetailsOkbtn_Xpath);
-                        test.Pass("Clicked Flight Details OK Button");
+                        Hooks.Hooks.UpdateTest(Status.Pass, "Clicked Flight Details OK Button");
+                        Log.Info("Clicked Flight Details OK Button");
                         break;
                     }
                 }
@@ -1013,8 +1232,16 @@ namespace iCargoUIAutomation.pages
             }
             catch (Exception e)
             {
+                Hooks.Hooks.UpdateTest(Status.Fail, "Error in Adding New Flight Details: " + e.Message);
                 Log.Error("Error in Adding New Flight Details: " + e.Message);
             }
+        }
+
+        public string CaptureAwbNumber()
+        {
+            string awb_num = "";
+            awb_num = awbNumber;
+            return awb_num;
         }
     }
 }
