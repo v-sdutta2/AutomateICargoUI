@@ -36,5 +36,11 @@ namespace iCargoUIAutomation.StepDefinitions
             mbp.EnterNewAgentCode(agentcode);
         }
 
+        [Then(@"User enters the AWB number")]
+        public void ThenUserEntersTheAWBNumberAs()
+        {
+            mbp.EnterAWBNumber();
+        }
+
     }
 }

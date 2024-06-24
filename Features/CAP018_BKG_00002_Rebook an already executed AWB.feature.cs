@@ -75,18 +75,12 @@ namespace iCargoUIAutomation.Features
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("iCargo Login and Rebook an already executed AWB")]
-        [NUnit.Framework.TestCaseAttribute("74325112", "SEA", "ANC", "2", "20", "20-Apr-2024", "AS7006", null)]
-        public virtual void ICargoLoginAndRebookAnAlreadyExecutedAWB(string aWB, string origin, string destination, string piece, string weight, string flightDate, string flightNo, string[] exampleTags)
+        [NUnit.Framework.TestCaseAttribute("30077246", null)]
+        public virtual void ICargoLoginAndRebookAnAlreadyExecutedAWB(string aWB, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             argumentsOfScenario.Add("AWB", aWB);
-            argumentsOfScenario.Add("Origin", origin);
-            argumentsOfScenario.Add("Destination", destination);
-            argumentsOfScenario.Add("Piece", piece);
-            argumentsOfScenario.Add("Weight", weight);
-            argumentsOfScenario.Add("FlightDate", flightDate);
-            argumentsOfScenario.Add("FlightNo", flightNo);
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("iCargo Login and Rebook an already executed AWB", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
 #line 4
 this.ScenarioInitialize(scenarioInfo);

@@ -26,13 +26,7 @@ namespace iCargoUIAutomation.StepDefinitions
             pageObjectManager = new PageObjectManager(driver);
             hp = pageObjectManager.GetHomePage();
             mbp = pageObjectManager.GetMaintainBookingPage();
-        }
-        [Then(@"User enters the AWB number as ""([^""]*)""")]
-        public void ThenUserEntersTheAWBNumberAs(string awb)
-        {
-            this.awb = awb;
-            mbp.EnterAWBNumber(awb); 
-        }
+        }        
 
 
 

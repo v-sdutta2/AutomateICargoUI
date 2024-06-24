@@ -85,6 +85,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="App.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>App.config</DependentUpon>
+    </Compile>
     <Compile Update="Features\LTE001_ACC_00013_Create an AWB with less than a 2 hr connection time between flights.feature.cs">
       <Visible>true</Visible>
       <DependentUpon>LTE001_ACC_00013_Create an AWB with less than a 2 hr connection time between flights.feature</DependentUpon>
@@ -94,6 +99,13 @@
     <Compile Update="Features\LTE001_ACC_00010_Reopen an AWB and change the final destination and reexecute.feature.cs">
       <DependentUpon>LTE001_ACC_00010_Reopen an AWB and change the final destination and reexecute.feature</DependentUpon>
     </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="App.config">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>App.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
 
 </Project>

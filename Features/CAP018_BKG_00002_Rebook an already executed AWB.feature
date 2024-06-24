@@ -19,6 +19,7 @@ Scenario Outline: iCargo Login and Rebook an already executed AWB
 	Then User logs out from the application
 
 Examples:
-	| AWB      | Origin | Destination | Piece | Weight | FlightDate  | FlightNo |
-	| 74325112 | SEA    | ANC         | 2     | 20     | 20-Apr-2024 | AS7006   |
+	| AWB      |  
+	| 30077246 |
+	#74328262  74328251
 	

@@ -289,7 +289,7 @@ namespace iCargoUIAutomation.pages
                 log.Error("Failed to clear the text in the element " + byLocator);
                 log.Error(e.ToString());
             }
-        }
+        }        
 
         public void EnterTextToDropdown(By byLocator, string text)
         {
