@@ -31,23 +31,18 @@ namespace iCargoUIAutomation.StepDefinitions
         public void WhenUSerAddsAnotherScreeningLine()
         {
             Log.Info("Step: Adding another screening line");
-            csp.addAnotherScreeningLine();
+            csp.AddAnotherScreeningLine();
         }
 
         [When(@"User saves all the details with ChargeType ""([^""]*)""")]
         public void WhenUserSavesAllTheDetailsWithChargeType(string chargeType)
         {
             Log.Info("Step: Saving all the details with ChargeType");
-            csp.saveDetailsWithChargeType(chargeType);
+            csp.SaveDetailsWithChargeType(chargeType);
         }
       
 
-        [When(@"User validates the popped up error message as ""([^""]*)""")]
-        public void WhenUserValidatesThePoppedUpErrorMessageAs(string expectedWarnMsg)
-        {
-            Log.Info("Step: Validating the popped up error message");
-            csp.validateWarningMessage(expectedWarnMsg);
-        }
+      
 
 
 

@@ -77,7 +77,7 @@ namespace iCargoUIAutomation.Features
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Create a CC AWB in LTE001 for a known shipper")]
         [NUnit.Framework.CategoryAttribute("tag1")]
-        [NUnit.Framework.TestCaseAttribute("10763", "10763", "10763", "SEA", "ANC", "GENERAL", "None", "0316", "None", "None", "2", "59", "CC", "None", "CART", null)]
+        [NUnit.Framework.TestCaseAttribute("10763", "10763", "10763", "LAS", "SEA", "GENERAL", "None", "0316", "None", "None", "2", "59", "CC", "None", "CART", null)]
         public virtual void CreateACCAWBInLTE001ForAKnownShipper(
                     string agentCode, 
                     string shipperCode, 
@@ -192,7 +192,7 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.And("User clicks on the Select Flight Button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 23
- testRunner.And("User selects an available flight", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("User selects an \"Combination\" flight", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 24
  testRunner.And("User clicks on the ContinueFlightDetails button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");

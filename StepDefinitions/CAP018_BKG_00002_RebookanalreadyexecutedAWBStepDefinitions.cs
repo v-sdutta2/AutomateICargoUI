@@ -12,6 +12,7 @@ namespace iCargoUIAutomation.StepDefinitions
         private PageObjectManager pageObjectManager;
         private homePage hp;
         private MaintainBookingPage mbp;
+        private CreateShipmentPage csp;
         string awb = "";
         string flightOrigin = "";
         string flightDestination = "";
@@ -68,6 +69,13 @@ namespace iCargoUIAutomation.StepDefinitions
         {
             mbp.CaptureIrregularity();
         }
+
+        [Then(@"User enters already executed AWB number")]
+        public void ThenUserEntersAlreadyExecutedAWBNumber()
+        {
+           csp.EnterAWBNumberForMaintainBooking();
+        }
+
 
 
     }

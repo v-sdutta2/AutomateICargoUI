@@ -13,6 +13,8 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Globalization;
 using System.Linq;
+using System.Net.Mail;
+using System.Net;
 using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,7 +27,7 @@ namespace iCargoUIAutomation.pages
         string shippingDate = DateTime.Now.ToString("dd-MMM-yyyy");
         string presentdate = DateTime.Now.ToString("dd-MMM");
         public static string firstflightnum = "";      
-        public static string awbNumber = "";             //new line added
+        public static string awbNumber = "";                             
         ILog Log = LogManager.GetLogger(typeof(MaintainBookingPage));
 
         public MaintainBookingPage(IWebDriver driver) : base(driver)
@@ -209,8 +211,8 @@ namespace iCargoUIAutomation.pages
             try
             {
                 //WaitForElementToBeVisible(origin_ID, TimeSpan.FromSeconds(15));
-                WaitForElementToBeInvisible(homePage_CSS, TimeSpan.FromSeconds(10));            //new line added                                                       
-                if (IsElementEnabled(origin_ID))
+                WaitForElementToBeInvisible(homePage_CSS, TimeSpan.FromSeconds(5));                                                                                                                                                                  
+                if (IsElementEnabled(origin_ID) && CheckForValueInTextbox(origin_ID,origin)==false)
                 {
                     EnterTextWithCheck(origin_ID, origin);
                     Hooks.Hooks.UpdateTest(Status.Pass, "Entered Origin: " + origin);
@@ -220,11 +222,14 @@ namespace iCargoUIAutomation.pages
                 Hooks.Hooks.UpdateTest(Status.Pass, "Entered Destination: " + destination);
                 Log.Info("Entered Destination: " + destination);
                 ClickOnElementIfPresent(agentCode_ID);
-                int agentcode = 10763;
-                EnterTextWithCheck(agentCode_ID, agentcode.ToString());
-                Hooks.Hooks.UpdateTest(Status.Pass, "Entered Agent Code: " + agentcode);
-                Log.Info("Entered Agent Code: " + agentcode);
-                EnterText(shippingDate_ID, shippingDate);
+                if (CheckForValueInTextbox(agentCode_ID, "A1001") == true)
+                {
+                    int agentCode = 10763;
+                    EnterTextWithCheck(agentCode_ID, agentCode.ToString());
+                    Hooks.Hooks.UpdateTest(Status.Pass, "Entered Agent Code: " + agentCode);
+                    Log.Info("Entered Agent Code: " + agentCode);
+                }
+                    EnterText(shippingDate_ID, shippingDate);
                 Hooks.Hooks.UpdateTest(Status.Pass, "Entered Shipping Date: " + shippingDate);
                 Log.Info("Entered Shipping Date: " + shippingDate);
                 EnterText(product_XPATH, ProductCode);
@@ -369,7 +374,7 @@ namespace iCargoUIAutomation.pages
                     WaitForElementToBeVisible(awbNumber_XPATH, TimeSpan.FromSeconds(15));
                     awbNumber = GetText(awbNumber_XPATH);
                     Hooks.Hooks.UpdateTest(Status.Pass, "AWB Number: " + awbNumber);
-                    Log.Info("AWB Number: " + awbNumber);
+                    Log.Info("AWB Number: " + awbNumber);                                        
                     if (IsElementEnabled(btnOkBookingSummaryPopup_XPATH))
                     {
                         WaitForElementToBeClickable(btnOkBookingSummaryPopup_XPATH, TimeSpan.FromSeconds(10));

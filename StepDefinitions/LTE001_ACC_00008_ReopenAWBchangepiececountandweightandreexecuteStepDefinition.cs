@@ -51,35 +51,35 @@ namespace iCargoUIAutomation.StepDefinitions
         public void WhenUserVerifiesAndUpdateTheFieldWithUpdatedValueAsInTheShipmentDetails(string fieldToBeUpdated, string value)
         {
             Log.Info("Step: Verifying and Updating the Shipment Details for " + fieldToBeUpdated + " with value " + value);
-            csp.verifyAndUpdateShipmentDetails(fieldToBeUpdated, value);
+            csp.VerifyAndUpdateShipmentDetails(fieldToBeUpdated, value);
         }
 
         [When(@"User verifies and Update the Flight Details with '([^']*)'")]
         public void WhenUserVerifiesAndUpdateTheFlightDetailsWith(string fieldToUpdate)
         {
             Log.Info("Step: Verifying and Updating the Flight Details");
-            csp.verifyAndUpdateFlightDetails(fieldToUpdate);
+            csp.VerifyAndUpdateFlightDetails(fieldToUpdate);
         }
-
+      
 
         [When(@"User verifies and Update the Acceptance Details")]
         public void WhenUserVerifiesAndUpdateTheAcceptanceDetails()
         {
             Log.Info("Step: Verifying and Updating the Acceptance Details");
-            csp.verifyAndUpdateAcceptanceDetails();
+            csp.VerifyAndUpdateAcceptanceDetails();
         }
 
         [When(@"User verifies and Update the Screening Details")]
         public void WhenUserVerifiesAndUpdateTheScreeningDetails()
         {
             Log.Info("Step: Verifying and Updating the Screening Details");
-            csp.verifyAndUpdateScreeningDetails();
+            csp.VerifyAndUpdateScreeningDetails();
         }
 
         [When(@"User validates the AWB is ""([^""]*)""")]
         public void WhenUserValidatesTheAWBIs(string expectedStatus)
         {
-            csp.validateAWBStatus(expectedStatus);
+            csp.ValidateAWBStatus(expectedStatus);
         }
 
 

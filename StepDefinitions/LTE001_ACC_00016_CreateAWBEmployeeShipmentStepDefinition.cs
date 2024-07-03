@@ -32,7 +32,7 @@ namespace iCargoUIAutomation.StepDefinitions
         [When(@"User captures the checksheet")]
         public void WhenUserCapturesTheChecksheet()
         {
-            csp.captureCheckSheetForDG();
+            csp.CaptureCheckSheetForDG();
         }
 
 

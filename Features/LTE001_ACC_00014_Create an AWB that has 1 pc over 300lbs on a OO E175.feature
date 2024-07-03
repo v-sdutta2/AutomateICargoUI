@@ -1,9 +1,9 @@
-﻿Feature: LTE001_ACC_00005_Create a CC AWB in LTE001 for a known shipper
+﻿Feature: LTE001_ACC_00014_Create an AWB that has 1 pc over 300lbs on a OO E175
 
 Create a New Shipment, Acceptance of that new shipment & screening as a CGO or CGODG user
 
 @tag1
-Scenario Outline: Create a CC AWB in LTE001 for a known shipper
+Scenario Outline: Create an AWB that has 1 pc over 300lbs on a OO E175
 	Given User lauches the Url of iCargo Staging UI
 	Then User enters into the  iCargo 'Sign in to icargoas' page successfully
 	When User clicks on the oidc button
@@ -37,4 +37,4 @@ Scenario Outline: Create a CC AWB in LTE001 for a known shipper
 
 Examples:
 	| AgentCode | ShipperCode | ConsigneeCode| Origin | Destination | ProductCode | SCC  | Commodity | ShipmentDescription | ServiceCargoClass | Piece | Weight | ChargeType | ModeOfPayment | cartType |
-	| 10763     | 10763       | 10763        | LAS    | SEA         | GENERAL     | None | 0316      | None                | None              | 2     | 59     | CC         | None          | CART     |
+	| 10763     | 10763       | 10763        | LAS    | SEA         | GENERAL     | None | 0316      | None                | None              | 1     | 500     | CC         | None          | CART     |

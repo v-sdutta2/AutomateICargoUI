@@ -31,7 +31,7 @@ namespace iCargoUIAutomation.StepDefinitions
         public void WhenUserValidatesTheCommodityChargeAmount()
         {
             Log.Info("Step: Validating the commodity charge amount");
-            csp.validateCommodityChargeAmount();
+            csp.ValidateCommodityChargeAmount();
         }
 
 

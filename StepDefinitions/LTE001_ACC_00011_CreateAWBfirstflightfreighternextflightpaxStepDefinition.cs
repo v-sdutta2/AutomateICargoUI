@@ -31,7 +31,7 @@ namespace iCargoUIAutomation.StepDefinitions
         [When(@"User selects first flight as '([^']*)' flight and second flight as '([^']*)' flight")]
         public void WhenUserSelectsFirstFlightAsFlightAndSecondFlightAsFlight(string firstFlightType, string secondFlightType)
         {
-            csp.bookConnectingFlightWithDifferentFlightTypes(firstFlightType, secondFlightType);
+            csp.BookConnectingFlightWithDifferentFlightTypes(firstFlightType, secondFlightType);
         }
 
 
