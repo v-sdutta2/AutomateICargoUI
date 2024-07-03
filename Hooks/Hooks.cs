@@ -10,6 +10,9 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Edge;
 using TechTalk.SpecFlow;
+using OpenQA.Selenium.Safari;
+using OpenQA.Selenium.Firefox;
+using System.Net.Mail;
 
 
 namespace iCargoUIAutomation.Hooks
@@ -23,6 +26,9 @@ namespace iCargoUIAutomation.Hooks
         public static ExtentTest? scenario;
         public static ExtentTest? step;
         public static string? testResultPath;
+        public static string? browser;
+        public MaintainBookingPage mbp;
+        public static string featureName;
 
         public Hooks(IObjectContainer container)
         {
@@ -68,7 +74,30 @@ namespace iCargoUIAutomation.Hooks
         [BeforeScenario(Order = 1)]
         public void FirstBeforeScenario(ScenarioContext scenarioContext)
         {
-            Console.WriteLine("Running before scenario...");
+            //browser = Environment.GetEnvironmentVariable("Browser", EnvironmentVariableTarget.Process);
+            //browser = "chrome";
+            //IWebDriver driver;
+
+            //if (browser.Equals("chrome", StringComparison.OrdinalIgnoreCase))
+            //{
+            //    driver = new ChromeDriver();
+            //}
+            //else if (browser.Equals("edge", StringComparison.OrdinalIgnoreCase))
+            //{
+            //    driver = new EdgeDriver();
+            //}
+            //else if(browser.Equals("firefox", StringComparison.OrdinalIgnoreCase))
+            //{
+            //    driver = new FirefoxDriver();
+            //}
+            //else if(browser.Equals("safari", StringComparison.OrdinalIgnoreCase))
+            //{
+            //    driver = new SafariDriver();
+            //}
+            //else
+            //{
+            //    throw new NotSupportedException($"Browser '{browser}' is not supported");
+            //}
 
 
             //IWebDriver driver = new EdgeDriver();
@@ -101,19 +130,32 @@ namespace iCargoUIAutomation.Hooks
         { }
 
         [AfterScenario]
-        public void AfterScenario()
+        public void AfterScenario(FeatureContext featureContext)
         {
             var driver = _container.Resolve<IWebDriver>();
             var status = TestContext.CurrentContext.Result.Outcome.Status;
             var stackTrace = TestContext.CurrentContext.Result.StackTrace;
             DateTime time = DateTime.Now;
+            featureName = featureContext.FeatureInfo.Title;
             string fileName = "Screenshot_" + time.ToString("h_mm_ss") + ".png";
             if (status == TestStatus.Failed)
-            {
+            {                
                 scenario.Fail("Test Failed", captureScreenshot(driver, fileName));
                 scenario.Log(Status.Fail, "Test failed with log" + stackTrace);
             }
             extent.Flush();
+            string fromEmail = "avijit.saha@alaskaair.com";
+            // Recipient's email address
+            string toEmail = "sourav.dutta2@alaskaair.com";
+            // Create and configure the SMTP client
+            SmtpClient smtpClient = new SmtpClient("outbound.alaskaair.com", 25);
+            MailMessage mail = new MailMessage(fromEmail, toEmail);
+            mail.Subject = "AWB Number";
+            if (featureName.Contains("CAP018"))
+            mail.Body = "The AWB Number is " + MaintainBookingPage.awbNumber;
+            else
+                mail.Body = "The AWB Number is " + CreateShipmentPage.awb_num;
+            smtpClient.Send(mail);
             driver?.Quit();
         }
 
@@ -133,8 +175,7 @@ namespace iCargoUIAutomation.Hooks
             ITakesScreenshot ts = (ITakesScreenshot)driver;
             Screenshot screenshot = ts.GetScreenshot();
             string screenshotLocation = Path.Combine(testResultPath,fileName);
-            screenshot.SaveAsFile(screenshotLocation);
-            //return MediaEntityBuilder.CreateScreenCaptureFromBase64String(ss, name).Build();
+            screenshot.SaveAsFile(screenshotLocation);            
             return MediaEntityBuilder.CreateScreenCaptureFromPath(screenshotLocation).Build();
         }
     }

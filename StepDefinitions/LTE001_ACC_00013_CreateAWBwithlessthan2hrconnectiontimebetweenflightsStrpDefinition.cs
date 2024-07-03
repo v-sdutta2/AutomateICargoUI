@@ -30,7 +30,7 @@ namespace iCargoUIAutomation.StepDefinitions
         [When(@"User selects flights having Minimum Handling / Connection Time Fails restriction")]
         public void WhenUserSelectsFlightsHavingMinimumHandlingConnectionTimeFailsRestriction()
         {
-            csp.selectFlightWithRestriction();
+            csp.SelectFlightWithRestriction();
         }
 
 

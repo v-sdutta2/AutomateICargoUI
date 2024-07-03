@@ -1,9 +1,11 @@
-﻿using iCargoUIAutomation.Features;
+﻿using AventStack.ExtentReports;
+using iCargoUIAutomation.Features;
 using iCargoUIAutomation.utilities;
 using log4net;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.DevTools.V121.Debugger;
+using OpenQA.Selenium.Support.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,21 +14,24 @@ using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics.Arm;
 using System.Text;
 using System.Threading.Tasks;
+using TechTalk.SpecFlow;
 
 namespace iCargoUIAutomation.pages
 {
     public class CreateShipmentPage : BasePage
     {
+
         private DangerousGoodsPage dgp;
         private PaymentPortalPage ppp;
         private CaptureIrregularityPage cip;
+        private ExportManifestPage emp;
         public static string awb_num = "";
         public static string totalPaybleAmount = "";
         public static string totalAmountCharged = "";
         string IATACharge = "";
         string MarketCharge = "";
         public static string origin = "";
-        string destination = "";
+        public static string destination = "";
         string shippingDate = DateTime.Now.ToString("dd-MMM-yyyy");
         string scc = "";
         string serviceCargoClass = "";
@@ -41,13 +46,20 @@ namespace iCargoUIAutomation.pages
         public static string ConnectingflightNum = "";
         string flightSegment = "";
         string generatedAWB = "";
+        public static string cartULDNum = "";
+        public static int noOfWindowBefore = 0;
+        public static int noOfWindowAfter = 0;
         ILog Log = LogManager.GetLogger(typeof(CreateShipmentPage));
+
 
         public CreateShipmentPage(IWebDriver driver) : base(driver)
         {
-            dgp = new DangerousGoodsPage(driver);
+
             ppp = new PaymentPortalPage(driver);
+            dgp = new DangerousGoodsPage(driver);
             cip = new CaptureIrregularityPage(driver);
+            emp = new ExportManifestPage(driver);
+
         }
 
         // LTE001 Header Section   //
@@ -200,8 +212,27 @@ namespace iCargoUIAutomation.pages
         private By btnOKSuccessCheckSheet_Xpath = By.XPath("//*[@class='alert-messages-list']//parent::div//following-sibling::div//button");
 
 
+        //Maintain Booking Page
+        private By awbTextbox_ID = By.Id("awbNum_b");
 
-        public void switchToLTEContentFrame()
+
+        public void EnterAWBNumberForMaintainBooking()
+        {
+            Hooks.Hooks.createNode();
+            try
+            {
+                awb_num = awb_num.Split('-')[1];
+                EnterText(awbTextbox_ID, awb_num);
+                Hooks.Hooks.UpdateTest(Status.Pass, "Entered AWB Number: " + awb_num);
+                Log.Info("Entered AWB Number: " + awb_num);
+            }
+            catch (Exception e)
+            {
+                Hooks.Hooks.UpdateTest(Status.Fail, "Error in Entering AWB Number: " + e.Message);
+                Log.Error("Error in Entering AWB Number: " + e.Message);
+            }
+        }
+        public void SwitchToLTEContentFrame()
         {
             try
             {
@@ -214,7 +245,7 @@ namespace iCargoUIAutomation.pages
 
         }
 
-        public void clickOnAwbTextBox()
+        public void ClickOnAwbTextBox()
         {
 
             try
@@ -225,21 +256,6 @@ namespace iCargoUIAutomation.pages
             {
                 Log.Error("Error in clicking on AWB text box: " + e.ToString());
             }
-
-
-        }
-
-        public void enterAWBTextBox(string awb)
-        {
-            try
-            {
-                EnterText(txtAwbNo_Id, awb);
-            }
-            catch (Exception e)
-            {
-                Log.Error("Error in entering AWB number: " + e.ToString());
-            }
-
 
         }
 
@@ -252,8 +268,8 @@ namespace iCargoUIAutomation.pages
                 Click(btnClear_Id);
                 WaitForElementToBeVisible(btnList_Id, TimeSpan.FromSeconds(10));
                 awb_num = awb_num.Split('-')[1];
-                enterAWBTextBox(awb_num);
-                clickOnListButton();
+                EnterAWBTextBox(awb_num);
+                ClickOnListButton();
             }
             catch (Exception e)
             {
@@ -262,7 +278,21 @@ namespace iCargoUIAutomation.pages
 
         }
 
-        public void clickOnListButton()
+        public void EnterAWBTextBox(string awb)
+        {
+            try
+            {
+                EnterText(txtAwbNo_Id, awb);
+            }
+            catch (Exception e)
+            {
+                Log.Error("Error in entering AWB number: " + e.ToString());
+            }
+
+        }
+
+
+        public void ClickOnListButton()
         {
             try
             {
@@ -274,6 +304,30 @@ namespace iCargoUIAutomation.pages
                 Log.Error("Error in clicking on List button: " + e.ToString());
             }
 
+        }
+
+        public void OpenAndVerifyParticipants()
+        {
+            try
+            {
+                Click(lblParticipantDetails_Id);
+                Click(btnOrangePencilParticipant_Css);
+                WaitForElementToBeInvisible(btnOrangePencilParticipant_Css, TimeSpan.FromSeconds(1));
+                agentCode = GetAttributeValue(txtAgentCode_Name, "value");
+                shipperCode = GetAttributeValue(txtShipperCode_Name, "value");
+                consigneeCode = GetAttributeValue(txtConsigneeCode_Name, "value");
+
+                Assert.IsNotNull(agentCode, "Agent code is null");
+                Assert.IsNotNull(shipperCode, "Shipper code is null");
+                Assert.IsNotNull(consigneeCode, "Consignee code is null");
+
+
+
+            }
+            catch (Exception e)
+            {
+                Log.Error("Error in opening and verifying participants: " + e.ToString());
+            }
 
         }
 
@@ -328,7 +382,7 @@ namespace iCargoUIAutomation.pages
                 Click(txtAgentCode_Name);
                 EnterTextWithCheck(txtAgentCode_Name, agentCode);
                 Click(txtShipperCode_Name);
-                EnterTextWithCheck(txtShipperCode_Name, shipperCode);//C1001
+                EnterTextWithCheck(txtShipperCode_Name, shipperCode);
                 EnterTextWithCheck(txtShipperName_Name, "Test Unknown Shipper");
                 EnterTextWithCheck(txtShipperContact_Name, "1234567890");
                 Click(btnMoreShipper_Name);
@@ -341,6 +395,7 @@ namespace iCargoUIAutomation.pages
                 EnterTextWithCheck(txtShipperEmail_Name, "test@mail.com");
                 ScrollDown();
                 Click(btnShipperOk_Name);
+                WaitForElementToBeInvisible(btnShipperOk_Name, TimeSpan.FromSeconds(5));
 
                 Click(txtConsigneeCode_Name);
                 EnterTextWithCheck(txtConsigneeCode_Name, consigneeCode);
@@ -355,38 +410,13 @@ namespace iCargoUIAutomation.pages
 
         }
 
-        public void openAndVerifyParticipants()
-        {
-            try
-            {
-                Click(lblParticipantDetails_Id);
-                Click(btnOrangePencilParticipant_Css);
-                // check the values of the participants are not null
-                agentCode = GetAttributeValue(txtAgentCode_Name, "value");
-                shipperCode = GetAttributeValue(txtShipperCode_Name, "value");
-                consigneeCode = GetAttributeValue(txtConsigneeCode_Name, "value");
-
-                Assert.IsNotNull(agentCode, "Agent code is null");
-                Assert.IsNotNull(shipperCode, "Shipper code is null");
-                Assert.IsNotNull(consigneeCode, "Consignee code is null");
-
-
-
-            }
-            catch (Exception e)
-            {
-                Log.Error("Error in opening and verifying participants: " + e.ToString());
-            }
-
-        }
-
         public void reOpenAWB()
         {
             try
             {
                 Click(lblShipmentDetails_Id);
                 Click(btnOrangePencilShipment_Css);
-                clickingYesOnPopupWarnings("");
+                ClickingYesOnPopupWarnings("");
             }
             catch (Exception e)
             {
@@ -395,7 +425,9 @@ namespace iCargoUIAutomation.pages
 
         }
 
-        public void clickOnContinueParticipantButton()
+
+
+        public void ClickOnContinueParticipantButton()
         {
             ScrollDown();
             try
@@ -426,7 +458,7 @@ namespace iCargoUIAutomation.pages
 
         }
 
-        public void clickOnContinueCertificateButton()
+        public void ClickOnContinueCertificateButton()
         {
             try
             {
@@ -441,12 +473,34 @@ namespace iCargoUIAutomation.pages
 
         }
 
-        public void EnterShipmentDetails(string neworigin, string destination, string productCode, string scc,
+        public string OpenAndVerifyShipments()
+        {
+            try
+            {
+                WaitForElementToBeClickable(btnOrangePencilShipment_Css, TimeSpan.FromSeconds(10));
+                Click(btnOrangePencilShipment_Css);
+                WaitForElementToBeInvisible(btnOrangePencilShipment_Css, TimeSpan.FromSeconds(5));
+                ScrollDown();
+
+                origin = GetAttributeValue(txtOrigin_Name, "value");
+                destination = GetAttributeValue(txtDestination_Name, "value");
+                this.shippingDate = GetAttributeValue(txtShipmentDate_Name, "value");
+                pieces = GetAttributeValue(txtPieces_Name, "value");
+                weight = GetAttributeValue(txtWeight_Name, "value");
+            }
+            catch (Exception e)
+            {
+                Log.Error("Error in opening and verifying shipment details: " + e.ToString());
+            }
+
+            return pieces;
+        }
+
+        public void EnterShipmentDetails(string neworigin, string newdestination, string productCode, string scc,
                                          string commodity, string shipmentdesc, string serviceCargoClass, string newpiece, string newweight)
         {
             origin = neworigin;
-            this.destination = destination;
-            //this.shippingDate = shippingDate;
+            destination = newdestination;
             this.scc = scc;
             this.serviceCargoClass = serviceCargoClass;
             pieces = newpiece;
@@ -490,27 +544,8 @@ namespace iCargoUIAutomation.pages
             }
         }
 
-        public string openAndVerifyShipments()
-        {
-            try
-            {
-                Click(btnOrangePencilShipment_Css);
 
-                origin = GetAttributeValue(txtOrigin_Name, "value");
-                this.destination = GetAttributeValue(txtDestination_Name, "value");
-                this.shippingDate = GetAttributeValue(txtShipmentDate_Name, "value");
-                pieces = GetAttributeValue(txtPieces_Name, "value");
-                weight = GetAttributeValue(txtWeight_Name, "value");
-            }
-            catch (Exception e)
-            {
-                Log.Error("Error in opening and verifying shipment details: " + e.ToString());
-            }
-
-            return pieces;
-        }
-
-        public void verifyAndUpdateShipmentDetails(string fieldToUpdate, string newvalue)
+        public void VerifyAndUpdateShipmentDetails(string fieldToUpdate, string newvalue)
         {
             try
             {
@@ -540,7 +575,8 @@ namespace iCargoUIAutomation.pages
 
         }
 
-        public void clickOnContinueShipmentButton()
+
+        public void ClickOnContinueShipmentButton()
         {
             try
             {
@@ -550,6 +586,23 @@ namespace iCargoUIAutomation.pages
             catch (Exception e)
             {
                 Log.Error("Error in clicking on Continue button for shipment details: " + e.ToString());
+            }
+
+        }
+
+        public void OpenAndVerifyFlightDetails()
+        {
+            try
+            {
+                Click(btnOrangePencilFlight_Css);
+                WaitForElementToBeInvisible(btnOrangePencilFlight_Css, TimeSpan.FromSeconds(5));
+
+                flightNum = GetAttributeValue(txtFlightNo_Name, "value");
+                this.flightSegment = GetAttributeValue(txtSegment_Name, "value");
+            }
+            catch (Exception e)
+            {
+                Log.Error("Error in opening and verifying flight details: " + e.ToString());
             }
 
         }
@@ -576,23 +629,7 @@ namespace iCargoUIAutomation.pages
 
         }
 
-        public void openAndVerifyFlightDetails()
-        {
-            try
-            {
-                Click(btnOrangePencilFlight_Css);
-
-                flightNum = GetAttributeValue(txtFlightNo_Name, "value");
-                this.flightSegment = GetAttributeValue(txtSegment_Name, "value");
-            }
-            catch (Exception e)
-            {
-                Log.Error("Error in opening and verifying flight details: " + e.ToString());
-            }
-
-        }
-
-        public void verifyAndUpdateFlightDetails(string fieldToUpdate)
+        public void VerifyAndUpdateFlightDetails(string fieldToUpdate)
         {
             try
             {
@@ -617,7 +654,9 @@ namespace iCargoUIAutomation.pages
 
         }
 
-        public void clickOnSelectFlightButton()
+
+
+        public void ClickOnSelectFlightButton()
         {
             try
             {
@@ -638,7 +677,7 @@ namespace iCargoUIAutomation.pages
 
         }
 
-        public void bookFlightWithAllAvailability()
+        public void BookFlightWithAllAvailability()
         {
             try
             {
@@ -649,7 +688,7 @@ namespace iCargoUIAutomation.pages
                     {
                         if (GetAttributeValue(By.XPath("//*[@id='flight_details']//tbody//tr[" + (i + 1) + "]"), "class").Contains("row-border-merge"))
                         {
-                            if (!getCAPAvailabilityStatus(i).Contains("error") && !getEMBAvailabilityStatus(i).Contains("error") && !getLOADAvailabilityStatus(i).Contains("error") && !getRESAvailabilityStatus(i).Contains("error") && !getCAPAvailabilityStatus(i + 1).Contains("error") && !getEMBAvailabilityStatus(i + 1).Contains("error") && !getLOADAvailabilityStatus(i + 1).Contains("error") && !getRESAvailabilityStatus(i + 1).Contains("error"))
+                            if (!GetCAPAvailabilityStatus(i).Contains("error") && !GetEMBAvailabilityStatus(i).Contains("error") && !GetLOADAvailabilityStatus(i).Contains("error") && !GetRESAvailabilityStatus(i).Contains("error") && !GetCAPAvailabilityStatus(i + 1).Contains("error") && !GetEMBAvailabilityStatus(i + 1).Contains("error") && !GetLOADAvailabilityStatus(i + 1).Contains("error") && !GetRESAvailabilityStatus(i + 1).Contains("error"))
                             {
                                 flightNum = GetText(By.XPath("//*[@id='flight_details']//tbody//tr[" + i + "]//td[1]")).Trim().Split("AS")[1].Trim();
                                 ConnectingflightNum = GetText(By.XPath("//*[@id='flight_details']//tbody//tr[" + (i + 1) + "]//td[1]")).Trim().Split("AS")[1].Trim();
@@ -665,7 +704,7 @@ namespace iCargoUIAutomation.pages
                         }
                         else
                         {
-                            if (!(getCAPAvailabilityStatus(i).Contains("error") && getEMBAvailabilityStatus(i).Contains("error") && getLOADAvailabilityStatus(i).Contains("error") && getRESAvailabilityStatus(i).Contains("error")))
+                            if (!(GetCAPAvailabilityStatus(i).Contains("error") && GetEMBAvailabilityStatus(i).Contains("error") && GetLOADAvailabilityStatus(i).Contains("error") && GetRESAvailabilityStatus(i).Contains("error")))
                             {
                                 flightNum = GetText(By.XPath("//*[@id='flight_details']//tbody//tr[" + i + "]//td[1]")).Trim().Split("AS")[1].Trim();
 
@@ -698,7 +737,7 @@ namespace iCargoUIAutomation.pages
         }
 
 
-        public void bookWithSpecificFlightType(string typeOfFlight)
+        public string BookWithSpecificFlightType(string typeOfFlight)
         {
             try
             {
@@ -709,7 +748,7 @@ namespace iCargoUIAutomation.pages
                     {
                         if (!GetAttributeValue(By.XPath("//*[@id='flight_details']//tbody//tr[" + (i + 1) + "]"), "class").Contains("row-border-merge"))
                         {
-                            if (!getCAPAvailabilityStatus(i).Contains("error") && !getEMBAvailabilityStatus(i).Contains("error") && !getLOADAvailabilityStatus(i).Contains("error") && !getRESAvailabilityStatus(i).Contains("error") && getFlightType(i).Contains(typeOfFlight))
+                            if (!GetCAPAvailabilityStatus(i).Contains("error") && !GetEMBAvailabilityStatus(i).Contains("error") && !GetLOADAvailabilityStatus(i).Contains("error") && !GetRESAvailabilityStatus(i).Contains("error") && GetFlightType(i).Contains(typeOfFlight))
                             {
                                 flightNum = GetText(By.XPath("//*[@id='flight_details']//tbody//tr[" + i + "]//td[1]")).Trim().Split("AS")[1].Trim();
 
@@ -737,10 +776,11 @@ namespace iCargoUIAutomation.pages
                 Log.Error("Error in booking flight: " + e.ToString());
             }
 
+            return flightNum;
+
         }
 
-
-        public void selectFlightWithRestriction()
+        public void BookConnectingFlightWithDifferentFlightTypes(string firstflttyp, string secondflttype)
         {
             try
             {
@@ -751,7 +791,53 @@ namespace iCargoUIAutomation.pages
                     {
                         if (GetAttributeValue(By.XPath("//*[@id='flight_details']//tbody//tr[" + (i + 1) + "]"), "class").Contains("row-border-merge"))
                         {
-                            if (!getCAPAvailabilityStatus(i).Contains("error") && !getEMBAvailabilityStatus(i).Contains("error") && !getLOADAvailabilityStatus(i).Contains("error") || getRESAvailabilityStatus(i).Contains("error") && !getCAPAvailabilityStatus(i + 1).Contains("error") && !getEMBAvailabilityStatus(i + 1).Contains("error") && !getLOADAvailabilityStatus(i + 1).Contains("error") || getRESAvailabilityStatus(i + 1).Contains("error"))
+                            if (GetFlightType(i).Contains(firstflttyp) && GetFlightType(i + 1).Contains(secondflttype))
+                            {
+                                if (!GetCAPAvailabilityStatus(i).Contains("error") && !GetEMBAvailabilityStatus(i).Contains("error") && !GetLOADAvailabilityStatus(i).Contains("error") && !GetRESAvailabilityStatus(i).Contains("error") && !GetCAPAvailabilityStatus(i + 1).Contains("error") && !GetEMBAvailabilityStatus(i + 1).Contains("error") && !GetLOADAvailabilityStatus(i + 1).Contains("error") && !GetRESAvailabilityStatus(i + 1).Contains("error"))
+                                {
+                                    flightNum = GetText(By.XPath("//*[@id='flight_details']//tbody//tr[" + i + "]//td[1]")).Trim().Split("AS")[1].Trim();
+                                    ConnectingflightNum = GetText(By.XPath("//*[@id='flight_details']//tbody//tr[" + (i + 1) + "]//td[1]")).Trim().Split("AS")[1].Trim();
+                                    btnBookFlight = btnBookFlight.Replace("1", i.ToString());
+                                    ScrollDown();
+                                    Click(By.XPath(btnBookFlight));
+
+                                    Log.Info(firstflttyp + " Flight " + flightNum + " & connecting " + secondflttype + " Flight " + ConnectingflightNum + " is booked successfully");
+
+                                    break;
+                                }
+
+                            }
+                            i += 1;
+                        }
+
+                    }
+
+                }
+                else
+                {
+                    Log.Info("No flight is available for booking from " + origin + " to " + destination + " on " + shippingDate);
+                }
+            }
+            catch (Exception e)
+            {
+                Log.Error("Error in booking flight: " + e.ToString());
+            }
+
+        }
+
+
+        public void SelectFlightWithRestriction()
+        {
+            try
+            {
+                int noOfFlights = GetElementCount(listAllFlights_Xpath);
+                if (noOfFlights > 0)
+                {
+                    for (int i = 1; i <= noOfFlights; i++)
+                    {
+                        if (GetAttributeValue(By.XPath("//*[@id='flight_details']//tbody//tr[" + (i + 1) + "]"), "class").Contains("row-border-merge"))
+                        {
+                            if (!GetCAPAvailabilityStatus(i).Contains("error") && !GetEMBAvailabilityStatus(i).Contains("error") && !GetLOADAvailabilityStatus(i).Contains("error") || GetRESAvailabilityStatus(i).Contains("error") && !GetCAPAvailabilityStatus(i + 1).Contains("error") && !GetEMBAvailabilityStatus(i + 1).Contains("error") && !GetLOADAvailabilityStatus(i + 1).Contains("error") || GetRESAvailabilityStatus(i + 1).Contains("error"))
                             {
                                 flightNum = GetText(By.XPath("//*[@id='flight_details']//tbody//tr[" + i + "]//td[1]")).Trim().Split("AS")[1].Trim();
                                 ConnectingflightNum = GetText(By.XPath("//*[@id='flight_details']//tbody//tr[" + (i + 1) + "]//td[1]")).Trim().Split("AS")[1].Trim();
@@ -784,95 +870,43 @@ namespace iCargoUIAutomation.pages
 
         }
 
-        public void bookConnectingFlightWithDifferentFlightTypes(string firstflttyp, string secondflttype)
-        {
-            try
-            {
-                int noOfFlights = GetElementCount(listAllFlights_Xpath);
-                if (noOfFlights > 0)
-                {
-                    for (int i = 1; i <= noOfFlights; i++)
-                    {
-                        if (GetAttributeValue(By.XPath("//*[@id='flight_details']//tbody//tr[" + (i + 1) + "]"), "class").Contains("row-border-merge"))
-                        {
-                            if (getFlightType(i).Contains(firstflttyp) && getFlightType(i + 1).Contains(secondflttype))
-                            {
-                                if (!getCAPAvailabilityStatus(i).Contains("error") && !getEMBAvailabilityStatus(i).Contains("error") && !getLOADAvailabilityStatus(i).Contains("error") && !getRESAvailabilityStatus(i).Contains("error") && !getCAPAvailabilityStatus(i + 1).Contains("error") && !getEMBAvailabilityStatus(i + 1).Contains("error") && !getLOADAvailabilityStatus(i + 1).Contains("error") && !getRESAvailabilityStatus(i + 1).Contains("error"))
-                                {
-                                    flightNum = GetText(By.XPath("//*[@id='flight_details']//tbody//tr[" + i + "]//td[1]")).Trim().Split("AS")[1].Trim();
-                                    ConnectingflightNum = GetText(By.XPath("//*[@id='flight_details']//tbody//tr[" + (i + 1) + "]//td[1]")).Trim().Split("AS")[1].Trim();
-                                    btnBookFlight = btnBookFlight.Replace("1", i.ToString());
-                                    ScrollDown();
-                                    Click(By.XPath(btnBookFlight));
 
-                                    Log.Info(firstflttyp + " Flight " + flightNum + " & connecting " + secondflttype + " Flight " + ConnectingflightNum + " is booked successfully");
-
-                                    break;
-                                }
-
-                            }
-
-
-
-                            i += 1;
-
-                        }
-
-                    }
-
-                }
-                else
-                {
-                    Log.Info("No flight is available for booking from " + origin + " to " + destination + " on " + shippingDate);
-                }
-
-
-            }
-            catch (Exception e)
-            {
-                Log.Error("Error in booking flight: " + e.ToString());
-            }
-
-        }
-
-
-        public string getFlightType(int flightRowNum)
+        public string GetFlightType(int flightRowNum)
         {
             lblFlightType = "//*[@id='flight_details']//tbody//tr[" + flightRowNum + "]//td[3]";
             string flightType = GetText(By.XPath(lblFlightType)).Trim();
             return flightType;
         }
 
-        public string getCAPAvailabilityStatus(int flightRowNum)
+        public string GetCAPAvailabilityStatus(int flightRowNum)
         {
             lblAvailabilityCap = "//*[@id='flight_details']//tbody//tr[" + flightRowNum + "]//span[text()='CAP']";
             string status = GetAttributeValue(By.XPath(lblAvailabilityCap), "class");
             return status;
         }
 
-        public string getEMBAvailabilityStatus(int flightRowNum)
+        public string GetEMBAvailabilityStatus(int flightRowNum)
         {
             lblAvailabilityEMB = "//*[@id='flight_details']//tbody//tr[" + flightRowNum + "]//span[text()='EMB']";
-            // lblAvailabilityEMB = lblAvailabilityEMB.Replace("1", flightRowNum.ToString());
             string status = GetAttributeValue(By.XPath(lblAvailabilityEMB), "class");
             return status;
         }
 
-        public string getLOADAvailabilityStatus(int flightRowNum)
+        public string GetLOADAvailabilityStatus(int flightRowNum)
         {
             lblAvailabilityLOAD = "//*[@id='flight_details']//tbody//tr[" + flightRowNum + "]//span[text()='LOAD']";
             string status = GetAttributeValue(By.XPath(lblAvailabilityLOAD), "class");
             return status;
         }
 
-        public string getRESAvailabilityStatus(int flightRowNum)
+        public string GetRESAvailabilityStatus(int flightRowNum)
         {
             lblAvailabilityRES = "//*[@id='flight_details']//tbody//tr[" + flightRowNum + "]//span[text()='RES']";
             string status = GetAttributeValue(By.XPath(lblAvailabilityRES), "class");
             return status;
         }
 
-        public void clickOnContinueFlightDetailsButton()
+        public void ClickOnContinueFlightDetailsButton()
         {
             try
             {
@@ -886,7 +920,23 @@ namespace iCargoUIAutomation.pages
 
         }
 
-        public void enterChargeDetails(string paymentType, string modeOfPayment)
+        public void OpenAndVerifyChargeDetails()
+        {
+            try
+            {
+                WaitForElementToBeClickable(btnOrangePencilCharge_Css, TimeSpan.FromSeconds(10));
+                Click(btnOrangePencilCharge_Css);
+                WaitForElementToBeInvisible(btnOrangePencilCharge_Css, TimeSpan.FromSeconds(5));
+                ScrollDown();
+            }
+            catch (Exception e)
+            {
+                Log.Error("Error in opening and verifying charge details: " + e.ToString());
+            }
+
+        }
+
+        public void EnterChargeDetails(string paymentType, string modeOfPayment)
         {
             this.chargeType = paymentType;
             this.modeOfPayment = modeOfPayment;
@@ -909,26 +959,11 @@ namespace iCargoUIAutomation.pages
 
         }
 
-        public void openAndVerifyChargeDetails()
+
+        public void ClickOnCalculateChargeButton()
         {
             try
             {
-                Click(btnOrangePencilCharge_Css);
-                ScrollDown();
-            }
-            catch (Exception e)
-            {
-                Log.Error("Error in opening and verifying charge details: " + e.ToString());
-            }
-
-        }
-
-        public string clickOnCalculateChargeButton()
-        {
-            try
-            {
-                ScrollDown();
-
 
                 while (!checkTextboxIsNotEmpty(txtIATACharge_Xpath))
                 {
@@ -937,22 +972,17 @@ namespace iCargoUIAutomation.pages
 
                 }
 
-
-                this.IATACharge = GetAttributeValue(txtIATACharge_Xpath, "value");
-                this.MarketCharge = GetAttributeValue(txtMarketCharge_Xpath, "value");
-                totalAmountCharged = GetText(txtTotalCharge_Xpath).Split(':')[1].Trim();
-                totalAmountCharged = totalAmountCharged.Split("USD")[0];
             }
             catch (Exception e)
             {
                 Log.Error("Error in clicking on Calculate Charge button: " + e.ToString());
             }
-            return totalAmountCharged;
+
 
 
         }
 
-        public string clickingYesOnPopupWarnings(string errortype = null)
+        public string ClickingYesOnPopupWarnings(string errortype = null)
         {
             string errorText = "";
 
@@ -960,29 +990,40 @@ namespace iCargoUIAutomation.pages
 
             if (errortype.Equals("Embargo"))
             {
-                if (IsElementDisplayed(lblEmbargoDetails_Xpath, 3))
+                if (IsElementDisplayed(lblEmbargoDetails_Xpath, 1))
                 {
                     Click(btnContinueEmbargo_Xpath);
                 }
             }
             else if (errortype.Equals("Capture Irregularity"))
             {
-                if (IsElementDisplayed(lblCaptureIrregularity_Xpath, 3))
+                if (IsElementDisplayed(lblCaptureIrregularity_Xpath, 1))
                 {
                     cip.captureIrregularity(pieces, weight);
-                    switchToLTEContentFrame();
+                    SwitchToLTEContentFrame();
                 }
             }
+
             else
             {
                 SwitchToDefaultContent();
-                if (IsElementDisplayed(popupWarning_Css, 3))
+                if (IsElementDisplayed(popupWarning_Css, 1))
                 {
                     errorText = GetText(popupAlertMessage_Xpath);
-                    Click(btnYesActiveCashDraw_Xpath);
+                    if (errorText.Contains("Active Cash Draw"))
+                    {
+                        Click(btnYesActiveCashDraw_Xpath);
+                        WaitForElementToBeInvisible(btnYesActiveCashDraw_Xpath, TimeSpan.FromMilliseconds(500));
+                    }
+
+                    else
+                    {
+                        Click(btnYesActiveCashDraw_Xpath);
+                        WaitForTextToBeInvisible(errorText, TimeSpan.FromMilliseconds(500));
+                    }
                 }
 
-                switchToLTEContentFrame();
+                SwitchToLTEContentFrame();
             }
 
 
@@ -990,15 +1031,14 @@ namespace iCargoUIAutomation.pages
             return errorText;
         }
 
-        public void selectModeOfPayment(string modeOfPayment)
+        public void SelectModeOfPayment(string modeOfPayment)
         {
             try
             {
                 ScrollDown();
                 Click(drpdwnModeOfPayment_Name);
-                //SelectDropdownByVisibleTextUntil(drpdwnModeOfPayment_Name, modeOfPayment);
+                SelectDropdownByVisibleTextUntil(drpdwnModeOfPayment_Name, modeOfPayment);
 
-                SelectDropdownByVisibleText(drpdwnModeOfPayment_Name, modeOfPayment);
             }
             catch (Exception e)
             {
@@ -1008,35 +1048,37 @@ namespace iCargoUIAutomation.pages
 
         }
 
-        public void clickOnContinueChargeButton()
+        public string ClickOnContinueChargeButton()
         {
 
             try
             {
                 if (chargeType.Equals("PP") && !serviceCargoClass.Equals("Free of Charge") && !serviceCargoClass.Equals("COMAT"))
                 {
-                    selectModeOfPayment(modeOfPayment);
+                    SelectModeOfPayment(modeOfPayment);
                 }
-
-                //ScrollDown();
-                Click(btnContinueChargeDetails_Name);
 
             }
             catch (Exception)
             {
-                clickingYesOnPopupWarnings("");
+                ClickingYesOnPopupWarnings("");
                 if (chargeType.Equals("PP") && !serviceCargoClass.Equals("Free of Charge") && !serviceCargoClass.Equals("COMAT"))
                 {
-                    selectModeOfPayment(modeOfPayment);
+                    SelectModeOfPayment(modeOfPayment);
                 }
 
                 ScrollDown();
-                Click(btnContinueChargeDetails_Name);
+
             }
+            totalAmountCharged = GetText(txtTotalCharge_Xpath).Split(':')[1].Trim();
+            totalAmountCharged = totalAmountCharged.Split("USD")[0];
+            Click(btnContinueChargeDetails_Name);
+            WaitForElementToBeInvisible(btnContinueChargeDetails_Name, TimeSpan.FromSeconds(5));
+            return totalAmountCharged;
 
         }
 
-        public void enterAcceptanceDetails()
+        public void EnterAcceptanceDetails()
         {
             try
             {
@@ -1047,31 +1089,35 @@ namespace iCargoUIAutomation.pages
                 Log.Error("Error in entering acceptance details: " + e.ToString());
             }
 
-
         }
 
-        public void verifyAndUpdateAcceptanceDetails()
+        public void VerifyAndUpdateAcceptanceDetails()
         {
             try
             {
                 Click(btnOrangePencilAcceptance_Css);
-                EnterText(txtPieceAccepted_Name, pieces);
-                EnterKeys(txtPieceAccepted_Name, Keys.Tab);
+                WaitForElementToBeInvisible(btnOrangePencilAcceptance_Css, TimeSpan.FromSeconds(5));
+
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                Log.Error("Error in verifying and updating acceptance details: " + e.ToString());
+                Log.Error("Error in clicking the acceptance details, retrying.. ");
+                Click(btnOrangePencilAcceptance_Css);
+                WaitForElementToBeInvisible(btnOrangePencilAcceptance_Css, TimeSpan.FromSeconds(5));
             }
+            EnterText(txtPieceAccepted_Name, pieces);
+            EnterKeys(txtPieceAccepted_Name, Keys.Tab);
 
 
         }
 
-        public void clickOnContinueAcceptanceButton()
+        public void ClickOnContinueAcceptanceButton()
         {
             try
             {
                 ScrollDown();
                 Click(btnContinueAcceptanceDetails_Name);
+                WaitForElementToBeInvisible(btnContinueAcceptanceDetails_Name, TimeSpan.FromSeconds(5));
             }
             catch (Exception e)
             {
@@ -1080,7 +1126,7 @@ namespace iCargoUIAutomation.pages
 
         }
 
-        public void enterScreeningDetails(int rownum, string screeningMethod, string screeningResult)
+        public void EnterScreeningDetails(int rownum, string screeningMethod, string screeningResult)
         {
             try
             {
@@ -1100,7 +1146,7 @@ namespace iCargoUIAutomation.pages
                 }
                 else
                 {
-                    //screeningRowElement.FindElement(txtScreeningPieces_Xpath).SendKeys(screeingPiece);
+
                     EnterText(txtScreeningAirport1_Xpath, origin);
                     SelectDropdownByVisibleText(drpdwnScreeningMethod1_Xpath, screeningMethod);
                     EnterText(txtScreeningPieces1_Xpath, pieces);
@@ -1115,23 +1161,7 @@ namespace iCargoUIAutomation.pages
 
         }
 
-        public void verifyAndUpdateScreeningDetails()
-        {
-            try
-            {
-                Click(btnOrangePencilScreening_Css);
-                EnterText(txtScreeningPieces1_Xpath, pieces);
-            }
-            catch (Exception e)
-            {
-                Log.Error("Error in verifying and updating screening details: " + e.ToString());
-            }
-
-
-
-        }
-
-        public void addAnotherScreeningLine()
+        public void AddAnotherScreeningLine()
         {
             try
             {
@@ -1142,15 +1172,33 @@ namespace iCargoUIAutomation.pages
                 Log.Error("Error in adding another screening line: " + e.ToString());
             }
 
+        }
+
+        public void VerifyAndUpdateScreeningDetails()
+        {
+            try
+            {
+                Click(btnOrangePencilScreening_Css);
+                WaitForElementToBeInvisible(btnOrangePencilScreening_Css, TimeSpan.FromSeconds(5));
+
+            }
+            catch (Exception)
+            {
+                Log.Error("Error in verifying and updating screening details,retrying..:");
+                Click(btnOrangePencilScreening_Css);
+                WaitForElementToBeInvisible(btnOrangePencilScreening_Css, TimeSpan.FromSeconds(5));
+            }
+            EnterText(txtScreeningPieces1_Xpath, pieces);
 
         }
 
-        public void clickOnContinueScreeningButton()
+        public void ClickOnContinueScreeningButton()
         {
             try
             {
                 ScrollDown();
                 Click(btnContinueScreeningDetails_Name);
+                WaitForElementToBeInvisible(btnContinueScreeningDetails_Name, TimeSpan.FromSeconds(5));
             }
             catch (Exception e)
             {
@@ -1159,7 +1207,7 @@ namespace iCargoUIAutomation.pages
 
         }
 
-        public void clickOnAWBVerifiedCheckbox()
+        public void ClickOnAWBVerifiedCheckbox()
         {
             try
             {
@@ -1175,210 +1223,244 @@ namespace iCargoUIAutomation.pages
 
         }
 
-        public void clickSave()
+        public void ClickSave()
         {
+            noOfWindowBefore = GetNumberOfWindowsOpened();
             Click(btnSaveShipment_Name);
-        }
-
-        public void saveCAODGshipment(string flightType)
-        {
-            if (flightType.Equals("Combination"))
-            {
-                clickSave();
-                clickingYesOnPopupWarnings("");
-            }
 
         }
-
-        public (string, string) saveShipmentDetailsAndHandlePopups()
+        public void ClosePaymentPortalWindow()
         {
+            WaitForNewWindowToOpen(TimeSpan.FromSeconds(5), noOfWindowBefore + 1);
+            SwitchToLastWindow();
+            ppp.ClosePaymentPortal();
+            SwitchToLastWindow();
+            SwitchToLTEContentFrame();
+        }
+
+        public void PaymentWithPPCCinPortal(string chargeType)
+        {
+            WaitForNewWindowToOpen(TimeSpan.FromSeconds(10), noOfWindowBefore + 1);
+            SwitchToLastWindow();
+            ppp.PaymentWithPPCC(chargeType);
+            SwitchToLastWindow();
+            SwitchToLTEContentFrame();
+        }
+   
+
+        public (string, string) SaveShipmentDetailsAndHandlePopups()
+        {
+            log.Info("Saving Shipment Details and handling all popup function");
+            int retryCount = 0;
+            const int maxRetries = 3; // Maximum number of retries
 
             while (true)
             {
-                if ((captureBookingStatus() == "Confirmed") && (captureDataCaptureStatus() == "EXECUTED") && (captureAcceptanceStatus() == "Finalised") && (captureColorReadyForCarriageStatus().Contains("green")) && (captureColorCaptureCheckSheetStatus().Contains("green")) && (captureColorBlockStatus().Contains("green")))
-                {
-
-                    awb_num = captureAWBNumber();
-                    break;
-                }
-
                 try
                 {
-                    totalPaybleAmount = clickOnSaveButtonHandlePaymentPortal();
+                    if ((CaptureBookingStatus() == "Confirmed") && (CaptureDataCaptureStatus() == "EXECUTED") && (CaptureAcceptanceStatus() == "Finalised") && (CaptureColorReadyForCarriageStatus().Contains("green")) && (CaptureColorCaptureCheckSheetStatus().Contains("green")) && (CaptureColorBlockStatus().Contains("green")))
+                    {
+                        awb_num = captureAWBNumber();
+                        break;
+                    }
 
+                    try
+                    {
+                        totalPaybleAmount = ClickOnSaveButtonHandlePaymentPortal();
+                    }
+                    catch (Exception)
+                    {
+                        int noOfWindowsBefore = GetNumberOfWindowsOpened();
+                        ClickingYesOnPopupWarnings("");
+                        int noOfWindowsAfter = GetNumberOfWindowsOpened();
+                        if (noOfWindowsAfter > noOfWindowsBefore)
+                        {
+                            SwitchToLastWindow();
+                            totalPaybleAmount = ppp.HandlePaymentInPaymentPortal(this.chargeType);
+                            WaitForNewWindowToOpen(TimeSpan.FromSeconds(3), noOfWindowsBefore);
+                            SwitchToLastWindow();
+                            SwitchToLTEContentFrame();
+                        }
+
+                    }
                 }
-                catch (Exception)
+                catch (StaleElementReferenceException)
                 {
-                    clickingYesOnPopupWarnings("");
+                    if (retryCount >= maxRetries)
+                    {
+                        throw; // Rethrow the exception if max retries are exceeded
+                    }
+                    log.Info($"Encountered StaleElementReferenceException, retrying... Attempt {retryCount + 1}");
+                    retryCount++;                   
+                    continue; // Retry the loop
                 }
-
             }
 
             return (awb_num, totalPaybleAmount);
+        }
+
+
+        public string ClickOnSaveButtonHandlePaymentPortal()
+        {
+            log.Info("ClickOnSaveButtonHandlePaymentPortal function");
+            int noOfWindowsBefore = GetNumberOfWindowsOpened();
+            Click(btnSaveShipment_Name);
+            if (IsElementDisplayed(lblEmbargoDetails_Xpath, 1))
+            {
+                Click(btnContinueEmbargo_Xpath);
+            }
+
+            WaitForNewWindowToOpen(TimeSpan.FromSeconds(3), noOfWindowsBefore + 1);
+            int noOfWindowsAfter = GetNumberOfWindowsOpened();
+            if (noOfWindowsAfter > noOfWindowsBefore)
+            {
+                SwitchToLastWindow();
+                totalPaybleAmount = ppp.HandlePaymentInPaymentPortal(this.chargeType);               
+                SwitchToLastWindow();
+                SwitchToLTEContentFrame();
+            }
+            return totalPaybleAmount;
+
+        }
+
+        public void SaveDetailsWithChargeType(string chargeType)
+        {
+
+            this.chargeType = chargeType;
+            int noOfWindowsBefore = GetNumberOfWindowsOpened();
+            Click(btnSaveShipment_Name);
+            if (IsElementDisplayed(lblEmbargoDetails_Xpath, 1))
+            {
+                Click(btnContinueEmbargo_Xpath);
+            }
+            WaitForNewWindowToOpen(TimeSpan.FromSeconds(10), noOfWindowsBefore + 1);
+            int noOfWindowsAfter = GetNumberOfWindowsOpened();
+            if (noOfWindowsAfter > noOfWindowsBefore)
+            {
+                SwitchToLastWindow();
+                ppp.HandlePaymentInPaymentPortal(chargeType);
+                SwitchToLastWindow();
+                SwitchToLTEContentFrame();
+            }
+
+        }
+
+        public void SaveDetailsWithCapturingIrregularity(string chargetyp)
+        {
+            this.chargeType = chargetyp;
+            int noOfWindowsBefore = GetNumberOfWindowsOpened();
+            ClickSave();
+            ClickingYesOnPopupWarnings("");
+            ClickingYesOnPopupWarnings("Embargo");
+            ClickingYesOnPopupWarnings("Capture Irregularity");
+            WaitForNewWindowToOpen(TimeSpan.FromSeconds(10), noOfWindowsBefore + 1);
+            int noOfWindowsAfter = GetNumberOfWindowsOpened();
+            if (noOfWindowsAfter > noOfWindowsBefore)
+            {
+                SwitchToLastWindow();
+                ppp.HandlePaymentInPaymentPortal(chargeType);
+                SwitchToLastWindow();
+                SwitchToLTEContentFrame();
+            }
+            ClickingYesOnPopupWarnings("");
+
+        }
+
+
+        public string SaveShipmentCaptureAWB()
+        {
+            Click(btnSaveShipment_Name);
+            if (IsElementDisplayed(lblEmbargoDetails_Xpath, 1))
+            {
+                Click(btnContinueEmbargo_Xpath);
+            }
+
+            awb_num = captureAWBNumber();
+            return awb_num;
         }
 
         public (string, string) SaveWithDGAndCheckSheet(string chargetype, string unid, string propershipmntname, string pi, string noofpkg, string netqtyperpkg, string reportable)
         {
             this.chargeType = chargetype;
             Click(btnSaveShipment_Name);
-            clickingYesOnPopupWarnings("");
-            dgp.handleDGShipment(unid, propershipmntname, pi, noofpkg, netqtyperpkg, reportable);
-            switchToLTEContentFrame();
+            ClickingYesOnPopupWarnings("");
+            dgp.HandleDGShipment(unid, propershipmntname, pi, noofpkg, netqtyperpkg, reportable);
+            SwitchToLTEContentFrame();
             Click(btnSaveShipment_Name);
-            clickingYesOnPopupWarnings("");
-            captureCheckSheetForDG();
-            clickOnAWBVerifiedCheckbox();
+            ClickingYesOnPopupWarnings("");
+            CaptureCheckSheetForDG();
+            ClickOnAWBVerifiedCheckbox();
 
             string awb_num;
             while (true)
             {
-                try
-                {
-                    totalPaybleAmount = clickOnSaveButtonHandlePaymentPortal();                   
-
-                }
-                catch (Exception)
-                {
-                    clickingYesOnPopupWarnings("");
-                }
-
-                if ((captureBookingStatus() == "Confirmed") && (captureDataCaptureStatus() == "EXECUTED") && (captureAcceptanceStatus() == "Finalised") && (captureColorReadyForCarriageStatus().Contains("green")) && (captureColorCaptureCheckSheetStatus().Contains("green")) && (captureColorBlockStatus().Contains("green")))
+                if ((CaptureBookingStatus() == "Confirmed") && (CaptureDataCaptureStatus() == "EXECUTED") && (CaptureAcceptanceStatus() == "Finalised") && (CaptureColorReadyForCarriageStatus().Contains("green")) && (CaptureColorCaptureCheckSheetStatus().Contains("green")) && (CaptureColorBlockStatus().Contains("green")))
                 {
                     awb_num = captureAWBNumber();
                     break;
                 }
+
+                try
+                {
+                    totalPaybleAmount = ClickOnSaveButtonHandlePaymentPortal();
+
+                }
+                catch (Exception)
+                {
+                    int noOfWindowsBefore = GetNumberOfWindowsOpened();
+                    ClickingYesOnPopupWarnings("");
+                    int noOfWindowsAfter = GetNumberOfWindowsOpened();
+                    if (noOfWindowsAfter > noOfWindowsBefore)
+                    {
+                        SwitchToLastWindow();
+                        totalPaybleAmount = ppp.HandlePaymentInPaymentPortal(this.chargeType);
+                        SwitchToLastWindow();
+                        SwitchToLTEContentFrame();
+                    }
+                }
+
+
             }
             return (awb_num, totalPaybleAmount);
 
         }
-
-
-        public void enterCAODGDetails(string chargetyp, string unid, string propershipmntname, string pi, string noofpkg, string netqtyperpkg, string reportable)
-        {
-            this.chargeType = chargetyp;
-            Click(btnSaveShipment_Name);
-            clickingYesOnPopupWarnings("");
-            dgp.enterDetailsForCAODGShipment(unid, propershipmntname, pi, noofpkg, netqtyperpkg, reportable);
-            switchToLTEContentFrame();
-            Click(btnSaveShipment_Name);
-            clickingYesOnPopupWarnings("");
-            captureCheckSheetForDG();
-        }
-
-        public string clickOnSaveButtonHandlePaymentPortal()
-        {
-
-            int noOfWindowsBefore = GetNumberOfWindowsOpened();
-            Click(btnSaveShipment_Name);
-            //clickingYesOnPopupWarnings("Embargo");
-            WaitForNewWindowToOpen(TimeSpan.FromSeconds(5), noOfWindowsBefore + 1);
-            int noOfWindowsAfter = GetNumberOfWindowsOpened();
-            if (noOfWindowsAfter > noOfWindowsBefore)
-            {
-                SwitchToLastWindow();
-                totalPaybleAmount = ppp.handlePaymentInPaymentPortal(this.chargeType);               
-                switchToLTEContentFrame();
-            }
-            return totalPaybleAmount;
-
-        }
-
-        public void saveDetailsWithChargeType(string chargeType)
-        {
-
-            this.chargeType = chargeType;
-            int noOfWindowsBefore = GetNumberOfWindowsOpened();
-            Click(btnSaveShipment_Name);
-            if (IsElementDisplayed(lblEmbargoDetails_Xpath, 3))
-            {
-                Click(btnContinueEmbargo_Xpath);
-            }
-            WaitForNewWindowToOpen(TimeSpan.FromSeconds(10), noOfWindowsBefore + 1);
-            int noOfWindowsAfter = GetNumberOfWindowsOpened();
-            if (noOfWindowsAfter > noOfWindowsBefore)
-            {
-                SwitchToLastWindow();
-                ppp.handlePaymentInPaymentPortal(chargeType);
-                // WaitForElementToBeVisible(contentFrame_Xpath, TimeSpan.FromSeconds(20));
-                switchToLTEContentFrame();
-            }
-
-        }
-
-        public void saveDetailsWithCapturingIrregularity(string chargetyp)
-        {
-            this.chargeType = chargetyp;
-            int noOfWindowsBefore = GetNumberOfWindowsOpened();
-            clickSave();
-            clickingYesOnPopupWarnings("");
-            clickingYesOnPopupWarnings("Embargo");
-            clickingYesOnPopupWarnings("Capture Irregularity");
-            WaitForNewWindowToOpen(TimeSpan.FromSeconds(10), noOfWindowsBefore + 1);
-            int noOfWindowsAfter = GetNumberOfWindowsOpened();
-            if (noOfWindowsAfter > noOfWindowsBefore)
-            {
-                SwitchToLastWindow();
-                ppp.handlePaymentInPaymentPortal(chargeType);
-                // WaitForElementToBeVisible(contentFrame_Xpath, TimeSpan.FromSeconds(20));
-                switchToLTEContentFrame();
-            }
-
-            clickingYesOnPopupWarnings("");
-        }
-
-        public string saveShipmentCaptureAWB()
-        {
-            Click(btnSaveShipment_Name);
-            if (IsElementDisplayed(lblEmbargoDetails_Xpath, 3))
-            {
-                Click(btnContinueEmbargo_Xpath);
-            }
-            awb_num = captureAWBNumber();
-            return awb_num;
-        }
-
 
         public string captureAWBNumber()
         {
             return GetText(lblAWBNo_Css);
         }
 
-        public string captureBookingStatus()
+        public string CaptureBookingStatus()
         {
             return GetText(lblBookingConfirmation_Xpath);
         }
 
-        public string captureDataCaptureStatus()
+        public string CaptureDataCaptureStatus()
         {
             return GetText(lblDataCapture_Xpath);
         }
 
-        public string captureAcceptanceStatus()
+        public string CaptureAcceptanceStatus()
         {
             return GetText(lblAcceptance_Xpath);
         }
 
-        public string captureColorReadyForCarriageStatus()
+        public string CaptureColorReadyForCarriageStatus()
         {
             return GetAttributeValue(lblColorReadyForCarriage_Xpath, "class");
         }
 
-        public string captureColorCaptureCheckSheetStatus()
+        public string CaptureColorCaptureCheckSheetStatus()
         {
             return GetAttributeValue(lblColorCaptureChecksheet_Xpath, "class");
         }
 
-        public string captureColorBlockStatus()
+        public string CaptureColorBlockStatus()
         {
             return GetAttributeValue(lblColorBlock_Xpath, "class");
         }
 
-        public string captureCheckSheetStatus()
-        {
-            return GetText(lblColorCaptureChecksheet_Xpath);
-        }
-
-        public void captureCheckSheetForDG()
+        public void CaptureCheckSheetForDG()
         {
             Click(lnkCaptureChecksheet_Xpath);
             SwitchToFrame(popupContainerFrameChksheet);
@@ -1467,13 +1549,32 @@ namespace iCargoUIAutomation.pages
                 Click(btnOKCaptureChkSheet_Xpath);
             SwitchToDefaultContent();
             Click(btnOKSuccessCheckSheet_Xpath);
-            switchToLTEContentFrame();
+            SwitchToLTEContentFrame();
         }
 
-        public void validateWarningMessage(string expectedWarningMessage)
+        public void EnterCAODGDetails(string chargetyp, string unid, string propershipmntname, string pi, string noofpkg, string netqtyperpkg, string reportable)
+        {
+            this.chargeType = chargetyp;
+            Click(btnSaveShipment_Name);
+            ClickingYesOnPopupWarnings("");
+            dgp.EnterDetailsForCAODGShipment(unid, propershipmntname, pi, noofpkg, netqtyperpkg, reportable);
+            SwitchToLTEContentFrame();            
+        }
+
+        public void SaveCAODGshipment(string flightType)
+        {
+            if (flightType.Equals("Combination"))
+            {
+                ClickSave();
+                ClickingYesOnPopupWarnings("");
+            }
+
+        }
+
+        public void ValidateWarningMessage(string expectedWarningMessage)
         {
 
-            WaitForElementToBeVisible(lblWarningMessage_Css, TimeSpan.FromSeconds(10));
+            WaitForElementToBeVisible(lblWarningMessage_Css, TimeSpan.FromSeconds(5));
             string actualWarningMessage = GetText(lblWarningMessage_Css);
             if (!actualWarningMessage.Contains(expectedWarningMessage))
             {
@@ -1483,14 +1584,13 @@ namespace iCargoUIAutomation.pages
             }
             else
             {
-                //Assert.Pass("Warning message is as expected: " + actualWarningMessage);
                 Log.Info("Warning message is as expected: " + actualWarningMessage);
             }
         }
 
-        public string validateAWBStatus(string expectedStatus)
+        public string ValidateAWBStatus(string expectedStatus)
         {
-            string actualStatus = captureDataCaptureStatus();
+            string actualStatus = CaptureDataCaptureStatus();
             if (!actualStatus.Contains(expectedStatus))
             {
                 Log.Error("AWB status is not as expected. Expected: " + expectedStatus + " Actual: " + actualStatus);
@@ -1506,7 +1606,7 @@ namespace iCargoUIAutomation.pages
             return awb_num;
         }
 
-        public void validateCommodityChargeAmount()
+        public void ValidateCommodityChargeAmount()
         {
 
             if (totalAmountCharged != totalPaybleAmount)
@@ -1521,12 +1621,100 @@ namespace iCargoUIAutomation.pages
             }
 
 
+        }
+
+        public void CloseLTE001Screen()
+        {
+            while (!IsElementDisplayed(btnCloseShipment_Name))
+            {
+                try
+                {
+                    Click(btnCloseShipment_Name);
+                    WaitForElementToBeInvisible(btnCloseShipment_Name, TimeSpan.FromSeconds(2));
+                }
+                catch (Exception)
+                {
+                    ClickingYesOnPopupWarnings("");
+                    Log.Error("Error in closing LTE001 screen, retrying..");
+                }
+
+            }
+
 
         }
 
-        public void closeLTE001Screen()
+        // Export Manifest Calling Functions //
+
+        public void EnterFlightDateExportManifest()
         {
-            Click(btnCloseShipment_Name);
+            try
+            {
+                emp.EnterFlightDate(shippingDate);
+            }
+            catch (Exception e)
+            {
+                Log.Error("Error in entering flight date in export manifest: " + e.ToString());
+            }
+
+        }
+
+        public void EnterFlightinExportManifest(string fltnum)
+        {
+            try
+            {
+                if (fltnum.Equals(""))
+                {
+                    emp.EnterFlightNumber(flightNum);
+                }
+                else
+                {
+                    emp.EnterFlightNumber(fltnum);
+                }
+
+            }
+            catch (Exception e)
+            {
+                Log.Error("Error in entering flight details in export manifest: " + e.ToString());
+            }
+
+        }
+
+        public string CreateNewULDCartExportManifest(string carttype, string pou)
+        {
+            if (pou.Equals(""))
+            {
+                cartULDNum = emp.CreateULDOrCart(carttype, destination);
+            }
+            else
+            {
+                cartULDNum = emp.CreateULDOrCart(carttype, pou);
+            }
+
+            return cartULDNum;
+        }
+
+        public void FilterOutAWBULDInExportManifest(string awbSectionName)
+        {
+            if (awbSectionName.Equals("PlannedShipment"))
+            {
+                awb_num = awb_num.Split("-")[1];
+                emp.FilterOutPlannedAWBAndULD(awb_num, cartULDNum);
+            }
+            else if (awbSectionName.Equals("LyingList"))
+            {
+                emp.FilterOutLyingListAWBAndULD(cartULDNum);
+            }
+
+        }
+
+        public void FilterSplitAndAssignAWBToULDExportManifest(string awbSectionName, string splitPieces)
+        {
+            if (awbSectionName.Equals("PlannedShipment"))
+            {
+                awb_num = awb_num.Split("-")[1];
+                emp.FilterOutPlannedAWBSplitAndAssign(awb_num, cartULDNum, splitPieces);
+            }
+
 
         }
 

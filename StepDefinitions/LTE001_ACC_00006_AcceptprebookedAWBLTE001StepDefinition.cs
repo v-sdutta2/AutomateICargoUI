@@ -34,30 +34,31 @@ namespace iCargoUIAutomation.StepDefinitions
         {
             Log.Info("Step: Entering the AWB of a PreBooked Shipment");
             preBookedAWB = preBookedAWB.Split("-")[1];
-            csp.switchToLTEContentFrame();
-            csp.enterAWBTextBox(preBookedAWB);
-            csp.clickOnListButton();
+            csp.SwitchToLTEContentFrame();
+            csp.ClickOnAwbTextBox();
+            csp.EnterAWBTextBox(preBookedAWB);
+            csp.ClickOnListButton();
         }
 
         [When(@"User opens & verifies the Participant Details")]
         public void WhenUserOpensVerifiesTheParticipantDetails()
         {
             Log.Info("Step: Opening and Verifying the Participant Details");
-            csp.openAndVerifyParticipants();
+            csp.OpenAndVerifyParticipants();
         }
 
         [When(@"User opens & verifies the Shipment Details")]
         public void WhenUserOpensVerifiesTheShipmentDetails()
         {
             Log.Info("Step: Opening and Verifying the Shipment Details");
-            csp.openAndVerifyShipments();            
+            csp.OpenAndVerifyShipments();            
         }
 
         [When(@"User opens & verifies the Flight Details")]
         public void WhenUserOpensVerifiesTheFlightDetails()
         {
             Log.Info("Step: Opening and Verifying the Flight Details");
-            csp.openAndVerifyFlightDetails();
+            csp.OpenAndVerifyFlightDetails();
            
         }
 
@@ -65,14 +66,14 @@ namespace iCargoUIAutomation.StepDefinitions
         public void WhenUserOpensTheChargeDetails()
         {
             Log.Info("Step: Opening the Charge Details");
-            csp.openAndVerifyChargeDetails();
+            csp.OpenAndVerifyChargeDetails();
         }
 
         [When(@"User enters the Acceptance details with PreBooked pieces")]
         public void WhenUserEntersTheAcceptanceDetailsWithPreBookedPieces()
         {
             Log.Info("Step: Entering the Acceptance details with PreBooked pieces");
-            csp.enterAcceptanceDetails();
+            csp.EnterAcceptanceDetails();
         }
 
     }

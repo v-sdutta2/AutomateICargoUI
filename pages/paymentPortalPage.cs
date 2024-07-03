@@ -28,8 +28,44 @@ namespace iCargoUIAutomation.pages
         private By btnContinuePlsConfirm = By.XPath("//*[text()=' Continue ']");
         ILog Log = LogManager.GetLogger(typeof(PaymentPortalPage));
 
+        public void ClosePaymentPortal()
+        {
+            Log.Info("Closing Payment Portal");
+            CloseCurrentWindow();
+        }
 
-        public string handlePaymentInPaymentPortal(string chargetyp)
+        public string PaymentWithPPCC(string chargtyp)
+        {
+            Log.Info("Handling Payment in Payment Portal with "+chargtyp);
+            string totalPaybleAmount = "";
+            try
+            {
+                if (chargtyp.Equals("PP"))
+                {
+                    ConfirmManualPayment();
+                    ScrollDown();
+                    totalPaybleAmount = GetText(lblTotalAmount_Xpath).Split("$")[1];
+                    ClickOnElementIfEnabled(btnDone_Xpath);
+                    WaitForElementToBeInvisible(btnDone_Xpath, TimeSpan.FromSeconds(7));
+
+                }
+                else if (chargtyp.Equals("CC"))
+                {
+                    ConfirmManualPayment();
+                    Click(btnExitIcargo_Xpath);
+                    Click(btnContinuePlsConfirm);
+                }
+
+            }
+            catch (Exception e)
+            {
+                Log.Error("Error in handling Payment in Payment Portal" + e.Message);
+            }
+            return totalPaybleAmount;
+        }
+
+
+        public string HandlePaymentInPaymentPortal(string chargetyp)
         {
             Log.Info("Handling Payment in Payment Portal");
             string totalPaybleAmount = "";
@@ -43,22 +79,18 @@ namespace iCargoUIAutomation.pages
                     }
                     else if (chargetyp.Equals("PP"))
                     {
-                        confirmManualPayment();
-                       
-                        WaitForElementToBeVisible(lblPaymentSuccess_Xpath, TimeSpan.FromSeconds(15));
+                        ConfirmManualPayment();
                         ScrollDown();
                         totalPaybleAmount = GetText(lblTotalAmount_Xpath).Split("$")[1];
                         ClickOnElementIfEnabled(btnDone_Xpath);
-                        Thread.Sleep(2000);
-                        
+                        WaitForElementToBeInvisible(btnDone_Xpath, TimeSpan.FromSeconds(7));
                     }
                     else if (chargetyp.Equals("CC"))
                     {
-                        confirmManualPayment();
+                        ConfirmManualPayment();
                         Click(btnExitIcargo_Xpath);
                         Click(btnContinuePlsConfirm);
                     }
-                    SwitchToLastWindow();
 
                 }
 
@@ -73,7 +105,7 @@ namespace iCargoUIAutomation.pages
 
 
 
-        public void confirmManualPayment()
+        public void ConfirmManualPayment()
         {
             Log.Info("Confirming Manual Payment");
             Click(optionManualPaymentMethod_Xpath);

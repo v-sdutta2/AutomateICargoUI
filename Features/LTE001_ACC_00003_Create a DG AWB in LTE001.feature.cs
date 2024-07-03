@@ -229,12 +229,9 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.And("User clicks on the ContinueScreeningDetails button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 32
- testRunner.And(string.Format("User Save Shipment Capture Checksheet & DG Details with ChargeType \"{0}\",UNID \"{1" +
-                            "}\", ProperShipmentName \"{2}\", PackingInstruction \"{3}\",NoOfPkg \"{4}\", NetQtyPerP" +
-                            "kg \"{5}\", ReportableQnty \"{6}\"", chargeType, uNID, properShipmentName, packingInstruction, piece, netQtyPerPkg, reportableQnty), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-#line 33
- testRunner.And("User closes the LTE screen", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And(string.Format("User Save Shipment with DG Details & Capture Checksheet with ChargeType \"{0}\",UNI" +
+                            "D \"{1}\", ProperShipmentName \"{2}\", PackingInstruction \"{3}\",NoOfPkg \"{4}\", NetQt" +
+                            "yPerPkg \"{5}\", ReportableQnty \"{6}\"", chargeType, uNID, properShipmentName, packingInstruction, piece, netQtyPerPkg, reportableQnty), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 34
  testRunner.Then("User logs out from the application", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");

@@ -2,7 +2,7 @@
 
 Create a New Shipment, Acceptance of that new shipment & screening as a CGO or CGODG user
 
-@tag1
+@LTE001
 Scenario Outline: Accept a prebooked AWB in LTE001
 	Given User lauches the Url of iCargo Staging UI
 	Then User enters into the  iCargo 'Sign in to icargoas' page successfully
@@ -29,12 +29,15 @@ Scenario Outline: Accept a prebooked AWB in LTE001
 	And User clicks on the ContinueAcceptanceDetails button
 	And User enters the Screening details for row 1 with screeingMethod as 'Transfer Manifest Verified' and ScreeningResult as 'Pass'
 	And User clicks on the ContinueScreeningDetails button
-	And User checks the AWB_Verified checkbox
-	And User clicks on the save button & handle Payment Portal
-	And User saves all the details & handles all the popups
+	And User checks the AWB_Verified checkbox	
+	And User clicks on the save button
+	And User handles the error popups with errorType as ''	
+	And User closes the Payment Portal tab and retry
+	And User handles the error popups with errorType as ''
+	And User handles the error popups with errorType as ''
 	And User closes the LTE screen
 	Then User logs out from the application
 
 Examples:
 	| prebookedAWB | Origin | ChargeType | ModeOfPayment | cartType |
-	| 027-30073223 | SEA    | PP         | CREDIT        | CART     |
+	| 027-30077655 | ANC    | CC         | CREDIT        | CART     |

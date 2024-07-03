@@ -77,7 +77,7 @@ namespace iCargoUIAutomation.Features
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Reopen an AWB and change the final destination and reexecute")]
         [NUnit.Framework.CategoryAttribute("tag1")]
-        [NUnit.Framework.TestCaseAttribute("10763", "10763", "10763", "SEA", "ANC", "GENERAL", "None", "0316", "None", "None", "2", "59", "CC", "None", "CART", null)]
+        [NUnit.Framework.TestCaseAttribute("10763", "10763", "10763", "SEA", "JFK", "GENERAL", "None", "0316", "None", "None", "2", "59", "CC", "None", "CART", null)]
         public virtual void ReopenAnAWBAndChangeTheFinalDestinationAndReexecute(
                     string agentCode, 
                     string shipperCode, 

@@ -1,8 +1,8 @@
-﻿Feature: LTE001_ACC_00005_Create a CC AWB in LTE001 for a known shipper
+﻿Feature: OPR344_EXP_00004_Split an AWB in OPR344 and manifest split pieces to a flight
 
-Create a New Shipment, Acceptance of that new shipment & screening as a CGO or CGODG user
+Manifest a Shipment as a CGO or CGODG user
 
-@tag1
+@OPR344
 Scenario Outline: Create a CC AWB in LTE001 for a known shipper
 	Given User lauches the Url of iCargo Staging UI
 	Then User enters into the  iCargo 'Sign in to icargoas' page successfully
@@ -20,7 +20,7 @@ Scenario Outline: Create a CC AWB in LTE001 for a known shipper
 	And User enters the Shipment details with Origin "<Origin>", Destination "<Destination>", ProductCode "<ProductCode>", SCCCode "<SCC>", Commodity "<Commodity>", ShipmentDescription"<ShipmentDescription>", ServiceCargoClass "<ServiceCargoClass>", Piece "<Piece>", Weight "<Weight>"
 	And User clicks on the ContinueShipment button
 	And User clicks on the Select Flight Button
-	And User selects an "Combination" flight	
+	And User selects an "Combination" flight
 	And User clicks on the ContinueFlightDetails button
 	And User enters the Charge details with ChargeType "<ChargeType>" and ModeOfPayment "<ModeOfPayment>"
 	And User clicks on the CalculateCharges button
@@ -36,5 +36,30 @@ Scenario Outline: Create a CC AWB in LTE001 for a known shipper
 	Then User logs out from the application
 
 Examples:
-	| AgentCode | ShipperCode | ConsigneeCode| Origin | Destination | ProductCode | SCC  | Commodity | ShipmentDescription | ServiceCargoClass | Piece | Weight | ChargeType | ModeOfPayment | cartType |
-	| 10763     | 10763       | 10763        | LAS    | SEA         | GENERAL     | None | 0316      | None                | None              | 2     | 59     | CC         | None          | CART     |
+	| AgentCode | ShipperCode | ConsigneeCode | Origin | Destination | ProductCode | SCC  | Commodity | ShipmentDescription | ServiceCargoClass | Piece | Weight | ChargeType | ModeOfPayment | cartType |
+	| 10763     | 10763       | 10763         | SEA    | JFK         | GENERAL     | None | 0316      | None                | None              | 2     | 59     | CC         | None          | CART     |
+
+
+Scenario Outline: Split an AWB in OPR344 and manifest split pieces to a flight
+	Given User lauches the Url of iCargo Staging UI
+	Then User enters into the  iCargo 'Sign in to icargoas' page successfully
+	When User clicks on the oidc button
+	Then A new window is opened
+	And User enters into the  iCargo 'Home' page successfully
+	When User switches station if BaseStation other than "<Origin>"
+	When User enters the screen name as 'OPR344'
+	Then User enters into the  iCargo 'Export Manifest' page successfully
+	When User enters the Booked FlightNumber with ""
+	And User enters Booked ShipmentDate
+	And User clicks on the List button to fetch the Booked Shipment
+	And User creates new ULD/Cart in Assigned Shipment with cartType "<cartType>" and pou "<Destination>"
+	And User filterouts the Booked AWB from '<AWBSectionName>' Split And Assign with Pieces "<SplitPieces>"
+	And User clicks on the Manifest button
+	And User closes the PrintPDF window
+	And User validates the AWB is "Manifested" in the Export Manifest screen
+	Then User closes the Export Manifest screen
+	Then User logs out from the application
+
+Examples:
+	| Origin | Destination | Piece | Weight | AWBSectionName  | cartType | FlightNumber | SplitPieces |
+	| SEA    | JFK         | 2     | 59     | PlannedShipment | CART     | 675          | 1           |

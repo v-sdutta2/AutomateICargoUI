@@ -15,6 +15,7 @@ namespace iCargoUIAutomation.StepDefinitions
         private IWebDriver driver;
         private PageObjectManager pageObjectManager;       
         private CreateShipmentPage csp;
+      
 
         ILog Log = LogManager.GetLogger(typeof(LTE001_ACC_00002_CreateAWBLTE001unknownshipperonrestrictedpaxflight));
 
@@ -24,7 +25,10 @@ namespace iCargoUIAutomation.StepDefinitions
             this.driver = driver;
             this.pageObjectManager = new PageObjectManager(driver);           
             this.csp = pageObjectManager.GetCreateShipmentPage();
-        }
+          
+        }       
+
+       
 
         [When(@"User enters the Participant details with AgentCode ""([^""]*)"",Unknown ShipperCode ""([^""]*)"", ConsigneeCode ""([^""]*)""")]
         public void WhenUserEntersTheParticipantDetailsWithAgentCodeUnknownShipperCodeConsigneeCode(string agent, string unknownshipper, string consignee)
@@ -35,11 +39,15 @@ namespace iCargoUIAutomation.StepDefinitions
         [When(@"User saves the shipment details and capture AWB number")]
         public void WhenUserSavesTheShipmentDetailsAndCaptureAWBNumber()
         {
-            csp.saveShipmentCaptureAWB();
+           csp.SaveShipmentCaptureAWB();
         }
 
-
-
+        [When(@"User validates the popped up error message as ""([^""]*)""")]
+        public void WhenUserValidatesThePoppedUpErrorMessageAs(string expectedWarnMsg)
+        {
+            Log.Info("Step: Validating the popped up error message");
+            csp.ValidateWarningMessage(expectedWarnMsg);
+        }
 
 
 

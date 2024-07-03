@@ -36,7 +36,7 @@ namespace iCargoUIAutomation.pages
         private By chkboxDGVerified_Xpath = By.XPath("//*[@id='footerbutton']//input[@type='checkbox' and @name='dgVerifiedFlag']");
         private By btnOKDGVerified_Xpath = By.XPath("//*[@id='footerbutton']//button[@name='butOk']");
 
-        public void handleDGShipment(string unid, string propershipmntname, string pi, string noofpkg, string netqtyperpkg, string reportable)
+        public void HandleDGShipment(string unid, string propershipmntname, string pi, string noofpkg, string netqtyperpkg, string reportable)
         {
             Click(lnkDangerousGoods_Xpath);
             SwitchToFrame(popupContainerFrame_Xpath);
@@ -61,7 +61,7 @@ namespace iCargoUIAutomation.pages
         }
 
 
-        public void enterDetailsForCAODGShipment(string unid, string propershipmntname, string pi, string noofpkg, string netqtyperpkg, string reportable)
+        public void EnterDetailsForCAODGShipment(string unid, string propershipmntname, string pi, string noofpkg, string netqtyperpkg, string reportable)
         {
             Click(lnkDangerousGoods_Xpath);
             SwitchToFrame(popupContainerFrame_Xpath);

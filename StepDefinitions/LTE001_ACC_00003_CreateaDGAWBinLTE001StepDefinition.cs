@@ -30,7 +30,7 @@ namespace iCargoUIAutomation.StepDefinitions
        
 
 
-        [When(@"User Save Shipment Capture Checksheet & DG Details with ChargeType ""([^""]*)"",UNID ""([^""]*)"", ProperShipmentName ""([^""]*)"", PackingInstruction ""([^""]*)"",NoOfPkg ""([^""]*)"", NetQtyPerPkg ""([^""]*)"", ReportableQnty ""([^""]*)""")]
+        [When(@"User Save Shipment with DG Details & Capture Checksheet with ChargeType ""([^""]*)"",UNID ""([^""]*)"", ProperShipmentName ""([^""]*)"", PackingInstruction ""([^""]*)"",NoOfPkg ""([^""]*)"", NetQtyPerPkg ""([^""]*)"", ReportableQnty ""([^""]*)""")]
         public void SaveShipmentWithDGAndCheckSheet(string chargetype,string unid, string propershipmntname, string pi, string noOFPkg, string netqtyperpkg, string reportable)
         {
            Log.Info("Step: Save Shipment Capture Checksheet & DG Details");

@@ -26,6 +26,11 @@ namespace iCargoUIAutomation.pages
         private By lnkLogOut_Xpath = By.XPath("//*[@class='ic-header-items-sub-menu']//*[@class='ic-log-off']/a");
         private By btnYesLogoutConfirmation_Xpath = By.XPath("//button[text()=' Yes ']");
         private By txt_ScreenName_Css = By.CssSelector(".ic-screen-search");
+
+        //Login Page Details
+        private By userName_Id = By.Id("username");
+        private By password_Id = By.Id("password");
+        private By loginButton_Id = By.XPath("//input[@title='Sign In']");
         ILog Log = LogManager.GetLogger(typeof(homePage));
 
         public void SwitchStation(string station)
@@ -101,6 +106,22 @@ namespace iCargoUIAutomation.pages
             }
             
            
+        }
+
+        public void LoginICargo()
+        {
+            try
+            {
+                EnterText(userName_Id, "iCargoTest1@aagqa.net");
+                EnterText(password_Id, "#hG*Txs24$K54Xk");
+                Click(loginButton_Id);
+                WaitForElementToBeInvisible(userName_Id, TimeSpan.FromSeconds(5));
+            }
+            catch (Exception e)
+            {
+                Log.Error("Error in loginiCargo method: " + e.Message);
+            }
+            
         }
 
     }

@@ -38,5 +38,5 @@ Scenario Outline: Create an AWB in LTE001 using a specific commodity code
 	Then User logs out from the application
 
 Examples:
-	| AgentCode | ShipperCode | ConsigneeCode| Origin | Destination | ProductCode | SCC  | Commodity | ShipmentDescription | ServiceCargoClass | Piece | Weight | ChargeType | ModeOfPayment | cartType |
-	| 10763     | 10763       | 10763        | SEA    | ANC         | GENERAL     | None | 0316      | None                | None              | 2     | 59     | PP         | CREDIT        | CART     |
+	| AgentCode | ShipperCode | ConsigneeCode | Origin | Destination | ProductCode | SCC  | Commodity | ShipmentDescription | ServiceCargoClass | Piece | Weight | ChargeType | ModeOfPayment | cartType |
+	| 10763     | 10763       | 10763         | SEA    | ANC         | PRIORITY    | None | 2199      | None                | None              | 2     | 59     | PP         | CREDIT        | CART     |
