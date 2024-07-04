@@ -41,7 +41,12 @@ namespace iCargoUIAutomation.StepDefinitions
         public void ThenUserSearchesForTheMultilegFlightToVerifyRESBubbleAWarningMessageAs(string rescolr, string reswarning, string productcode)
         {
             this.productcode = productcode;
+            if (ScenarioContext.Current["Execute"] == "true")
            mbp.selectMultilegflight(rescolr, reswarning, productcode);
+            else
+            {
+                ScenarioContext.Current.Pending();
+            }
         }                
 
     }

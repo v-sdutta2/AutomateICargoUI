@@ -387,9 +387,10 @@ namespace iCargoUIAutomation.pages
                     SwitchToCAP018Frame();
                     Log.Info("Switched to CAP018 Frame");
                 }
-                ClickOnElementIfPresent(btnCloseMb_XPATH);
-                Hooks.Hooks.UpdateTest(Status.Pass, "Clicked Close Button on Maintain Booking Page");
-                Log.Info("Clicked Close Button on Maintain Booking Page");
+                ClickOnElementIfPresent(clearAWBBtn_ID);   //new lines added
+                //ClickOnElementIfPresent(btnCloseMb_XPATH);
+                //Hooks.Hooks.UpdateTest(Status.Pass, "Clicked Close Button on Maintain Booking Page");
+                //Log.Info("Clicked Close Button on Maintain Booking Page");
             }
             catch (Exception e)
             {
@@ -604,6 +605,7 @@ namespace iCargoUIAutomation.pages
                 Click(aviBookingChecksheetOkBtn_XPATH);
                 Hooks.Hooks.UpdateTest(Status.Pass, "Clicked OK Button on AVI Booking Checksheet");
                 Log.Info("Clicked OK Button on AVI Booking Checksheet");
+                SwitchToPopupWindow();
                 SwitchToCAP018Frame();
                 ClickSaveButton();
             }
@@ -800,6 +802,7 @@ namespace iCargoUIAutomation.pages
                 }
                 else
                 {
+                    Click(unkShipperName_ID);
                     WaitForElementToBeInvisible(CAP018Frame_XPATH, TimeSpan.FromSeconds(10));
                     EnterTextWithCheck(unkShipperName_ID, shipperName);
                     Hooks.Hooks.UpdateTest(Status.Pass, "Entered Shipper Name: " + shipperName);
@@ -844,6 +847,7 @@ namespace iCargoUIAutomation.pages
                 }
                 else
                 {
+                    Click(unkConsigneeName_ID);
                     WaitForElementToBeInvisible(CAP018Frame_XPATH, TimeSpan.FromSeconds(10));
                     EnterTextWithCheck(unkConsigneeName_ID, consigneeName);
                     Hooks.Hooks.UpdateTest(Status.Pass, "Entered Consignee Name: " + consigneeName);

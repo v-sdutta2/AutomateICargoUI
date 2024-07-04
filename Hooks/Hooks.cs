@@ -20,20 +20,22 @@ namespace iCargoUIAutomation.Hooks
     [Binding]
     public sealed class Hooks
     {
-        private readonly IObjectContainer _container;        
+        private readonly IObjectContainer? _container;    
         public static ExtentReports? extent;
         public static ExtentTest? feature;
         public static ExtentTest? scenario;
         public static ExtentTest? step;
+        public homePage hp;
         public static string? testResultPath;
         public static string? browser;
-        public MaintainBookingPage mbp;
-        public static string featureName;
+        private static IWebDriver driver;
+        private MaintainBookingPage mbp;
+        public static string? featureName;       
+        public static string? appUrl = "https://asstg-icargo.ibsplc.aero/icargo/login.do";
 
         public Hooks(IObjectContainer container)
         {
             _container = container;
-
         }
 
         [BeforeTestRun]
@@ -47,7 +49,7 @@ namespace iCargoUIAutomation.Hooks
             htmlReporter.Config.ReportName = "Automation Status Report";
             htmlReporter.Config.Theme = AventStack.ExtentReports.Reporter.Configuration.Theme.Standard;
             extent = new ExtentReports();
-            extent.AttachReporter(htmlReporter);
+            extent.AttachReporter(htmlReporter);            
 
         }
 
@@ -62,50 +64,64 @@ namespace iCargoUIAutomation.Hooks
         {
             Console.WriteLine("Running before feature...");
             feature = extent.CreateTest(featureContext.FeatureInfo.Title);
-            feature.Log(Status.Info, featureContext.FeatureInfo.Description);
+            feature.Log(Status.Info, featureContext.FeatureInfo.Description);            
+            //browser = Environment.GetEnvironmentVariable("Browser", EnvironmentVariableTarget.Process);
+            browser = "chrome";
+
+            if (browser.Equals("chrome", StringComparison.OrdinalIgnoreCase))
+            {
+                driver = new ChromeDriver();
+            }
+            else if (browser.Equals("edge", StringComparison.OrdinalIgnoreCase))
+            {
+                driver = new EdgeDriver();
+            }
+            else if (browser.Equals("firefox", StringComparison.OrdinalIgnoreCase))
+            {
+                driver = new FirefoxDriver();
+            }
+            else if (browser.Equals("safari", StringComparison.OrdinalIgnoreCase))
+            {
+                driver = new SafariDriver();
+            }
+            else
+            {
+                throw new NotSupportedException($"Browser '{browser}' is not supported");
+            }
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(20);
+            driver.Manage().Window.Maximize();              
+            homePage hp = new homePage(driver);
+            BasePage bp = new BasePage(driver);
+            bp.DeleteAllCookies();
+            bp.Open(appUrl);
+            driver.FindElement(By.XPath("//a[@id='social-oidc']")).Click();
+            if (bp.IsElementDisplayed(By.XPath("//body[@class='login']")))
+            {
+                hp.LoginICargo();
+            }
+            bp.SwitchToNewWindow();            
         }
 
         [BeforeScenario("@tag1")]
         public void BeforeScenarioWithTag()
         {
 
+        }        
+
+        [AfterFeature]
+        public static void AfterFeature()
+        {
+            Console.WriteLine("Running after feature...");
+            homePage hp = new homePage(driver);
+            hp.logoutiCargo();            
+            extent.Flush();
+            driver.Quit();
         }
 
-        [BeforeScenario(Order = 1)]
+        [BeforeScenario(Order = 1)]        
         public void FirstBeforeScenario(ScenarioContext scenarioContext)
-        {
-            //browser = Environment.GetEnvironmentVariable("Browser", EnvironmentVariableTarget.Process);
-            //browser = "chrome";
-            //IWebDriver driver;
-
-            //if (browser.Equals("chrome", StringComparison.OrdinalIgnoreCase))
-            //{
-            //    driver = new ChromeDriver();
-            //}
-            //else if (browser.Equals("edge", StringComparison.OrdinalIgnoreCase))
-            //{
-            //    driver = new EdgeDriver();
-            //}
-            //else if(browser.Equals("firefox", StringComparison.OrdinalIgnoreCase))
-            //{
-            //    driver = new FirefoxDriver();
-            //}
-            //else if(browser.Equals("safari", StringComparison.OrdinalIgnoreCase))
-            //{
-            //    driver = new SafariDriver();
-            //}
-            //else
-            //{
-            //    throw new NotSupportedException($"Browser '{browser}' is not supported");
-            //}
-
-
-            //IWebDriver driver = new EdgeDriver();
-            IWebDriver driver = new ChromeDriver();
-            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(20);
-            driver.Manage().Window.Maximize();
-
-            _container.RegisterInstanceAs<IWebDriver>(driver);
+        {            
+            _container.RegisterInstanceAs(driver);
             scenario = feature.CreateNode(scenarioContext.ScenarioInfo.Title);
 
         }
@@ -127,47 +143,45 @@ namespace iCargoUIAutomation.Hooks
 
         [BeforeStep]
         public void BeforeStep()
-        { }
+        {            
+        }
 
         [AfterScenario]
         public void AfterScenario(FeatureContext featureContext)
         {
-            var driver = _container.Resolve<IWebDriver>();
+            //driver = _container.Resolve<IWebDriver>();
             var status = TestContext.CurrentContext.Result.Outcome.Status;
             var stackTrace = TestContext.CurrentContext.Result.StackTrace;
             DateTime time = DateTime.Now;
             featureName = featureContext.FeatureInfo.Title;
             string fileName = "Screenshot_" + time.ToString("h_mm_ss") + ".png";
             if (status == TestStatus.Failed)
-            {                
+            {
                 scenario.Fail("Test Failed", captureScreenshot(driver, fileName));
                 scenario.Log(Status.Fail, "Test failed with log" + stackTrace);
             }
-            extent.Flush();
-            string fromEmail = "avijit.saha@alaskaair.com";
-            // Recipient's email address
-            string toEmail = "sourav.dutta2@alaskaair.com";
-            // Create and configure the SMTP client
-            SmtpClient smtpClient = new SmtpClient("outbound.alaskaair.com", 25);
-            MailMessage mail = new MailMessage(fromEmail, toEmail);
-            mail.Subject = "AWB Number";
-            if (featureName.Contains("CAP018"))
-            mail.Body = "The AWB Number is " + MaintainBookingPage.awbNumber;
-            else
-                mail.Body = "The AWB Number is " + CreateShipmentPage.awb_num;
-            smtpClient.Send(mail);
-            driver?.Quit();
+            if (MaintainBookingPage.awbNumber != "" || CreateShipmentPage.awb_num != "")
+            {
+                string fromEmail = "avijit.saha@alaskaair.com";
+                // Recipient's email address
+                string toEmail = "prattay.roy.chowdury@alaskaair.com";
+                // Create and configure the SMTP client
+                SmtpClient smtpClient = new SmtpClient("outbound.alaskaair.com", 25);
+                MailMessage mail = new MailMessage(fromEmail, toEmail);
+                mail.Subject = "AWB Number";
+                if (featureName.Contains("CAP018"))
+                    mail.Body = "The AWB Number is " + MaintainBookingPage.awbNumber;
+                else
+                    mail.Body = "The AWB Number is " + CreateShipmentPage.awb_num;
+                smtpClient.Send(mail);
+            }
         }
-
         [AfterStep]
         public void AfterStep(ScenarioContext scenarioContext)
         {
             Console.WriteLine("Running after step....");
             string stepType = scenarioContext.StepContext.StepInfo.StepDefinitionType.ToString();
-            string stepName = scenarioContext.StepContext.StepInfo.Text;
-
-            var driver = _container.Resolve<IWebDriver>();
-            
+            string stepName = scenarioContext.StepContext.StepInfo.Text;                        
         }
 
         public static MediaEntityModelProvider captureScreenshot(IWebDriver driver, string fileName)

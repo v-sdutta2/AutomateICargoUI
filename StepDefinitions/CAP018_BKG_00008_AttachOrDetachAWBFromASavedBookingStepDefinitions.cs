@@ -26,20 +26,35 @@ namespace iCargoUIAutomation.StepDefinitions
         [Then(@"User clicks on Attach/Detach button")]
         public void ThenUserClicksOnAttachDetachButton()
         {
+            if (ScenarioContext.Current["Execute"] == "true")
             mbp.AttachOrDetachAWB();
+            else
+            {
+                ScenarioContext.Current.Pending();
+            }
         }
 
         [Then(@"User enters new Agent Code ""([^""]*)""")]
         public void ThenUserEntersNewAgentCode(string agentcode)
         {
             this.agentcode = agentcode;
+            if (ScenarioContext.Current["Execute"] == "true")
             mbp.EnterNewAgentCode(agentcode);
+            else
+            {
+                ScenarioContext.Current.Pending();
+            }
         }
 
         [Then(@"User enters the AWB number")]
         public void ThenUserEntersTheAWBNumberAs()
         {
+            if (ScenarioContext.Current["Execute"] == "true")
             mbp.EnterAWBNumber();
+            else
+            {
+                ScenarioContext.Current.Pending();
+            }
         }
 
     }

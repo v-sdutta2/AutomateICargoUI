@@ -76,8 +76,15 @@ namespace iCargoUIAutomation.StepDefinitions
         public void SwitchStationForDifferentBase(string origin)
         {
             //this.origin = origin;
-            Log.Info("Step: Switching station if BaseStation other than Origin ");
-            hp.SwitchStation(origin);
+            if (ScenarioContext.Current["Execute"] == "true")
+            {
+                Log.Info("Step: Switching station if BaseStation other than Origin ");
+                hp.SwitchStation(origin);
+            }
+            else
+            {
+                ScenarioContext.Current.Pending();
+            }            
         }
 
         [When(@"User enters the screen name as '([^']*)'")]

@@ -31,30 +31,32 @@ Scenario Outline: Create a CC AWB in LTE001 for a known shipper
 	And User clicks on the save button & handle Payment Portal
 	And User saves all the details & handles all the popups
 	And User closes the LTE screen
-	Then User logs out from the application
+	#Then User logs out from the application
 
 Examples:
-	| AgentCode | ShipperCode | ConsigneeCode| Origin | Destination | ProductCode | SCC  | Commodity | ShipmentDescription | ServiceCargoClass | Piece | Weight | ChargeType | ModeOfPayment | cartType |
-	| 10763     | 10763       | 10763        | SEA    | ANC         | GENERAL     | None | 0316      | None                | None              | 2     | 59     | CC         | None          | CART     |
+	| AgentCode | ShipperCode | ConsigneeCode | Origin | Destination | ProductCode | SCC  | Commodity | ShipmentDescription | ServiceCargoClass | Piece | Weight | ChargeType | ModeOfPayment | cartType |
+	| 10763     | 10763       | 10763         | SEA    | ANC         | GENERAL     | None | 0316      | None                | None              | 2     | 59     | CC         | None          | CART     |
 
 
 Scenario Outline: iCargo Login and Rebook an already executed AWB
-	Given User lauches the Url of iCargo Staging UI
-	Then User enters into the  iCargo 'Sign in to icargoas' page successfully
-	When User clicks on the oidc button
-	Then A new window is opened
-	And User enters into the  iCargo 'Home' page successfully
+	#Given User lauches the Url of iCargo Staging UI
+	#Then User enters into the  iCargo 'Sign in to icargoas' page successfully
+	#When User clicks on the oidc button
+	#Then A new window is opened
+	#And User enters into the  iCargo 'Home' page successfully
+	Given User wants to execute the example "<Execute>"
+	When User switches station if BaseStation other than "<Origin>"
 	When User enters screen name as 'CAP018'
 	Then User enters into the  iCargo 'Maintain Booking' page successfully
 	And User enters already executed AWB number
 	And User clicks on New/List button
-	And User deletes the flight details and adds new flight details	
+	And User deletes the flight details and adds new flight details
 	And User selects new carrier details
 	And User clicks on Save button to save new flight details
 	And User captures the irregularity details
-	Then User logs out from the application
+	#Then User logs out from the application
 
 Examples:
-	| AWB      |  
-	| 30077246 |	
+	| Execute |
+	| Yes     |
 	
