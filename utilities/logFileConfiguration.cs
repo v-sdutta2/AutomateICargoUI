@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace iCargoUIAutomation.utilities
 {
-    public class logFileConfiguration
+    public class LogFileConfiguration
     {
         public void ConfigureLog4Net()
         {
@@ -20,17 +20,13 @@ namespace iCargoUIAutomation.utilities
             patternLayout.ConversionPattern = "%date [%thread] %-5level %logger - %message%newline";
             patternLayout.ActivateOptions();
            
-            string projectDirectory = System.IO.Path.GetFullPath(System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), "..\\..\\..\\"));
-            string logFilePath = System.IO.Path.Combine(projectDirectory, "Logs", "logfile.log");
+            //string projectDirectory = System.IO.Path.GetFullPath(System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), "..\\..\\..\\"));
+            string logFilePath = @"\\seavvfile1\projectmgmt_pmo\iCargoAutomationReports\Logs\Log"+DateTime.Now.ToString("yyyyMMdd_HHmmss")+@"logfile.log";
             Console.WriteLine("Log file path: " + logFilePath);
             FileAppender appender = new FileAppender();
-            appender.AppendToFile = false;
+            appender.AppendToFile = true;
             appender.File = logFilePath;
-            appender.Layout = patternLayout;
-            //appender.MaxSizeRollBackups = 10;
-            //roller.MaximumFileSize = "10MB";
-            //roller.RollingStyle = RollingFileAppender.RollingMode.Size;
-            //roller.StaticLogFileName = true;
+            appender.Layout = patternLayout;            
             appender.ActivateOptions();
             hierarchy.Root.AddAppender(appender);
 

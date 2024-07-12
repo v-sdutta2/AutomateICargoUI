@@ -15,7 +15,7 @@ namespace iCargoUIAutomation.StepDefinitions
     {
         private IWebDriver driver;
         private PageObjectManager pageObjectManager;       
-        private createShipmentPage csp;
+        private CreateShipmentPage csp;
         ILog Log = LogManager.GetLogger(typeof(LTE001_ACC_00007_CreateAWBLTE001thathaspiecesthatfailscreening));
 
 
@@ -30,24 +30,21 @@ namespace iCargoUIAutomation.StepDefinitions
         [When(@"USer adds another screening line")]
         public void WhenUSerAddsAnotherScreeningLine()
         {
+            Hooks.Hooks.createNode();
             Log.Info("Step: Adding another screening line");
-            csp.addAnotherScreeningLine();
+            csp.AddAnotherScreeningLine();
         }
 
         [When(@"User saves all the details with ChargeType ""([^""]*)""")]
         public void WhenUserSavesAllTheDetailsWithChargeType(string chargeType)
         {
+            Hooks.Hooks.createNode();
             Log.Info("Step: Saving all the details with ChargeType");
-            csp.saveDetailsWithChargeType(chargeType);
+            csp.SaveDetailsWithChargeType(chargeType);
         }
       
 
-        [When(@"User validates the popped up error message as ""([^""]*)""")]
-        public void WhenUserValidatesThePoppedUpErrorMessageAs(string expectedWarnMsg)
-        {
-            Log.Info("Step: Validating the popped up error message");
-            csp.validateWarningMessage(expectedWarnMsg);
-        }
+      
 
 
 

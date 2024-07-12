@@ -30,7 +30,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Azure.Identity" Version="1.12.0" />
+    <PackageReference Include="Azure.Security.KeyVault.Secrets" Version="4.6.0" />
     <PackageReference Include="DotNetSeleniumExtras.WaitHelpers" Version="3.11.0" />
+    <PackageReference Include="EPPlus" Version="7.2.1" />
     <PackageReference Include="ExtentReports" Version="4.1.0" />
     <PackageReference Include="ini-parser" Version="2.5.2" />
     <PackageReference Include="log4net" Version="2.0.17" />
@@ -85,6 +88,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="App.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>App.config</DependentUpon>
+    </Compile>
     <Compile Update="Features\LTE001_ACC_00013_Create an AWB with less than a 2 hr connection time between flights.feature.cs">
       <Visible>true</Visible>
       <DependentUpon>LTE001_ACC_00013_Create an AWB with less than a 2 hr connection time between flights.feature</DependentUpon>
@@ -94,6 +102,13 @@
     <Compile Update="Features\LTE001_ACC_00010_Reopen an AWB and change the final destination and reexecute.feature.cs">
       <DependentUpon>LTE001_ACC_00010_Reopen an AWB and change the final destination and reexecute.feature</DependentUpon>
     </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="App.config">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>App.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
 
 </Project>

@@ -14,7 +14,7 @@ namespace iCargoUIAutomation.StepDefinitions
     {
         private IWebDriver driver;
         private PageObjectManager pageObjectManager;       
-        private createShipmentPage csp;
+        private CreateShipmentPage csp;
 
         ILog Log = LogManager.GetLogger(typeof(LTE001_ACC_00011_CreateAWBfirstflightfreighternextflightpaxStepDefinition));
 
@@ -31,7 +31,8 @@ namespace iCargoUIAutomation.StepDefinitions
         [When(@"User selects first flight as '([^']*)' flight and second flight as '([^']*)' flight")]
         public void WhenUserSelectsFirstFlightAsFlightAndSecondFlightAsFlight(string firstFlightType, string secondFlightType)
         {
-            csp.bookConnectingFlightWithDifferentFlightTypes(firstFlightType, secondFlightType);
+            Hooks.Hooks.createNode();
+            csp.BookConnectingFlightWithDifferentFlightTypes(firstFlightType, secondFlightType);
         }
 
 

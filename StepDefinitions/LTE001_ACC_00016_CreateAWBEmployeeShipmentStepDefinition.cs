@@ -14,7 +14,7 @@ namespace iCargoUIAutomation.StepDefinitions
     {
         private IWebDriver driver;
         private PageObjectManager pageObjectManager;       
-        private createShipmentPage csp;
+        private CreateShipmentPage csp;
 
         ILog Log = LogManager.GetLogger(typeof(LTE001_ACC_00016_CreateAWBEmployeeShipmentStepDefinition));
 
@@ -32,7 +32,8 @@ namespace iCargoUIAutomation.StepDefinitions
         [When(@"User captures the checksheet")]
         public void WhenUserCapturesTheChecksheet()
         {
-            csp.captureCheckSheetForDG();
+            Hooks.Hooks.createNode();
+            csp.CaptureCheckSheetForDG();
         }
 
 

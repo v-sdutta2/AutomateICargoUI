@@ -32,7 +32,8 @@ Scenario Outline: Create an AWB for an Employee Shipment
 	And User clicks on the save button
 	And User captures the checksheet
 	And User checks the AWB_Verified checkbox
-	And User clicks on the save button & handle Payment Portal
+	And User clicks on the save button
+	And User handles the error popups with errorType as ''	
 	And User saves all the details & handles all the popups
 	And User closes the LTE screen
 	Then User logs out from the application

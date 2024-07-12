@@ -76,20 +76,24 @@ namespace iCargoUIAutomation.Features
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Create a booking for a single piece over 300lbs on an OO E175 and system generate" +
             "s an AWB with a warning.")]
-        [NUnit.Framework.TestCaseAttribute("SEA", "ANC", "19-Apr-2024", "GENERAL", "0316", "2", "310", "19-Apr-2024", "AS61", null)]
-        public virtual void CreateABookingForASinglePieceOver300LbsOnAnOOE175AndSystemGeneratesAnAWBWithAWarning_(string origin, string destination, string shippingDate, string productCode, string commodity, string piece, string weight, string flightDate, string flightNo, string[] exampleTags)
+        [NUnit.Framework.CategoryAttribute("CAP018")]
+        [NUnit.Framework.TestCaseAttribute("SEA", "ANC", "GENERAL", "0316", "2", "310", null)]
+        public virtual void CreateABookingForASinglePieceOver300LbsOnAnOOE175AndSystemGeneratesAnAWBWithAWarning_(string origin, string destination, string productCode, string commodity, string piece, string weight, string[] exampleTags)
         {
-            string[] tagsOfScenario = exampleTags;
+            string[] @__tags = new string[] {
+                    "CAP018"};
+            if ((exampleTags != null))
+            {
+                @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
+            }
+            string[] tagsOfScenario = @__tags;
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             argumentsOfScenario.Add("Origin", origin);
             argumentsOfScenario.Add("Destination", destination);
-            argumentsOfScenario.Add("ShippingDate", shippingDate);
             argumentsOfScenario.Add("ProductCode", productCode);
             argumentsOfScenario.Add("Commodity", commodity);
             argumentsOfScenario.Add("Piece", piece);
             argumentsOfScenario.Add("Weight", weight);
-            argumentsOfScenario.Add("FlightDate", flightDate);
-            argumentsOfScenario.Add("FlightNo", flightNo);
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Create a booking for a single piece over 300lbs on an OO E175 and system generate" +
                     "s an AWB with a warning.", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
 #line 4
@@ -137,8 +141,8 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.And("User clicks on New/List button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 13
- testRunner.And(string.Format("User enters shipment details with Origin \"{0}\", Destination \"{1}\", Shipping Date " +
-                            "\"{2}\", Product Code \"{3}\"", origin, destination, shippingDate, productCode), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And(string.Format("User enters shipment details with Origin \"{0}\", Destination \"{1}\", Product Code \"" +
+                            "{2}\" and Agent code", origin, destination, productCode), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 14
  testRunner.And("User enters Shipper and Consignee details", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
@@ -147,8 +151,7 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.And(string.Format("User enters commodity details with Commodity \"{0}\", Pieces \"{1}\", Weight \"{2}\"", commodity, piece, weight), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 16
- testRunner.And(string.Format("User enters Carrier details with Origin \"{0}\", Destination \"{1}\", Flight No \"{2}\"" +
-                            ", Flight Date \"{3}\", Pieces \"{4}\", Weight \"{5}\"", origin, destination, flightNo, flightDate, piece, weight), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And(string.Format("User selects flight for \"{0}\"", productCode), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 17
  testRunner.And("User clicks on Save button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");

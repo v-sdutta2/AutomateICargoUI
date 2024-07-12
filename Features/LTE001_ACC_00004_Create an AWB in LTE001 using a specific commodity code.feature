@@ -31,12 +31,12 @@ Scenario Outline: Create an AWB in LTE001 using a specific commodity code
 	And User enters the Screening details for row 1 with screeingMethod as 'Transfer Manifest Verified' and ScreeningResult as 'Pass'
 	And User clicks on the ContinueScreeningDetails button
 	And User checks the AWB_Verified checkbox
-	And User clicks on the save button & handle Payment Portal
+	#And User clicks on the save button & handle Payment Portal
 	And User saves all the details & handles all the popups
 	And User validates the commodity charge amount
 	And User closes the LTE screen
 	Then User logs out from the application
 
 Examples:
-	| AgentCode | ShipperCode | ConsigneeCode| Origin | Destination | ProductCode | SCC  | Commodity | ShipmentDescription | ServiceCargoClass | Piece | Weight | ChargeType | ModeOfPayment | cartType |
-	| 10763     | 10763       | 10763        | SEA    | ANC         | GENERAL     | None | 0316      | None                | None              | 2     | 59     | PP         | CREDIT        | CART     |
+	| AgentCode | ShipperCode | ConsigneeCode | Origin | Destination | ProductCode | SCC  | Commodity | ShipmentDescription | ServiceCargoClass | Piece | Weight | ChargeType | ModeOfPayment | cartType |
+	| 10763     | 10763       | 10763         | SEA    | ANC         | PRIORITY    | None | 2199      | None                | None              | 2     | 59     | PP         | CREDIT        | CART     |

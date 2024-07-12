@@ -15,7 +15,7 @@ namespace iCargoUIAutomation.StepDefinitions
     {
         private IWebDriver driver;
         private PageObjectManager pageObjectManager;
-        private createShipmentPage csp;
+        private CreateShipmentPage csp;
         ILog Log = LogManager.GetLogger(typeof(LTE001_ACC_00010_ReopenAWBchangefinaldestinationandreexecute));
 
         public LTE001_ACC_00010_ReopenAWBchangefinaldestinationandreexecute(IWebDriver driver) : base(driver)
@@ -29,7 +29,8 @@ namespace iCargoUIAutomation.StepDefinitions
         [When(@"User saves the details with capturing irregularity for flight destination change with ChargeType ""([^""]*)""")]
         public void WhenUserSavesTheDetailsWithCapturingIrregularityForFlightDestinationChangeWithChargeType(string charge)
         {
-            csp.saveDetailsWithCapturingIrregularity(charge);
+            Hooks.Hooks.createNode();
+            csp.SaveDetailsWithCapturingIrregularity(charge);
         }
 
 

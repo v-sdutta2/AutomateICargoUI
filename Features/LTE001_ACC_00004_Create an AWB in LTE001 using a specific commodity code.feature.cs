@@ -77,7 +77,7 @@ namespace iCargoUIAutomation.Features
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Create an AWB in LTE001 using a specific commodity code")]
         [NUnit.Framework.CategoryAttribute("tag1")]
-        [NUnit.Framework.TestCaseAttribute("10763", "10763", "10763", "SEA", "ANC", "GENERAL", "None", "0316", "None", "None", "2", "59", "PP", "CREDIT", "CART", null)]
+        [NUnit.Framework.TestCaseAttribute("10763", "10763", "10763", "SEA", "ANC", "PRIORITY", "None", "2199", "None", "None", "2", "59", "PP", "CREDIT", "CART", null)]
         public virtual void CreateAnAWBInLTE001UsingASpecificCommodityCode(
                     string agentCode, 
                     string shipperCode, 
@@ -221,9 +221,6 @@ this.ScenarioInitialize(scenarioInfo);
 #line hidden
 #line 33
  testRunner.And("User checks the AWB_Verified checkbox", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-#line 34
- testRunner.And("User clicks on the save button & handle Payment Portal", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 35
  testRunner.And("User saves all the details & handles all the popups", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");

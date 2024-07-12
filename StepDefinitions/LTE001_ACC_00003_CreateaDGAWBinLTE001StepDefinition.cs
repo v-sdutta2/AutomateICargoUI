@@ -14,7 +14,7 @@ namespace iCargoUIAutomation.StepDefinitions
     {
         private IWebDriver driver;
         private PageObjectManager pageObjectManager;       
-        private createShipmentPage csp;
+        private CreateShipmentPage csp;
 
         ILog Log = LogManager.GetLogger(typeof(LTE001_ACC_00003_CreateaDGAWBinLTE001));
 
@@ -22,19 +22,19 @@ namespace iCargoUIAutomation.StepDefinitions
         public LTE001_ACC_00003_CreateaDGAWBinLTE001(IWebDriver driver) : base(driver)
         {
             this.driver = driver;
-            this.pageObjectManager = new PageObjectManager(driver);
-           
+            this.pageObjectManager = new PageObjectManager(driver);           
             this.csp = pageObjectManager.GetCreateShipmentPage();
         }
 
        
 
 
-        [When(@"User Save Shipment Capture Checksheet & DG Details with ChargeType ""([^""]*)"",UNID ""([^""]*)"", ProperShipmentName ""([^""]*)"", PackingInstruction ""([^""]*)"",NoOfPkg ""([^""]*)"", NetQtyPerPkg ""([^""]*)"", ReportableQnty ""([^""]*)""")]
+        [When(@"User Save Shipment with DG Details & Capture Checksheet with ChargeType ""([^""]*)"",UNID ""([^""]*)"", ProperShipmentName ""([^""]*)"", PackingInstruction ""([^""]*)"",NoOfPkg ""([^""]*)"", NetQtyPerPkg ""([^""]*)"", ReportableQnty ""([^""]*)""")]
         public void SaveShipmentWithDGAndCheckSheet(string chargetype,string unid, string propershipmntname, string pi, string noOFPkg, string netqtyperpkg, string reportable)
         {
-           Log.Info("Step: Save Shipment Capture Checksheet & DG Details");
-           csp.SaveWithDGAndCheckSheet(chargetype,unid, propershipmntname, pi, noOFPkg, netqtyperpkg, reportable);
+            Hooks.Hooks.createNode();
+            Log.Info("Step: Save Shipment Capture Checksheet & DG Details");
+           (string capturedAWB,string totalpayment)=csp.SaveWithDGAndCheckSheet(chargetype,unid, propershipmntname, pi, noOFPkg, netqtyperpkg, reportable);
 
         }
 

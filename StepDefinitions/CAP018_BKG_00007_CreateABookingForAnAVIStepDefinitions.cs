@@ -23,7 +23,14 @@ namespace iCargoUIAutomation.StepDefinitions
         [Then(@"User clicks on Save button and fills the checksheet details to generate awb")]
         public void ThenUserFillsTheChecksheetDetailsToGenerateAwb()
         {
-            mbp.AVIBookingChecksheetDetails();
+            if (ScenarioContext.Current["Execute"] == "true")
+            {
+                mbp.AVIBookingChecksheetDetails();
+            }
+            else
+            {
+                ScenarioContext.Current.Pending();
+            }            
         }
     }
 }

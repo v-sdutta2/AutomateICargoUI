@@ -1,4 +1,5 @@
-﻿using iCargoUIAutomation.utilities;
+﻿using AventStack.ExtentReports;
+using iCargoUIAutomation.utilities;
 using log4net;
 using OpenQA.Selenium;
 using System;
@@ -28,10 +29,54 @@ namespace iCargoUIAutomation.pages
         private By btnContinuePlsConfirm = By.XPath("//*[text()=' Continue ']");
         ILog Log = LogManager.GetLogger(typeof(PaymentPortalPage));
 
+        public void ClosePaymentPortal()
+        {
+            Log.Info("Closing Payment Portal");
+            CloseCurrentWindow();
+            Hooks.Hooks.UpdateTest(Status.Pass, "Closed Payment Portal");
+        }
 
-        public string handlePaymentInPaymentPortal(string chargetyp)
+        public string PaymentWithPPCC(string chargtyp)
+        {
+            Log.Info("Handling Payment in Payment Portal with "+chargtyp);
+            Hooks.Hooks.UpdateTest(Status.Info, "Handling Payment in Payment Portal with " + chargtyp);
+            string totalPaybleAmount = "";
+            try
+            {
+                if (chargtyp.Equals("PP"))
+                {
+                    ConfirmManualPayment();
+                    ScrollDown();
+                    totalPaybleAmount = GetText(lblTotalAmount_Xpath).Split("$")[1];
+                    Hooks.Hooks.UpdateTest(Status.Pass, "Total Payable Amount is: " + totalPaybleAmount);
+                    ClickOnElementIfEnabled(btnDone_Xpath);
+                    Hooks.Hooks.UpdateTest(Status.Pass, "Clicked on Done Button");
+                    WaitForElementToBeInvisible(btnDone_Xpath, TimeSpan.FromSeconds(7));
+
+                }
+                else if (chargtyp.Equals("CC"))
+                {
+                    ConfirmManualPayment();
+                    Click(btnExitIcargo_Xpath);
+                    Hooks.Hooks.UpdateTest(Status.Pass, "Clicked on Exit to iCargo Button");
+                    Click(btnContinuePlsConfirm);
+                    Hooks.Hooks.UpdateTest(Status.Pass, "Clicked on Continue Button");
+                }
+
+            }
+            catch (Exception e)
+            {
+                Hooks.Hooks.UpdateTest(Status.Fail, "Error in handling Payment in Payment Portal: " + e.Message);
+                Log.Error("Error in handling Payment in Payment Portal" + e.Message);
+            }
+            return totalPaybleAmount;
+        }
+
+
+        public string HandlePaymentInPaymentPortal(string chargetyp)
         {
             Log.Info("Handling Payment in Payment Portal");
+            Hooks.Hooks.UpdateTest(Status.Info, "Handling Payment in Payment Portal");
             string totalPaybleAmount = "";
             try
             {
@@ -43,28 +88,29 @@ namespace iCargoUIAutomation.pages
                     }
                     else if (chargetyp.Equals("PP"))
                     {
-                        confirmManualPayment();
-                       
-                        WaitForElementToBeVisible(lblPaymentSuccess_Xpath, TimeSpan.FromSeconds(15));
+                        ConfirmManualPayment();
                         ScrollDown();
                         totalPaybleAmount = GetText(lblTotalAmount_Xpath).Split("$")[1];
+                        Hooks.Hooks.UpdateTest(Status.Pass, "Total Payable Amount is: " + totalPaybleAmount);
                         ClickOnElementIfEnabled(btnDone_Xpath);
-                        Thread.Sleep(2000);
-                        
+                        Hooks.Hooks.UpdateTest(Status.Pass, "Clicked on Done Button");
+                        WaitForElementToBeInvisible(btnDone_Xpath, TimeSpan.FromSeconds(7));
                     }
                     else if (chargetyp.Equals("CC"))
                     {
-                        confirmManualPayment();
+                        ConfirmManualPayment();
                         Click(btnExitIcargo_Xpath);
+                        Hooks.Hooks.UpdateTest(Status.Pass, "Clicked on Exit to iCargo Button");
                         Click(btnContinuePlsConfirm);
+                        Hooks.Hooks.UpdateTest(Status.Pass, "Clicked on Continue Button");
                     }
-                    SwitchToLastWindow();
 
                 }
 
             }
             catch (Exception e)
             {
+                Hooks.Hooks.UpdateTest(Status.Fail, "Error in handling Payment in Payment Portal: " + e.Message);
                 Log.Error("Error in handling Payment in Payment Portal" + e.Message);
             }
 
@@ -73,12 +119,16 @@ namespace iCargoUIAutomation.pages
 
 
 
-        public void confirmManualPayment()
+        public void ConfirmManualPayment()
         {
+            Hooks.Hooks.UpdateTest(Status.Info, "Confirming Manual Payment");
             Log.Info("Confirming Manual Payment");
             Click(optionManualPaymentMethod_Xpath);
+            Hooks.Hooks.UpdateTest(Status.Pass, "Selected Manual Payment Option");
             Click(btnNext_Xpath);
+            Hooks.Hooks.UpdateTest(Status.Pass, "Clicked on Next Button");
             Click(btnConfirmManualPayment_Xpath);
+            Hooks.Hooks.UpdateTest(Status.Pass, "Clicked on Confirm manual payment Button");
 
         }
 

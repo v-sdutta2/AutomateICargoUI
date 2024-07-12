@@ -17,15 +17,17 @@ namespace iCargoUIAutomation.pages
     {
         private readonly IWebDriver driver;
 
+
         public static readonly ILog log = LogManager.GetLogger(typeof(BasePage));
-        private readonly logFileConfiguration logConfig;
+        private readonly LogFileConfiguration logConfig;
         public BasePage(IWebDriver driver)
         {
             this.driver = driver;
-            this.logConfig = new logFileConfiguration();
+            this.logConfig = new LogFileConfiguration();
             this.logConfig.ConfigureLog4Net();
-        }    
-                
+
+        }
+
 
         // Browser Actions
 
@@ -93,7 +95,6 @@ namespace iCargoUIAutomation.pages
 
             driver.Navigate().Refresh();
             log.Info("Refreshed the page");
-            //Thread.Sleep(5000);
 
 
         }
@@ -169,7 +170,7 @@ namespace iCargoUIAutomation.pages
 
         public void SwitchToLastWindow()
         {
-            driver.SwitchTo().Window(driver.WindowHandles[^1]);
+            driver.SwitchTo().Window(driver.WindowHandles[^1]);            
             log.Info("Switched to the last window");
         }
 
@@ -197,10 +198,9 @@ namespace iCargoUIAutomation.pages
         {
 
             driver.FindElement(byLocator).Click();
-           // Thread.Sleep(1000);
             log.Info("Clicked on the element " + byLocator);
 
-        }   
+        }
 
 
 
@@ -211,12 +211,15 @@ namespace iCargoUIAutomation.pages
 
         public void DoubleClick(By byLocator)
         {
-
             Actions action = new Actions(driver);
             action.DoubleClick(driver.FindElement(byLocator)).Perform();
             log.Info("Double clicked on the element " + byLocator);
-            //Thread.Sleep(2000);
+        }
 
+        public void ClickElementUsingActions(By byLocator)
+        {
+            Actions actions = new Actions(driver);
+            actions.MoveToElement(driver.FindElement(byLocator)).Click().Perform();
         }
 
         // WebElement Actions
@@ -262,7 +265,7 @@ namespace iCargoUIAutomation.pages
                 if (element.GetAttribute("value") == text)
                 {
                     log.Info("Entered the text " + text + " in the element " + byLocator);
-                    break; // The text was entered correctly, so break the loop
+                    break;
                 }
             }
 
@@ -294,13 +297,12 @@ namespace iCargoUIAutomation.pages
         public void EnterTextToDropdown(By byLocator, string text)
         {
             driver.FindElement(byLocator).SendKeys(text + Keys.Enter + Keys.Tab);
-
         }
 
         public string GetText(By byLocator)
         {
 
-            string textExtracted = driver.FindElement(byLocator).Text;
+            string textExtracted = driver.FindElement(byLocator).Text.Trim();            
             log.Info("Extracted the text " + textExtracted);
             return textExtracted;
 
@@ -329,7 +331,7 @@ namespace iCargoUIAutomation.pages
             return attributeValue;
         }
 
-        
+
 
         public void EnterKeys(By byLocator, string key)
         {
@@ -354,7 +356,7 @@ namespace iCargoUIAutomation.pages
         {
             WebDriverWait wait = new WebDriverWait(driver, time);
             wait.PollingInterval = TimeSpan.FromSeconds(1);
-            wait.IgnoreExceptionTypes(typeof(ElementNotVisibleException), typeof(NoSuchElementException), typeof(TimeoutException));
+            wait.IgnoreExceptionTypes(typeof(ElementNotVisibleException), typeof(NoSuchElementException), typeof(TimeoutException), typeof(StaleElementReferenceException));
             wait.Until(driver => driver.FindElement(byLocator).Displayed);
             log.Info("The element " + byLocator + " is visible");
 
@@ -372,13 +374,28 @@ namespace iCargoUIAutomation.pages
             WebDriverWait wait = new WebDriverWait(driver, time);
             wait.PollingInterval = TimeSpan.FromSeconds(1);
             wait.IgnoreExceptionTypes(typeof(ElementNotVisibleException), typeof(NoSuchElementException), typeof(TimeoutException));
-            wait.Until(driver => driver.FindElement(byLocator).Enabled);
+            //wait.Until(driver => driver.FindElement(byLocator).Enabled);
+            wait.Until(ExpectedConditions.ElementToBeClickable(byLocator));
+
             log.Info("The element " + byLocator + " is clickable");
 
         }
 
-        
+        // wait for the element to be disabled
+        public void WaitForElementToBeDisabled(By byLocator, TimeSpan time)
+        {
+            WebDriverWait wait = new WebDriverWait(driver, time);
+            wait.Until(driver => !driver.FindElement(byLocator).Enabled);
+        }
 
+        // wait until the invisibility of a text
+        
+        public void WaitForTextToBeInvisible(string text, TimeSpan timeout)
+        {
+            var wait = new WebDriverWait(driver, timeout);
+            wait.Until(ExpectedConditions.InvisibilityOfElementLocated(By.XPath("//*[contains(text(), '" + text + "')]")));
+            
+        }
 
         public void ClickOnElementIfPresent(By byLocator)
         {
@@ -396,7 +413,7 @@ namespace iCargoUIAutomation.pages
             Click(byLocator);
         }
 
-        public bool IsElementDisplayed(By byLocator,int time=10)
+        public bool IsElementDisplayed(By byLocator, int time = 5)
         {
             try
             {
@@ -417,7 +434,7 @@ namespace iCargoUIAutomation.pages
 
         public void WaitUntilTextIsDisplayed(By byLocator, string text)
         {
-            //Thread.Sleep(5000);
+
             string textCaptured = driver.FindElement(byLocator).Text;
             // wait until the textCaptured is not equal to text
             while (true)
@@ -433,17 +450,24 @@ namespace iCargoUIAutomation.pages
         public bool checkTextboxIsNotEmpty(By byLocator)
         {
 
-            string textCaptured = driver.FindElement(byLocator).GetAttribute("value");            
-            
+            string textCaptured = driver.FindElement(byLocator).GetAttribute("value");
+
             if (textCaptured.Trim() != "")
             {
-                   return true;
+                return true;
             }
             else
             {
                 return false;
             }
-            
+
+        }
+
+        //check for a value in a textbox
+        public bool CheckForValueInTextbox(By byLocator, string text)
+        {
+            string textCaptured = driver.FindElement(byLocator).GetAttribute("value");
+            return textCaptured == text;
         }
 
         // wait until the text box is not empty
@@ -488,17 +512,25 @@ namespace iCargoUIAutomation.pages
             js.ExecuteScript("window.scrollBy(2000,0)");
         }
 
+        //Click Element using JavaScriptExecutor
+        public void ClickElementUsingJavaScript(By byLocator)
+        {
+            IWebElement element = driver.FindElement(byLocator);
+            IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
+            js.ExecuteScript("arguments[0].click();", element);
+        }
+
 
         /* Frame Actions */
         public void SwitchToFrame(By byLocator)
         {
-            driver.SwitchTo().Frame(driver.FindElement(byLocator));
+            driver.SwitchTo().Frame(driver.FindElement(byLocator));            
             log.Info("Switched to frame");
         }
 
         public void SwitchToDefaultContent()
         {
-            driver.SwitchTo().DefaultContent();
+            driver.SwitchTo().DefaultContent();            
             log.Info("Switched to default content");
         }
 
@@ -512,8 +544,8 @@ namespace iCargoUIAutomation.pages
                 // wait untill the value is visible
                 WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
                 wait.Until(driver => select.Options.Any(option => option.Text == text));
-                select.SelectByText(text);           
-            
+                select.SelectByText(text);
+
             }
             else
             {
@@ -529,9 +561,7 @@ namespace iCargoUIAutomation.pages
             IWebElement dropdown = driver.FindElement(byLocator);
             Actions actions = new Actions(driver);
             actions.MoveToElement(dropdown).Click().Perform();
-            // Thread.Sleep(2000);
             actions.SendKeys(text).Perform();
-            // Thread.Sleep(2000);
             actions.SendKeys(Keys.Enter).Perform();
             log.Info("Selected the dropdown by visible text " + text + " in the element " + byLocator);
 
@@ -582,16 +612,14 @@ namespace iCargoUIAutomation.pages
             {
                 SelectElement select = new SelectElement(driver.FindElement(byLocator));
                 select.SelectByText(text);
-                //select.SelectByValue(text);
                 WaitUntilTextboxIsNotEmpty(byLocator);
                 if (select.SelectedOption.Text == text)
                 {
                     log.Info("Selected the dropdown by visible text " + text + " in the element " + byLocator);
-                    break; // The text was selected correctly, so break the loop
+                    break;
                 }
             }
         }
-
 
 
         /* Random Number Generate */
@@ -608,15 +636,10 @@ namespace iCargoUIAutomation.pages
             return random.Next(rangeStart, rangeEnd + 1);
         }
 
-
-
-
-
-
-
-
-
-
+        public void LogOutApplication()
+        {
+            driver.Quit();
+        }
 
     }
 }

@@ -2,7 +2,7 @@
 
 Create a New Shipment, Acceptance of that new shipment & screening as a CGO or CGODG user
 
-@tag1
+@LTE001
 Scenario Outline: Create and accept an AWB for a known shipper booked on pax flights without screening details
 	Given User lauches the Url of iCargo Staging UI
 	Then User enters into the  iCargo 'Sign in to icargoas' page successfully

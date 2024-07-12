@@ -18,9 +18,8 @@ Scenario Outline: Reopen an AWB and change piece count and weight and reexecute
 	And User clicks on the ContinueCertificate button
 	And User enters the Shipment details with Origin "<Origin>", Destination "<Destination>", ProductCode "<ProductCode>", SCCCode "<SCC>", Commodity "<Commodity>", ShipmentDescription"<ShipmentDescription>", ServiceCargoClass "<ServiceCargoClass>", Piece "<Piece>", Weight "<Weight>"
 	And User clicks on the ContinueShipment button
-	#And User enters the Flight details with CarrierCode "<CarrierCode>", FlightNo "<FlightNo>"
 	And User clicks on the Select Flight Button
-	And User selects an available flight
+	And User selects an "Combination" flight	
 	And User clicks on the ContinueFlightDetails button
 	And User enters the Charge details with ChargeType "<ChargeType>" and ModeOfPayment "<ModeOfPayment>"
 	And User clicks on the CalculateCharges button
@@ -45,9 +44,12 @@ Scenario Outline: Reopen an AWB and change piece count and weight and reexecute
 	And User clicks on the ContinueAcceptanceDetails button
 	And User verifies and Update the Screening Details
 	And User clicks on the ContinueScreeningDetails button
-	And User checks the AWB_Verified checkbox
+	And User checks the AWB_Verified checkbox	
 	And User clicks on the save button
-	And User saves all the details & handles all the popups
+	And User handles the error popups with errorType as ''
+	And User closes the Payment Portal tab and retry
+	And User handles the error popups with errorType as ''
+	And User handles the error popups with errorType as ''	
 	And User validates the AWB is "EXECUTED"
 	And User closes the LTE screen
 	Then User logs out from the application
@@ -55,6 +57,6 @@ Scenario Outline: Reopen an AWB and change piece count and weight and reexecute
 
 Examples:
 	| AgentCode | ShipperCode | ConsigneeCode | Origin | Destination | ProductCode | SCC  | Commodity | ShipmentDescription | ServiceCargoClass | Piece | Weight | ChargeType | ModeOfPayment | cartType |
-	| 10763     | 10763       | 10763         | SEA    | ANC         | GENERAL     | None | 0316      | None                | None              | 2     | 59     | CC         | None          | CART     |
+	| 10763     | 10763       | 10763         | SEA    | JFK         | GENERAL     | None | 0316      | None                | None              | 2     | 59     | CC         | None          | CART     |
 
 	

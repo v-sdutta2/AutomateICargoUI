@@ -16,7 +16,7 @@ namespace iCargoUIAutomation.StepDefinitions
         private IWebDriver driver;
         private PageObjectManager pageObjectManager;
        
-        private createShipmentPage csp;
+        private CreateShipmentPage csp;
         public static string preBookedpieces="";
         ILog Log = LogManager.GetLogger(typeof(LTE001_ACC_00006_AcceptprebookedAWBLTE001));
 
@@ -32,47 +32,54 @@ namespace iCargoUIAutomation.StepDefinitions
         [When(@"User enters an AWB ""([^""]*)"" of a PreBooked Shipment")]
         public void WhenUserEntersAnAWBOfAPreBookedShipment(string preBookedAWB)
         {
+            Hooks.Hooks.createNode();
             Log.Info("Step: Entering the AWB of a PreBooked Shipment");
             preBookedAWB = preBookedAWB.Split("-")[1];
-            csp.switchToLTEContentFrame();
-            csp.enterAWBTextBox(preBookedAWB);
-            csp.clickOnListButton();
+            csp.SwitchToLTEContentFrame();
+            csp.ClickOnAwbTextBox();
+            csp.EnterAWBTextBox(preBookedAWB);
+            csp.ClickOnListButton();
         }
 
         [When(@"User opens & verifies the Participant Details")]
         public void WhenUserOpensVerifiesTheParticipantDetails()
         {
+            Hooks.Hooks.createNode();
             Log.Info("Step: Opening and Verifying the Participant Details");
-            csp.openAndVerifyParticipants();
+            csp.OpenAndVerifyParticipants();
         }
 
         [When(@"User opens & verifies the Shipment Details")]
         public void WhenUserOpensVerifiesTheShipmentDetails()
         {
+            Hooks.Hooks.createNode();
             Log.Info("Step: Opening and Verifying the Shipment Details");
-            csp.openAndVerifyShipments();            
+            csp.OpenAndVerifyShipments();            
         }
 
         [When(@"User opens & verifies the Flight Details")]
         public void WhenUserOpensVerifiesTheFlightDetails()
         {
+            Hooks.Hooks.createNode();
             Log.Info("Step: Opening and Verifying the Flight Details");
-            csp.openAndVerifyFlightDetails();
+            csp.OpenAndVerifyFlightDetails();
            
         }
 
         [When(@"user opens the Charge Details")]
         public void WhenUserOpensTheChargeDetails()
         {
+            Hooks.Hooks.createNode();
             Log.Info("Step: Opening the Charge Details");
-            csp.openAndVerifyChargeDetails();
+            csp.OpenAndVerifyChargeDetails();
         }
 
         [When(@"User enters the Acceptance details with PreBooked pieces")]
         public void WhenUserEntersTheAcceptanceDetailsWithPreBookedPieces()
         {
+            Hooks.Hooks.createNode();
             Log.Info("Step: Entering the Acceptance details with PreBooked pieces");
-            csp.enterAcceptanceDetails();
+            csp.EnterAcceptanceDetails();
         }
 
     }

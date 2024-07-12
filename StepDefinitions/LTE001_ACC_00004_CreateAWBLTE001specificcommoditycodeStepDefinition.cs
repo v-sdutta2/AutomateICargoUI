@@ -15,7 +15,7 @@ namespace iCargoUIAutomation.StepDefinitions
     {
         private IWebDriver driver;
         private PageObjectManager pageObjectManager;       
-        private createShipmentPage csp;        
+        private CreateShipmentPage csp;        
 
         ILog Log = LogManager.GetLogger(typeof(LTE001_ACC_00004_CreateAWBLTE001specificcommoditycode));
 
@@ -30,11 +30,10 @@ namespace iCargoUIAutomation.StepDefinitions
         [When(@"User validates the commodity charge amount")]
         public void WhenUserValidatesTheCommodityChargeAmount()
         {
+            Hooks.Hooks.createNode();
             Log.Info("Step: Validating the commodity charge amount");
-            csp.validateCommodityChargeAmount();
+            csp.ValidateCommodityChargeAmount();
         }
-
-
 
 
 

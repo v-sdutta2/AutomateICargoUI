@@ -79,7 +79,7 @@ namespace iCargoUIAutomation.Features
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Create and accept an AWB for a known shipper booked on pax flights without screen" +
             "ing details")]
-        [NUnit.Framework.CategoryAttribute("tag1")]
+        [NUnit.Framework.CategoryAttribute("LTE001")]
         [NUnit.Framework.TestCaseAttribute("10763", "10763", "10763", "SEA", "ANC", "GENERAL", "None", "0316", "None", "None", "2", "59", "CC", "None", "CART", null)]
         public virtual void CreateAndAcceptAnAWBForAKnownShipperBookedOnPaxFlightsWithoutScreeningDetails(
                     string agentCode, 
@@ -100,7 +100,7 @@ namespace iCargoUIAutomation.Features
                     string[] exampleTags)
         {
             string[] @__tags = new string[] {
-                    "tag1"};
+                    "LTE001"};
             if ((exampleTags != null))
             {
                 @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));

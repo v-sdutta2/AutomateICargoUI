@@ -20,7 +20,7 @@ Scenario Outline: Create a CC AWB in LTE001 for a known shipper
 	And User enters the Shipment details with Origin "<Origin>", Destination "<Destination>", ProductCode "<ProductCode>", SCCCode "<SCC>", Commodity "<Commodity>", ShipmentDescription"<ShipmentDescription>", ServiceCargoClass "<ServiceCargoClass>", Piece "<Piece>", Weight "<Weight>"
 	And User clicks on the ContinueShipment button
 	And User clicks on the Select Flight Button
-	And User selects an available flight
+	And User selects an "Combination" flight	
 	And User clicks on the ContinueFlightDetails button
 	And User enters the Charge details with ChargeType "<ChargeType>" and ModeOfPayment "<ModeOfPayment>"
 	And User clicks on the CalculateCharges button
@@ -37,4 +37,4 @@ Scenario Outline: Create a CC AWB in LTE001 for a known shipper
 
 Examples:
 	| AgentCode | ShipperCode | ConsigneeCode| Origin | Destination | ProductCode | SCC  | Commodity | ShipmentDescription | ServiceCargoClass | Piece | Weight | ChargeType | ModeOfPayment | cartType |
-	| 10763     | 10763       | 10763        | SEA    | ANC         | GENERAL     | None | 0316      | None                | None              | 2     | 59     | CC         | None          | CART     |
+	| 10763     | 10763       | 10763        | LAS    | SEA         | GENERAL     | None | 0316      | None                | None              | 2     | 59     | CC         | None          | CART     |
