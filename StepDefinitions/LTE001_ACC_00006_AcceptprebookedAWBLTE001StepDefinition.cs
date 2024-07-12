@@ -32,6 +32,7 @@ namespace iCargoUIAutomation.StepDefinitions
         [When(@"User enters an AWB ""([^""]*)"" of a PreBooked Shipment")]
         public void WhenUserEntersAnAWBOfAPreBookedShipment(string preBookedAWB)
         {
+            Hooks.Hooks.createNode();
             Log.Info("Step: Entering the AWB of a PreBooked Shipment");
             preBookedAWB = preBookedAWB.Split("-")[1];
             csp.SwitchToLTEContentFrame();
@@ -43,6 +44,7 @@ namespace iCargoUIAutomation.StepDefinitions
         [When(@"User opens & verifies the Participant Details")]
         public void WhenUserOpensVerifiesTheParticipantDetails()
         {
+            Hooks.Hooks.createNode();
             Log.Info("Step: Opening and Verifying the Participant Details");
             csp.OpenAndVerifyParticipants();
         }
@@ -50,6 +52,7 @@ namespace iCargoUIAutomation.StepDefinitions
         [When(@"User opens & verifies the Shipment Details")]
         public void WhenUserOpensVerifiesTheShipmentDetails()
         {
+            Hooks.Hooks.createNode();
             Log.Info("Step: Opening and Verifying the Shipment Details");
             csp.OpenAndVerifyShipments();            
         }
@@ -57,6 +60,7 @@ namespace iCargoUIAutomation.StepDefinitions
         [When(@"User opens & verifies the Flight Details")]
         public void WhenUserOpensVerifiesTheFlightDetails()
         {
+            Hooks.Hooks.createNode();
             Log.Info("Step: Opening and Verifying the Flight Details");
             csp.OpenAndVerifyFlightDetails();
            
@@ -65,6 +69,7 @@ namespace iCargoUIAutomation.StepDefinitions
         [When(@"user opens the Charge Details")]
         public void WhenUserOpensTheChargeDetails()
         {
+            Hooks.Hooks.createNode();
             Log.Info("Step: Opening the Charge Details");
             csp.OpenAndVerifyChargeDetails();
         }
@@ -72,6 +77,7 @@ namespace iCargoUIAutomation.StepDefinitions
         [When(@"User enters the Acceptance details with PreBooked pieces")]
         public void WhenUserEntersTheAcceptanceDetailsWithPreBookedPieces()
         {
+            Hooks.Hooks.createNode();
             Log.Info("Step: Entering the Acceptance details with PreBooked pieces");
             csp.EnterAcceptanceDetails();
         }

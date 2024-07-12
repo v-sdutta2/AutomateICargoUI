@@ -76,7 +76,7 @@ namespace iCargoUIAutomation.Features
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Manifest an AWB from the lying list")]
         [NUnit.Framework.CategoryAttribute("OPR344")]
-        [NUnit.Framework.TestCaseAttribute("LAS", "SEA", "675", "2", "59", "CART", "LyingList", null)]
+        [NUnit.Framework.TestCaseAttribute("SEA", "ANC", "93", "2", "59", "CART", "LyingList", null)]
         public virtual void ManifestAnAWBFromTheLyingList(string origin, string destination, string flightNumber, string piece, string weight, string cartType, string aWBSectionName, string[] exampleTags)
         {
             string[] @__tags = new string[] {

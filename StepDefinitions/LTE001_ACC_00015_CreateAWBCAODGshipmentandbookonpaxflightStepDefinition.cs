@@ -25,24 +25,24 @@ namespace iCargoUIAutomation.StepDefinitions
             this.pageObjectManager = new PageObjectManager(driver);
            
             this.csp = pageObjectManager.GetCreateShipmentPage();
-        }
-
-      
+        } 
 
 
 
         [When(@"User enters details for CAO DG shipment with ChargeType ""([^""]*)"",UNID ""([^""]*)"", ProperShipmentName ""([^""]*)"", PackingInstruction ""([^""]*)"",NoOfPkg ""([^""]*)"", NetQtyPerPkg ""([^""]*)"", ReportableQnty ""([^""]*)""")]
         public void UserEnterDetailsForCAODGShipment(string chargetype, string unid, string propershipmntname, string pi, string noOFPkg, string netqtyperpkg, string reportable)
         {
+            Hooks.Hooks.createNode();
             csp.EnterCAODGDetails(chargetype, unid, propershipmntname, pi, noOFPkg, netqtyperpkg, reportable);
         }
+        
 
-        [When(@"User saves the CAO DG shipment with ""([^""]*)"" flight")]
-        public void WhenUserSavesTheCAODGShipmentWithFlight(string typeOfFlight)
+        [When(@"User saves the CAO DG shipment")]
+        public void WhenUserSavesTheCAODGShipment()
         {
-            csp.SaveCAODGshipment(typeOfFlight);
+            Hooks.Hooks.createNode();
+            csp.SaveCAODGshipment();
         }
-
 
 
 

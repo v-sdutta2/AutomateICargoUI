@@ -34,6 +34,7 @@ namespace iCargoUIAutomation.StepDefinitions
         [When(@"User enters the Booked FlightNumber with ""([^""]*)""")]
         public void WhenUserEntersTheBookedFlightNumberWith(string fltnumber)
         {
+            Hooks.Hooks.createNode();
             emp.SwitchToManifestFrame();
             emp.ClickOnFlightTextBox();
             csp.EnterFlightinExportManifest(fltnumber);
@@ -43,12 +44,14 @@ namespace iCargoUIAutomation.StepDefinitions
         [When(@"User enters Booked ShipmentDate")]
         public void WhenUserEntersBookedShipmentDate()
         {
-           csp.EnterFlightDateExportManifest();
+            Hooks.Hooks.createNode();
+            csp.EnterFlightDateExportManifest();
         }
 
         [When(@"User clicks on the List button to fetch the Booked Shipment")]
         public void WhenUserClicksOnTheListButtonToFetchTheBookedShipment()
         {
+            Hooks.Hooks.createNode();
             emp.ClickOnListButton();
         }
        
@@ -56,6 +59,7 @@ namespace iCargoUIAutomation.StepDefinitions
         [When(@"User creates new ULD/Cart in Assigned Shipment with cartType ""([^""]*)"" and pou ""([^""]*)""")]
         public void WhenUserCreatesNewULDCartInAssignedShipmentWithCartTypeAndPou(string cartType, string pou)
         {
+            Hooks.Hooks.createNode();
             csp.CreateNewULDCartExportManifest(cartType, pou);
         }
 
@@ -64,6 +68,7 @@ namespace iCargoUIAutomation.StepDefinitions
         [When(@"User filterouts the Booked AWB from '([^']*)' and Created ULD_Cart")]
         public void WhenUserFilteroutsTheBookedAWBFromAndCreatedULD_Cart(string awbSectionName)
         {
+            Hooks.Hooks.createNode();
             csp.FilterOutAWBULDInExportManifest(awbSectionName);
         }   
         

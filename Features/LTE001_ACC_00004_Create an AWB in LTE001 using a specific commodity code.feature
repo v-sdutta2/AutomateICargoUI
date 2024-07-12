@@ -31,7 +31,7 @@ Scenario Outline: Create an AWB in LTE001 using a specific commodity code
 	And User enters the Screening details for row 1 with screeingMethod as 'Transfer Manifest Verified' and ScreeningResult as 'Pass'
 	And User clicks on the ContinueScreeningDetails button
 	And User checks the AWB_Verified checkbox
-	And User clicks on the save button & handle Payment Portal
+	#And User clicks on the save button & handle Payment Portal
 	And User saves all the details & handles all the popups
 	And User validates the commodity charge amount
 	And User closes the LTE screen

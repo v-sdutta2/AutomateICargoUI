@@ -31,7 +31,7 @@ Scenario Outline: Create an AWB for a CAO DG shipment and book on a pax flight
 	And User clicks on the ContinueScreeningDetails button
 	And User enters details for CAO DG shipment with ChargeType "<ChargeType>",UNID "<UNID>", ProperShipmentName "<ProperShipmentName>", PackingInstruction "<PackingInstruction>",NoOfPkg "<Piece>", NetQtyPerPkg "<NetQtyPerPkg>", ReportableQnty "<ReportableQnty>"
 	And User checks the AWB_Verified checkbox
-	And User saves the CAO DG shipment with "Combination" flight	
+	And User saves the CAO DG shipment
 	And User validates the popped up error message as "shipment can be booked only in Cargo / truck flight(s)"
 	And User closes the LTE screen
 	Then User logs out from the application

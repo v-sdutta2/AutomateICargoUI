@@ -4,6 +4,7 @@ using log4net;
 using OpenQA.Selenium;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,10 +13,12 @@ namespace iCargoUIAutomation.pages
 {
     public class homePage : BasePage
     {
+        public static string? role;        
         public homePage(IWebDriver driver) : base(driver)
         {
         }
 
+        private By btnHomeIcon_Xpath = By.XPath("//li[@role='tab']//span[normalize-space(text()='Home')]");
         private By lblBaseStation_Xpath = By.XPath("//*[@id='header_panel']//*[@id='ic-user-stationcode']");
         private By btnMore_Xpath = By.XPath("//*[@id='header_panel']//*[@class='ic-header-menu-icon' and @title='More..']");
         private By lnkSwitchRole_Xpath = By.XPath("//*[@class='ic-switch-role']/a");
@@ -31,8 +34,23 @@ namespace iCargoUIAutomation.pages
         private By userName_Id = By.Id("username");
         private By password_Id = By.Id("password");
         private By loginButton_Id = By.XPath("//input[@title='Sign In']");
+
         ILog Log = LogManager.GetLogger(typeof(homePage));
 
+        
+        public void ClickHomeIcon()
+        {
+            try
+            {
+                Click(btnHomeIcon_Xpath);
+            }
+            catch (Exception e)
+            {
+                Log.Error("Error in ClickHomeIcon method: " + e.Message);
+            }
+            
+        }
+        
         public void SwitchStation(string station)
         {
             try
@@ -53,19 +71,7 @@ namespace iCargoUIAutomation.pages
                         SwitchToDefaultContent();
                     
                 }
-
-
-                //string baseStation = GetText(lblBaseStation_Xpath);
-                //if (baseStation != station)
-                //{
-                //    Click(btnMore_Xpath);
-                //    Click(lnkSwitchRole_Xpath);
-                //    SwitchToFrame(frameSwitchRole_Id);
-                //    WaitForElementToBeVisible(drpdwnSelectStation_Id, TimeSpan.FromSeconds(10));
-                //    SelectDropdownByVisibleText(drpdwnSelectStation_Id, station);
-                //    Click(btnOKSwitchRole_Xpath);
-                //    SwitchToDefaultContent();
-                //}
+                
             }
             catch (Exception e)
             {              
@@ -81,7 +87,7 @@ namespace iCargoUIAutomation.pages
                 EnterText(txt_ScreenName_Css, screenName);
                 EnterKeys(txt_ScreenName_Css, Keys.Enter);
                 WaitForElementToBeVisible(By.CssSelector("li[tabindex='0']"), TimeSpan.FromSeconds(5));
-                //Thread.Sleep(2000);
+               
             }
             catch (Exception e)
             {
@@ -112,8 +118,24 @@ namespace iCargoUIAutomation.pages
         {
             try
             {
-                EnterText(userName_Id, "iCargoTest1@aagqa.net");
-                EnterText(password_Id, "#hG*Txs24$K54Xk");
+                var secrets = KeyVault.GetSecret();
+                WaitForElementToBeVisible(userName_Id, TimeSpan.FromSeconds(10));
+                role = Environment.GetEnvironmentVariable("ROLE_GROUP", EnvironmentVariableTarget.Process);
+                //role = "CCC";
+                if (role.ToUpper() == "CCC")
+                {
+                    EnterText(userName_Id, secrets["CCC_Username"]);
+                    EnterText(password_Id, secrets["CCC_Password"]);
+                }
+                else if (role.ToUpper() == "CGODG")
+                {
+                    EnterText(userName_Id, secrets["CGODG_Username"]);
+                    EnterText(password_Id, secrets["CGODG_Password"]);
+                }
+                else
+                {
+                    Log.Error("Role not found");
+                }
                 Click(loginButton_Id);
                 WaitForElementToBeInvisible(userName_Id, TimeSpan.FromSeconds(5));
             }
@@ -121,7 +143,7 @@ namespace iCargoUIAutomation.pages
             {
                 Log.Error("Error in loginiCargo method: " + e.Message);
             }
-            
+
         }
 
     }

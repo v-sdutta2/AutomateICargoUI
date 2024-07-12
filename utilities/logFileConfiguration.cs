@@ -19,14 +19,14 @@ namespace iCargoUIAutomation.utilities
             PatternLayout patternLayout = new PatternLayout();
             patternLayout.ConversionPattern = "%date [%thread] %-5level %logger - %message%newline";
             patternLayout.ActivateOptions();
-
-            string projectDirectory = System.IO.Path.GetFullPath(System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), "..\\..\\..\\"));
-            string logFilePath = System.IO.Path.Combine(projectDirectory, "Logs", "logfile.log");
+           
+            //string projectDirectory = System.IO.Path.GetFullPath(System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), "..\\..\\..\\"));
+            string logFilePath = @"\\seavvfile1\projectmgmt_pmo\iCargoAutomationReports\Logs\Log"+DateTime.Now.ToString("yyyyMMdd_HHmmss")+@"logfile.log";
             Console.WriteLine("Log file path: " + logFilePath);
             FileAppender appender = new FileAppender();
-            appender.AppendToFile = false;
+            appender.AppendToFile = true;
             appender.File = logFilePath;
-            appender.Layout = patternLayout;
+            appender.Layout = patternLayout;            
             appender.ActivateOptions();
             hierarchy.Root.AddAppender(appender);
 

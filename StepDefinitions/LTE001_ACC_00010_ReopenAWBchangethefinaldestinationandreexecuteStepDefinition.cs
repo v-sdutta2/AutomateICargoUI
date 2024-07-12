@@ -29,6 +29,7 @@ namespace iCargoUIAutomation.StepDefinitions
         [When(@"User saves the details with capturing irregularity for flight destination change with ChargeType ""([^""]*)""")]
         public void WhenUserSavesTheDetailsWithCapturingIrregularityForFlightDestinationChangeWithChargeType(string charge)
         {
+            Hooks.Hooks.createNode();
             csp.SaveDetailsWithCapturingIrregularity(charge);
         }
 

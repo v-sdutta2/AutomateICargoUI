@@ -30,6 +30,7 @@ namespace iCargoUIAutomation.StepDefinitions
         [When(@"USer adds another screening line")]
         public void WhenUSerAddsAnotherScreeningLine()
         {
+            Hooks.Hooks.createNode();
             Log.Info("Step: Adding another screening line");
             csp.AddAnotherScreeningLine();
         }
@@ -37,6 +38,7 @@ namespace iCargoUIAutomation.StepDefinitions
         [When(@"User saves all the details with ChargeType ""([^""]*)""")]
         public void WhenUserSavesAllTheDetailsWithChargeType(string chargeType)
         {
+            Hooks.Hooks.createNode();
             Log.Info("Step: Saving all the details with ChargeType");
             csp.SaveDetailsWithChargeType(chargeType);
         }

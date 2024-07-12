@@ -1,5 +1,4 @@
 using iCargoUIAutomation.pages;
-using NUnit.Framework.Internal.Execution;
 using OpenQA.Selenium;
 using System;
 using TechTalk.SpecFlow;
@@ -14,8 +13,7 @@ namespace iCargoUIAutomation.StepDefinitions
         private homePage hp;
         private MaintainBookingPage mbp;
         string origin = "";
-        string destination = "";
-        //string shippingDate = "";
+        string destination = "";        
         string productCode = "";
         string commodity = "";
         string piece = "";
@@ -34,15 +32,29 @@ namespace iCargoUIAutomation.StepDefinitions
         [When(@"User enters screen name as '([^']*)'")]
         public void WhenUserEntersScreenNameAs(string screenName)
         {
-            hp.enterScreenName(screenName);
-            mbp.SwitchToCAP018Frame();
+            if (ScenarioContext.Current["Execute"] == "true")
+            {
+                hp.enterScreenName(screenName);
+                mbp.SwitchToCAP018Frame();
+            }
+            
+            else
+            {
+                ScenarioContext.Current.Pending();
+            }
         }
 
         [Then(@"User clicks on New/List button")]
         public void ThenUserClicksOnNewListButton()
-        {
-            // mbp.SwitchToCAP018Frame();
-            mbp.ClickNewListButton();
+        { 
+            if (ScenarioContext.Current["Execute"] == "true")
+            {
+                mbp.ClickNewListButton();
+            }
+            else
+            {
+                ScenarioContext.Current.Pending();
+            }           
         }
 
         [Then(@"User enters shipment details with Origin ""([^""]*)"", Destination ""([^""]*)"", Product Code ""([^""]*)"" and Agent code")]
@@ -51,13 +63,23 @@ namespace iCargoUIAutomation.StepDefinitions
             this.origin = origin;
             this.destination = destination;            
             this.productCode = productCode;
+            if (ScenarioContext.Current["Execute"] == "true")
             mbp.EnterShipmentDetails(origin, destination,productCode);
+            else
+            {
+                ScenarioContext.Current.Pending();
+            }
         }
 
         [Then(@"User enters Shipper and Consignee details")]
         public void ThenUserEntersShipperAndConsigneeDetails()
         {
+            if (ScenarioContext.Current["Execute"] == "true")
             mbp.EnterShipperConsigneeDetails();
+            else
+            {
+                ScenarioContext.Current.Pending();
+            }
         }
 
         [Then(@"User enters commodity details with Commodity ""([^""]*)"", Pieces ""([^""]*)"", Weight ""([^""]*)""")]
@@ -66,34 +88,51 @@ namespace iCargoUIAutomation.StepDefinitions
             this.commodity = commodity;
             this.piece = piece;
             this.weight = weight;
+            if (ScenarioContext.Current["Execute"] == "true")
             mbp.EnterCommodityDetails(commodity, piece, weight);
-        }
-
-        //[Then(@"User enters Carrier details with Origin ""([^""]*)"", Destination ""([^""]*)"", Flight No ""([^""]*)"", Flight Date ""([^""]*)"", Pieces ""([^""]*)"", Weight ""([^""]*)""")]
-        //public void ThenUserEntersCarrierDetailsWithOriginDestinationFlightNoFlightDatePiecesWeight(string origin, string destination, string flightno, string flightdate, string piece, string weight)
-        //{
-        //    this.flightno = flightno;
-        //    this.flightDate = flightdate;
-        //    mbp.EnterCarrierDetails(origin, destination, flightno, flightdate, piece, weight);
-        //}
+            else
+            {
+                ScenarioContext.Current.Pending();
+            }
+        }        
 
         [Then(@"User clicks on Save button")]
         public void ThenUserClicksOnSaveButton()
         {
-            mbp.ClickSaveButton();
-            mbp.CaptureAwbNumber();
+            if (ScenarioContext.Current["Execute"] == "true")
+            {
+                mbp.ClickSaveButton();
+                mbp.CaptureAwbNumber();
+            }
+            else
+            {
+                ScenarioContext.Current.Pending();
+            }
         }
-
-        //[Then(@"User selects flight")]
-        //public void ThenUserSelectsFlight()
-        //{
-        //    mbp.SelectFlight();
-        //}
+        
         [Then(@"User selects flight for ""([^""]*)""")]
         public void ThenUserSelectsFlightFor(string productCode)
         {
+            if (ScenarioContext.Current["Execute"] == "true")
             mbp.SelectFlight(productCode);
+            else
+            {
+                ScenarioContext.Current.Pending();
+            }
         }
 
+        [Given(@"User wants to execute the example ""([^""]*)""")]
+        
+        public void GivenUserWantsToExecuteTheExample(string execute)
+        {
+            if (execute.ToLower() == "no")
+            {
+                ScenarioContext.Current["Execute"] = "false";
+            }
+            else
+            {
+                ScenarioContext.Current["Execute"] = "true";
+            }
+        }
     }
 }

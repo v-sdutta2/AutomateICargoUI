@@ -26,4 +26,4 @@ Scenario Outline: Manifest an AWB from the lying list
 
 Examples:
 	| Origin | Destination | FlightNumber | Piece | Weight | cartType | AWBSectionName |
-	| LAS    | SEA         | 675          | 2     | 59     | CART     | LyingList      |
+	| SEA    | ANC         | 93           | 2     | 59     | CART     | LyingList      |

@@ -32,6 +32,7 @@ namespace iCargoUIAutomation.StepDefinitions
         [When(@"User captures the checksheet")]
         public void WhenUserCapturesTheChecksheet()
         {
+            Hooks.Hooks.createNode();
             csp.CaptureCheckSheetForDG();
         }
 
