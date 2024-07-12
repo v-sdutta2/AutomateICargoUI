@@ -28,7 +28,7 @@ jobs:
 
       BROWSER: chrome
 
-      ROLE_GROUP: admin
+      ROLE_GROUP: CCC
  
     steps:
 
