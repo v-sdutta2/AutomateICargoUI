@@ -157,7 +157,7 @@ namespace iCargoUIAutomation.Hooks
                 scenario.Fail("Test Failed", captureScreenshot(fileName));
                 scenario.Log(Status.Fail, "Test failed with log" + stackTrace);
             }            
-            if (MaintainBookingPage.awbNumber != "" || CreateShipmentPage.awb_num != "" && ScenarioContext.Current["Execute"] == "true")
+            if (MaintainBookingPage.awbNumber != "" || CreateShipmentPage.awb_num != "" && ScenarioContext.Current["Execute"] == "true" )
             {
                 string filePath = @"\\seavvfile1\projectmgmt_pmo\iCargoAutomationReports\AWB_Numbers\AWB_Details.xlsx";
                 if (featureName.Contains("CAP018"))

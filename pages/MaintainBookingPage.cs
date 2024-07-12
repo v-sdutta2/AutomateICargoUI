@@ -317,16 +317,7 @@ namespace iCargoUIAutomation.pages
             }            
             return errorText;
         }
-
-        public void ClickingYesOnEmbargoWarnings()
-        {            
-            SwitchToSecondPopupWindow();
-            if (IsElementDisplayed(embargoAlert_XPATH))
-            {                
-                WaitForElementToBeVisible(embargoContinue_XPATH, TimeSpan.FromSeconds(10));
-                Click(embargoContinue_XPATH);
-            }            
-        }
+        
 
         public void ClickSaveButton()
         {
@@ -338,8 +329,7 @@ namespace iCargoUIAutomation.pages
                 ClickOnElementIfPresent(saveBtn_XPATH);
                 Hooks.Hooks.UpdateTest(Status.Pass, "Clicked Save Button");
                 Log.Info("Clicked Save Button");                
-                ClickingYesOnPopupWarnings();
-                ClickingYesOnEmbargoWarnings();
+                ClickingYesOnPopupWarnings();                
                 Hooks.Hooks.UpdateTest(Status.Pass, "Clicked Yes on Popup Warnings");
                 Log.Info("Clicked Yes on Popup Warnings");
                 WaitForNewWindowToOpen(TimeSpan.FromSeconds(20), noOfWindowsBefore + 1);

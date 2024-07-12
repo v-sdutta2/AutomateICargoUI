@@ -7,8 +7,10 @@ namespace iCargoUIAutomation.utilities
 {
     public class ExcelFileConfig
     {
+        //public static string excelAwbNumber = "";
         public void AppendDataToExcel(string filePath, string date, string time, string screenName, string awbNumber)
         {
+            //excelAwbNumber = awbNumber;
             // Set the license context for EPPlus 5.x or later
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
