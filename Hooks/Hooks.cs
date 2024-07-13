@@ -103,7 +103,7 @@ namespace iCargoUIAutomation.Hooks
             {
                 throw new NotSupportedException($"Browser '{browser}' is not supported");
             }
-            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(20);
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(30);
             driver.Manage().Window.Maximize();
             homePage hp = new homePage(driver);
             BasePage bp = new BasePage(driver);
