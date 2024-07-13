@@ -16,7 +16,7 @@ jobs:
     runs-on: windows-2019
 
     env:
-      BROWSER: firefox
+      BROWSER: chrome
       ROLE_GROUP: CCC
       App_Url: https://asstg-icargo.ibsplc.aero/icargo/login.do
 
