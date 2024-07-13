@@ -19,7 +19,7 @@ using System.Configuration;
 namespace iCargoUIAutomation.Hooks
 {
     [Binding]
-    public sealed class Hooks
+    public sealed class Hooks : BasePage
     {
         private readonly IObjectContainer _container;
         public static ExtentReports? extent;
@@ -31,9 +31,9 @@ namespace iCargoUIAutomation.Hooks
         private static IWebDriver? driver;
         public static string? featureName;
         public static string? browser;
-        public static string? appUrl = "https://asstg-icargo.ibsplc.aero/icargo/login.do";
+        public static string? appUrl;            
 
-        public Hooks(IObjectContainer container)
+        public Hooks(IObjectContainer container) : base(driver)
         {
             _container = container;
 
@@ -106,7 +106,8 @@ namespace iCargoUIAutomation.Hooks
                 homePage hp = new homePage(driver);
                 BasePage bp = new BasePage(driver);
                 bp.DeleteAllCookies();
-                bp.Open(appUrl);                
+                appUrl=Environment.GetEnvironmentVariable("AppUrl", EnvironmentVariableTarget.Process);
+                bp.Open(appUrl);                  
                 driver.FindElement(By.XPath("//a[@id='social-oidc']")).Click();                
                 if (bp.IsElementDisplayed(By.XPath("//body[@class='login']")))
                 {
