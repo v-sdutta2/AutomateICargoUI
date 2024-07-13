@@ -33,8 +33,7 @@ namespace iCargoUIAutomation.Hooks
         private static IWebDriver? driver;
         public static string? featureName;
         public static string? browser;
-        public static string? appUrl;
-        private static By loginBtn = By.XPath("//a[@id='social-oidc']");
+        public static string? appUrl;        
 
         public Hooks(IObjectContainer container) : base(driver)
         {
@@ -108,9 +107,8 @@ namespace iCargoUIAutomation.Hooks
             driver.Manage().Window.Maximize();
             homePage hp = new homePage(driver);
             BasePage bp = new BasePage(driver);
-            bp.DeleteAllCookies();
-            appUrl = Environment.GetEnvironmentVariable("AppUrl", EnvironmentVariableTarget.Process);
-            bp.Open(appUrl);
+            bp.DeleteAllCookies();            
+            bp.Open("https://asstg-icargo.ibsplc.aero/icargo/login.do");
             WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(20));
             wait.Until(ExpectedConditions.ElementToBeClickable(By.XPath("//a[@id='social-oidc']"))).Click();
             if (bp.IsElementDisplayed(By.XPath("//body[@class='login']")))
