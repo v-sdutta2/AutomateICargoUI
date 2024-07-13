@@ -21,7 +21,7 @@ using SeleniumExtras.WaitHelpers;
 namespace iCargoUIAutomation.Hooks
 {
     [Binding]
-    public sealed class Hooks : BasePage
+    public sealed class Hooks 
     {
         private readonly IObjectContainer _container;
         public static ExtentReports? extent;
@@ -35,7 +35,7 @@ namespace iCargoUIAutomation.Hooks
         public static string? browser;
         public static string? appUrl;        
 
-        public Hooks(IObjectContainer container) : base(driver)
+        public Hooks(IObjectContainer container)
         {
             _container = container;
 
