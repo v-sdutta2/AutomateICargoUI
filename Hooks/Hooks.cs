@@ -107,8 +107,10 @@ namespace iCargoUIAutomation.Hooks
             driver.Manage().Window.Maximize();
             homePage hp = new homePage(driver);
             BasePage bp = new BasePage(driver);
-            bp.DeleteAllCookies();            
+            bp.DeleteAllCookies();  
+            Console.WriteLine("Opening the application URL: " + appUrl);
             bp.Open("https://asstg-icargo.ibsplc.aero/icargo/login.do");
+            Console.WriteLine("Opened the application URL: " + appUrl);
             WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(20));
             wait.Until(ExpectedConditions.ElementToBeClickable(By.XPath("//a[@id='social-oidc']"))).Click();
             if (bp.IsElementDisplayed(By.XPath("//body[@class='login']")))
