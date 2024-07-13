@@ -78,8 +78,8 @@ namespace iCargoUIAutomation.Hooks
         {
             feature = extent.CreateTest(featureContext.FeatureInfo.Title);
             feature.Log(Status.Info, featureContext.FeatureInfo.Description);
-            //browser = Environment.GetEnvironmentVariable("Browser", EnvironmentVariableTarget.Process);
-            browser = "firefox";
+            browser = Environment.GetEnvironmentVariable("Browser", EnvironmentVariableTarget.Process);
+            //browser = "firefox";
             
                 if (browser.Equals("chrome", StringComparison.OrdinalIgnoreCase))
                 {
