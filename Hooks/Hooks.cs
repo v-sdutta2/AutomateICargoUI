@@ -14,6 +14,8 @@ using OpenQA.Selenium.Safari;
 using OpenQA.Selenium.Firefox;
 using System.Net.Mail;
 using System.Configuration;
+using OpenQA.Selenium.Support.UI;
+using SeleniumExtras.WaitHelpers;
 
 
 namespace iCargoUIAutomation.Hooks
@@ -31,7 +33,8 @@ namespace iCargoUIAutomation.Hooks
         private static IWebDriver? driver;
         public static string? featureName;
         public static string? browser;
-        public static string? appUrl;            
+        public static string? appUrl;
+        private static By loginBtn = By.XPath("//a[@id='social-oidc']");
 
         public Hooks(IObjectContainer container) : base(driver)
         {
@@ -41,8 +44,8 @@ namespace iCargoUIAutomation.Hooks
 
         [BeforeTestRun]
         public static void BeforeTestRun()
-        {            
-            reportPath = @"\\seavvfile1\projectmgmt_pmo\iCargoAutomationReports\Reports\TestResults_" + DateTime.Now.ToString("yyyyMMdd_HHmmss");            
+        {
+            reportPath = @"\\seavvfile1\projectmgmt_pmo\iCargoAutomationReports\Reports\TestResults_" + DateTime.Now.ToString("yyyyMMdd_HHmmss");
             testResultPath = reportPath + @"\index.html";
             if (!Directory.Exists(reportPath))
             {
@@ -54,7 +57,7 @@ namespace iCargoUIAutomation.Hooks
                 {
                     // Fallback to the project directory's resource folder if unable to create the specified path
                     string projectDirectory = AppDomain.CurrentDomain.BaseDirectory;
-                    reportPath = Path.Combine(projectDirectory, "Resource","Report", "TestResults_" + DateTime.Now.ToString("yyyyMMdd_HHmmss"));
+                    reportPath = Path.Combine(projectDirectory, "Resource", "Report", "TestResults_" + DateTime.Now.ToString("yyyyMMdd_HHmmss"));
                     Directory.CreateDirectory(reportPath);
                     testResultPath = reportPath + @"\index.html";
                 }
@@ -80,40 +83,41 @@ namespace iCargoUIAutomation.Hooks
             feature.Log(Status.Info, featureContext.FeatureInfo.Description);
             browser = Environment.GetEnvironmentVariable("Browser", EnvironmentVariableTarget.Process);
             //browser = "firefox";
-            
-                if (browser.Equals("chrome", StringComparison.OrdinalIgnoreCase))
-                {
-                    driver = new ChromeDriver();
-                }
-                else if (browser.Equals("edge", StringComparison.OrdinalIgnoreCase))
-                {
-                    driver = new EdgeDriver();
-                }
-                else if (browser.Equals("firefox", StringComparison.OrdinalIgnoreCase))
-                {
-                    driver = new FirefoxDriver();
-                }
-                else if (browser.Equals("safari", StringComparison.OrdinalIgnoreCase))
-                {
-                    driver = new SafariDriver();
-                }
-                else
-                {
-                    throw new NotSupportedException($"Browser '{browser}' is not supported");
-                }
-                driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(20);
-                driver.Manage().Window.Maximize();
-                homePage hp = new homePage(driver);
-                BasePage bp = new BasePage(driver);
-                bp.DeleteAllCookies();
-                appUrl=Environment.GetEnvironmentVariable("AppUrl", EnvironmentVariableTarget.Process);
-                bp.Open(appUrl);                  
-                driver.FindElement(By.XPath("//a[@id='social-oidc']")).Click();                
-                if (bp.IsElementDisplayed(By.XPath("//body[@class='login']")))
-                {
-                    hp.LoginICargo();                    
-                }
-                bp.SwitchToNewWindow();                       
+
+            if (browser.Equals("chrome", StringComparison.OrdinalIgnoreCase))
+            {
+                driver = new ChromeDriver();
+            }
+            else if (browser.Equals("edge", StringComparison.OrdinalIgnoreCase))
+            {
+                driver = new EdgeDriver();
+            }
+            else if (browser.Equals("firefox", StringComparison.OrdinalIgnoreCase))
+            {
+                driver = new FirefoxDriver();
+            }
+            else if (browser.Equals("safari", StringComparison.OrdinalIgnoreCase))
+            {
+                driver = new SafariDriver();
+            }
+            else
+            {
+                throw new NotSupportedException($"Browser '{browser}' is not supported");
+            }
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(20);
+            driver.Manage().Window.Maximize();
+            homePage hp = new homePage(driver);
+            BasePage bp = new BasePage(driver);
+            bp.DeleteAllCookies();
+            appUrl = Environment.GetEnvironmentVariable("AppUrl", EnvironmentVariableTarget.Process);
+            bp.Open(appUrl);
+            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(20));
+            wait.Until(ExpectedConditions.ElementToBeClickable(By.XPath("//a[@id='social-oidc']"))).Click();
+            if (bp.IsElementDisplayed(By.XPath("//body[@class='login']")))
+            {
+                hp.LoginICargo();
+            }
+            bp.SwitchToNewWindow();
         }
 
         [AfterFeature]
@@ -161,7 +165,7 @@ namespace iCargoUIAutomation.Hooks
 
         [AfterScenario]
         public void AfterScenario(FeatureContext featureContext)
-        {            
+        {
             var status = TestContext.CurrentContext.Result.Outcome.Status;
             var stackTrace = TestContext.CurrentContext.Result.StackTrace;
             DateTime time = DateTime.Now;
@@ -171,10 +175,10 @@ namespace iCargoUIAutomation.Hooks
             {
                 scenario.Fail("Test Failed", captureScreenshot(fileName));
                 scenario.Log(Status.Fail, "Test failed with log" + stackTrace);
-            }            
-            if (MaintainBookingPage.awbNumber != "" || CreateShipmentPage.awb_num != "" && ScenarioContext.Current["Execute"] == "true" )
+            }
+            if (MaintainBookingPage.awbNumber != "" || CreateShipmentPage.awb_num != "" && ScenarioContext.Current["Execute"] == "true")
             {
-                string filePath = @"\\seavvfile1\projectmgmt_pmo\iCargoAutomationReports\AWB_Numbers\AWB_Details.xlsx";                
+                string filePath = @"\\seavvfile1\projectmgmt_pmo\iCargoAutomationReports\AWB_Numbers\AWB_Details.xlsx";
 
                 // Check if the directory exists, if not, create it
                 string directoryPath = Path.GetDirectoryName(filePath);
@@ -212,10 +216,10 @@ namespace iCargoUIAutomation.Hooks
 
         [AfterStep]
         public void AfterStep(ScenarioContext scenarioContext)
-        {            
+        {
             string stepType = scenarioContext.StepContext.StepInfo.StepDefinitionType.ToString();
             string stepName = scenarioContext.StepContext.StepInfo.Text;
-            
+
 
         }
 
