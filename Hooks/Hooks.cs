@@ -41,10 +41,24 @@ namespace iCargoUIAutomation.Hooks
 
         [BeforeTestRun]
         public static void BeforeTestRun()
-        {
-            Console.WriteLine("Running before test run...");
+        {            
             reportPath = @"\\seavvfile1\projectmgmt_pmo\iCargoAutomationReports\Reports\TestResults_" + DateTime.Now.ToString("yyyyMMdd_HHmmss");            
             testResultPath = reportPath + @"\index.html";
+            if (!Directory.Exists(reportPath))
+            {
+                try
+                {
+                    Directory.CreateDirectory(reportPath);
+                }
+                catch (Exception)
+                {
+                    // Fallback to the project directory's resource folder if unable to create the specified path
+                    string projectDirectory = AppDomain.CurrentDomain.BaseDirectory;
+                    reportPath = Path.Combine(projectDirectory, "Resource","Report", "TestResults_" + DateTime.Now.ToString("yyyyMMdd_HHmmss"));
+                    Directory.CreateDirectory(reportPath);
+                    testResultPath = reportPath + @"\index.html";
+                }
+            }
             var htmlReporter = new ExtentHtmlReporter(testResultPath);
             htmlReporter.Config.ReportName = "Automation Status Report";
             htmlReporter.Config.Theme = AventStack.ExtentReports.Reporter.Configuration.Theme.Standard;
@@ -64,8 +78,8 @@ namespace iCargoUIAutomation.Hooks
         {
             feature = extent.CreateTest(featureContext.FeatureInfo.Title);
             feature.Log(Status.Info, featureContext.FeatureInfo.Description);
-            browser = Environment.GetEnvironmentVariable("Browser", EnvironmentVariableTarget.Process);
-            //browser = "firefox";
+            //browser = Environment.GetEnvironmentVariable("Browser", EnvironmentVariableTarget.Process);
+            browser = "firefox";
             
                 if (browser.Equals("chrome", StringComparison.OrdinalIgnoreCase))
                 {
@@ -159,7 +173,25 @@ namespace iCargoUIAutomation.Hooks
             }            
             if (MaintainBookingPage.awbNumber != "" || CreateShipmentPage.awb_num != "" && ScenarioContext.Current["Execute"] == "true" )
             {
-                string filePath = @"\\seavvfile1\projectmgmt_pmo\iCargoAutomationReports\AWB_Numbers\AWB_Details.xlsx";
+                string filePath = @"\\seavvfile1\projectmgmt_pmo\iCargoAutomationReports\AWB_Numbers\AWB_Details.xlsx";                
+
+                // Check if the directory exists, if not, create it
+                string directoryPath = Path.GetDirectoryName(filePath);
+                if (!Directory.Exists(directoryPath))
+                {
+                    try
+                    {
+                        Directory.CreateDirectory(directoryPath);
+                    }
+                    catch (Exception)
+                    {
+                        // Fallback to the project directory's resource folder if unable to create the specified path
+                        string projectDirectory = AppDomain.CurrentDomain.BaseDirectory;
+                        directoryPath = Path.Combine(projectDirectory, "Resource", "AWB_Details");
+                        Directory.CreateDirectory(directoryPath);
+                        filePath = Path.Combine(directoryPath, "AWB_Details.xlsx");
+                    }
+                }
                 if (featureName.Contains("CAP018"))
                 {
                     ExcelFileConfig excelFileConfig = new ExcelFileConfig();
