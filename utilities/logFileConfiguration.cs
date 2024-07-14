@@ -23,6 +23,28 @@ namespace iCargoUIAutomation.utilities
             //string projectDirectory = System.IO.Path.GetFullPath(System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), "..\\..\\..\\"));
             string logFilePath = @"\\seavvfile1\projectmgmt_pmo\iCargoAutomationReports\Logs\Log"+DateTime.Now.ToString("yyyyMMdd_HHmmss")+@"logfile.log";
             Console.WriteLine("Log file path: " + logFilePath);
+
+
+             if (!Directory.Exists(logFilePath))
+            {
+                try
+                {
+                    Directory.CreateDirectory(logFilePath);
+                }
+                catch (Exception)
+                {
+                    // Fallback to the project directory's resource folder if unable to create the specified path
+                    string projectDirectory = AppDomain.CurrentDomain.BaseDirectory;
+                    logFilePath = Path.Combine(projectDirectory, "Resource", "Logs", "Logs_" + DateTime.Now.ToString("yyyyMMdd_HHmmss"));
+                    Directory.CreateDirectory(logFilePath);
+                    
+                }
+            }
+
+
+
+
+            
             FileAppender appender = new FileAppender();
             appender.AppendToFile = true;
             appender.File = logFilePath;
