@@ -36,6 +36,7 @@ namespace iCargoUIAutomation.utilities
                     // Fallback to the project directory's resource folder if unable to create the specified path
                     string projectDirectory = AppDomain.CurrentDomain.BaseDirectory;
                     logFilePath = Path.Combine(projectDirectory, "Resource", "Logs", "Logs_" + DateTime.Now.ToString("yyyyMMdd_HHmmss"));
+                    logFilePath=logFilePath+@"logfile.log"
                     Directory.CreateDirectory(logFilePath);
                     
                 }
