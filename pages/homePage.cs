@@ -1,6 +1,7 @@
 ﻿using iCargoUIAutomation.Features;
 using iCargoUIAutomation.utilities;
 using log4net;
+using Microsoft.Extensions.Configuration;
 using OpenQA.Selenium;
 using System;
 using System.Collections.Generic;
@@ -13,9 +14,11 @@ namespace iCargoUIAutomation.pages
 {
     public class homePage : BasePage
     {
-        public static string? role;        
+        public static string? role;
+        private readonly KeyVault keyVault;
         public homePage(IWebDriver driver) : base(driver)
         {
+            keyVault = new KeyVault();
         }
 
         private By btnHomeIcon_Xpath = By.XPath("//li[@role='tab']//span[normalize-space(text()='Home')]");
@@ -37,7 +40,7 @@ namespace iCargoUIAutomation.pages
 
         ILog Log = LogManager.GetLogger(typeof(homePage));
 
-        
+
         public void ClickHomeIcon()
         {
             try
@@ -48,36 +51,36 @@ namespace iCargoUIAutomation.pages
             {
                 Log.Error("Error in ClickHomeIcon method: " + e.Message);
             }
-            
+
         }
-        
+
         public void SwitchStation(string station)
         {
             try
             {
-                string baseStation="";
+                string baseStation = "";
                 while (true)
                 {
                     baseStation = GetText(lblBaseStation_Xpath);
                     if (baseStation == station)
-                        break;                  
-                    
-                        Click(btnMore_Xpath);
-                        Click(lnkSwitchRole_Xpath);
-                        SwitchToFrame(frameSwitchRole_Id);
-                        WaitForElementToBeVisible(drpdwnSelectStation_Id, TimeSpan.FromSeconds(10));
-                        SelectDropdownByVisibleText(drpdwnSelectStation_Id, station);
-                        Click(btnOKSwitchRole_Xpath);
-                        SwitchToDefaultContent();
-                    
+                        break;
+
+                    Click(btnMore_Xpath);
+                    Click(lnkSwitchRole_Xpath);
+                    SwitchToFrame(frameSwitchRole_Id);
+                    WaitForElementToBeVisible(drpdwnSelectStation_Id, TimeSpan.FromSeconds(10));
+                    SelectDropdownByVisibleText(drpdwnSelectStation_Id, station);
+                    Click(btnOKSwitchRole_Xpath);
+                    SwitchToDefaultContent();
+
                 }
-                
+
             }
             catch (Exception e)
-            {              
+            {
                 Log.Error("Error in SwitchStation method: " + e.Message);
             }
-            
+
         }
 
         public void enterScreenName(string screenName)
@@ -87,13 +90,13 @@ namespace iCargoUIAutomation.pages
                 EnterText(txt_ScreenName_Css, screenName);
                 EnterKeys(txt_ScreenName_Css, Keys.Enter);
                 WaitForElementToBeVisible(By.CssSelector("li[tabindex='0']"), TimeSpan.FromSeconds(5));
-               
+
             }
             catch (Exception e)
             {
                 Log.Error("Error in enterScreenName method: " + e.Message);
             }
-           
+
         }
 
         public void logoutiCargo()
@@ -110,18 +113,18 @@ namespace iCargoUIAutomation.pages
             {
                 Log.Error("Error in logoutiCargo method: " + e.Message);
             }
-            
-           
+
+
         }
 
         public void LoginICargo()
         {
             try
             {
-                var secrets = KeyVault.GetSecret();
+                var secrets = keyVault.GetSecrets();
                 WaitForElementToBeVisible(userName_Id, TimeSpan.FromSeconds(10));
                 role = Environment.GetEnvironmentVariable("ROLE_GROUP", EnvironmentVariableTarget.Process);
-                //role = "CCC";
+                //role = "ccc";
                 if (role.ToUpper() == "CCC")
                 {
                     EnterText(userName_Id, secrets["CCC_Username"]);

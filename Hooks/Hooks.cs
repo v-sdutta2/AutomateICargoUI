@@ -111,8 +111,8 @@ namespace iCargoUIAutomation.Hooks
             bp.DeleteAllCookies();
             appUrl = Environment.GetEnvironmentVariable("AppUrl", EnvironmentVariableTarget.Process);
             bp.Open(appUrl);
-            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(20));
-            wait.Until(ExpectedConditions.ElementToBeClickable(By.XPath("//a[@id='social-oidc']"))).Click();
+            Console.WriteLine("Opening the application URL: " + appUrl);
+            bp.WaitForElementToBeInvisible(loginBtn, TimeSpan.FromSeconds(10));
             if (bp.IsElementDisplayed(By.XPath("//body[@class='login']")))
             {
                 hp.LoginICargo();
