@@ -21,7 +21,7 @@ using SeleniumExtras.WaitHelpers;
 namespace iCargoUIAutomation.Hooks
 {
     [Binding]
-    public sealed class Hooks : BasePage
+    public sealed class Hooks 
     {
         private readonly IObjectContainer _container;
         public static ExtentReports? extent;
@@ -33,10 +33,9 @@ namespace iCargoUIAutomation.Hooks
         private static IWebDriver? driver;
         public static string? featureName;
         public static string? browser;
-        public static string? appUrl;
-        private static By loginBtn = By.XPath("//a[@id='social-oidc']");
+        public static string? appUrl;        
 
-        public Hooks(IObjectContainer container) : base(driver)
+        public Hooks(IObjectContainer container)
         {
             _container = container;
 
@@ -104,15 +103,16 @@ namespace iCargoUIAutomation.Hooks
             {
                 throw new NotSupportedException($"Browser '{browser}' is not supported");
             }
-            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(20);
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(30);
             driver.Manage().Window.Maximize();
             homePage hp = new homePage(driver);
             BasePage bp = new BasePage(driver);
-            bp.DeleteAllCookies();
-            appUrl = Environment.GetEnvironmentVariable("AppUrl", EnvironmentVariableTarget.Process);
-            bp.Open(appUrl);
+            bp.DeleteAllCookies();  
             Console.WriteLine("Opening the application URL: " + appUrl);
-            bp.WaitForElementToBeInvisible(loginBtn, TimeSpan.FromSeconds(10));
+            bp.Open("https://asstg-icargo.ibsplc.aero/icargo/login.do");
+            Console.WriteLine("Opened the application URL: " + appUrl);
+            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(20));
+            wait.Until(ExpectedConditions.ElementToBeClickable(By.XPath("//a[@id='social-oidc']"))).Click();
             if (bp.IsElementDisplayed(By.XPath("//body[@class='login']")))
             {
                 hp.LoginICargo();
