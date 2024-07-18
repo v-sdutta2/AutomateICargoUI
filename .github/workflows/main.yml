@@ -1,0 +1,51 @@
+name: main
+
+on:
+  push:
+    tags:
+      - HelloTestingDoesnoTMatter
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: windows-2019
+
+    env:
+      BROWSER: chrome
+      ROLE_GROUP: CCC
+      App_Url: https://asstg-icargo.ibsplc.aero/icargo/login.do
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: '6.0.x'
+
+      - name: Verify .NET SDK installation
+        run: dotnet --list-sdks
+
+      - name: Clean project
+        run: dotnet clean
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration Release
+
+      - name: Set environment variables for script
+        run: |
+          echo "Browser=${BROWSER}" >> $GITHUB_ENV
+          echo "RoleGroup=${ROLE_GROUP}" >> $GITHUB_ENV
+          echo "AppURL=${App_Url}" >> $GITHUB_ENV
+
+      - name: Run tests by tag        
+        run: dotnet test --configuration Release --filter "TestCategory=CAP018_BKG_00001"
